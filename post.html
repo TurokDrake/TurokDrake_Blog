@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>文章详情</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked-footnote/dist/index.umd.min.js"></script>
+    
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html">&larr; 返回首页</a>
+        </nav>
+    </header>
+
+    <main id="content">
+        <p>正在加载ing...</p>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Turok's Laputa</p>
+    </footer>
+
+    <script>
+        // 关键修复：包裹在 load 事件中，等待头部所有 CDN 资源全部加载完成后再执行
+        window.addEventListener('load', () => {
+            // 安全注册脚注插件
+            if (typeof markedFootnote !== 'undefined') {
+                marked.use(markedFootnote());
+            }
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const fileName = urlParams.get('file');
+
+            if (fileName) {
+                fetch(`posts/${fileName}`)
+                    .then(response => {
+                        if (!response.ok) throw new Error("这篇文章去旅游了...");
+                        return response.text();
+                    })
+                    .then(markdownText => {
+                        // 1. 渲染 Markdown
+                        document.getElementById('content').innerHTML = marked.parse(markdownText);
+                        
+                        // 2. 渲染数学公式
+                        if (window.MathJax && MathJax.typesetPromise) {
+                            MathJax.typesetPromise([document.getElementById('content')]);
+                        }
+
+                        // 3. 为代码块生成顶部语言标签与复制按钮
+                        document.querySelectorAll('pre').forEach(pre => {
+                            const wrapper = document.createElement('div');
+                            wrapper.className = 'code-wrapper';
+                            
+                            pre.parentNode.insertBefore(wrapper, pre);
+                            wrapper.appendChild(pre);
+
+                            const codeElement = pre.querySelector('code');
+                            let languageName = 'TEXT';
+                            if (codeElement && codeElement.className) {
+                                const match = codeElement.className.match(/language-(\w+)/);
+                                if (match) {
+                                    languageName = match[1].toUpperCase();
+                                }
+                            }
+
+                            const header = document.createElement('div');
+                            header.className = 'code-header';
+
+                            const langSpan = document.createElement('span');
+                            langSpan.textContent = languageName;
+
+                            const copyBtn = document.createElement('button');
+                            copyBtn.className = 'copy-btn';
+                            copyBtn.textContent = '复制';
+                            
+                            copyBtn.addEventListener('click', () => {
+                                const codeText = codeElement.innerText;
+                                navigator.clipboard.writeText(codeText).then(() => {
+                                    copyBtn.textContent = '已复制!';
+                                    copyBtn.style.color = '#4ade80';
+                                    copyBtn.style.borderColor = '#4ade80';
+                                    
+                                    setTimeout(() => {
+                                        copyBtn.textContent = '复制';
+                                        copyBtn.style.color = '';
+                                        copyBtn.style.borderColor = '';
+                                    }, 2000);
+                                });
+                            });
+
+                            header.appendChild(langSpan);
+                            header.appendChild(copyBtn);
+                            wrapper.insertBefore(header, pre);
+                        });
+                    })
+                    .catch(error => {
+                        document.getElementById('content').innerHTML = `<p style="color: #ef4444;">加载失败: ${error.message}</p>`;
+                    });
+            } else {
+                document.getElementById('content').innerHTML = '<p>未指定任何文章。</p>';
+            }
+        });
+    </script>
+</body>
+</html>
