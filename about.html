@@ -2,204 +2,207 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>关于我 - Turok's Laputa</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABOUT - TUROK'S LAPUTA</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/about.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <h1>Turok's Laputa</h1>
-        <nav>
-            <a href="index.html">首页</a> | <a href="about.html">关于我</a>
+    <header class="site-header">
+        <a href="index.html" class="brand">
+            <div class="logo"></div>
+            <span class="brand-title">TUROK'S LAPUTA</span>
+        </a>
+        <nav class="site-nav">
+            <a href="index.html">首页</a> / 
+            <a href="about.html" class="active">关于我</a> / 
+            <a href="#">文章</a> / 
+            
         </nav>
     </header>
 
-    <main>
-        <h2>关于我</h2>
-        
+    <main class="about-section">
         <div class="about-hero">
             
-            <a href="https://github.com/TurokDrake" target="_blank" class="bubble bubble-tl" title="我的 GitHub">
-                <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
-                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            <div class="center-avatar" title="Turok">
+                <img src="avatar.jpg" alt="Avatar" class="avatar-img" onerror="this.src='images/turok.png'">
+            </div>
+
+            <a href="https://github.com/TurokDrake" target="_blank" class="node-bubble node-tl" title="我的 GitHub">
+                <svg class="node-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-.63-.9-.96-.135-.225-.72-.96-1.23-1.215-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
                 </svg>
-                <span class="bubble-text">GitHub</span>
+                <span class="node-label">GITHUB</span>
             </a>
 
-            <a href="https://space.bilibili.com" target="_blank" class="bubble bubble-tr" title="Bilibili">
-                <svg viewBox="0 0 24 24" width="38" height="38" fill="currentColor">
-                    <path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.528 2.245 1.574 3.749v7.344c-.046 1.504-.57 2.754-1.574 3.749-1.004.995-2.263 1.52-3.773 1.574H5.333c-1.51-.054-2.769-.579-3.773-1.574C.556 20.074.032 18.824 0 17.32V9.976c.032-1.504.556-2.754 1.56-3.749 1.004-.996 2.263-1.52 3.773-1.574h.781L4.17 2.441c-.287-.287-.287-.751 0-1.038.287-.287.751-.287 1.038 0l2.762 2.762h8.06l2.762-2.762c.287-.287.751-.287 1.038 0 .287.287.287.751 0 1.038l-1.944 2.212zM5.333 6.133c-.896.032-1.638.344-2.227.933-.589.589-1.331.901-2.227.933h13.334c.896-.032 1.638-.344 2.227-.933.589-.589.901-1.331.933-2.227V9.293c-.032-.896-.344-1.638-.933-2.227-.589-.589-1.331-.901-2.227-.933H5.333zM7.5 10.5c.828 0 1.5.672 1.5 1.5s-.672 1.5-1.5 1.5-1.5-.672-1.5-1.5.672-1.5 1.5-1.5zm9 0c.828 0 1.5.672 1.5 1.5s-.672 1.5-1.5 1.5-1.5-.672-1.5-1.5.672-1.5 1.5-1.5z"/>
-                </svg>
-                <span class="bubble-text">Bilibili</span>
-            </a>
-            
-            <img class="avatar" src="images/turok.png" alt="我的头像">
-            
-            <div class="bubble bubble-bl music-bubble" id="musicBubble">
-                <audio id="audioPlayer"></audio>
-
-                <div class="music-main-control" id="playToggleBtn" title="点击播放/暂停">
-                    <svg id="playIcon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-                        <path d="M8 5v14l11-7z"/>
+            <div class="node-bubble node-bl music-bubble" id="music-bubble" title="点击播放 / 暂停音乐">
+                <audio id="audio-player"></audio>
+                
+                <div class="music-icon-wrapper" id="music-icon">
+                    <svg class="node-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
                     </svg>
-                    <svg id="pauseIcon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor" style="display: none;">
-                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-                    </svg>
-                    <span class="bubble-text" id="musicStatusText">Music</span>
                 </div>
 
-                <div class="music-playlist-menu" id="playlistMenu">
-                    <div class="playlist-header">选择歌曲</div>
-                    <ul id="playlistItems"></ul>
-                    
-                    <div class="volume-control-box">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" class="volume-icon">
-                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
-                        </svg>
-                        <input type="range" id="volumeSlider" class="volume-slider" min="0" max="1" step="0.01" value="0.8" title="音量调节">
-                    </div>
-                </div>
-
-                <div class="music-progress-container" id="progressContainer">
-                    <button class="music-menu-btn" id="menuToggleBtn" title="选曲与音量">
+                <div class="music-progress-container" id="music-progress-container">
+                    <input type="range" id="music-progress-bar" value="0" min="0" max="100" step="0.1">
+                    <button class="music-menu-btn" id="music-menu-btn" title="歌单与控制">
                         <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
                             <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
                         </svg>
                     </button>
-                    <input type="range" id="progressBar" class="music-slider" min="0" max="100" value="0" step="0.1" title="播放进度">
+                </div>
+
+                <div class="music-playlist-menu" id="music-playlist-menu">
+                    <div class="menu-header">
+                        <span class="menu-title">PLAYLIST</span>
+                        <div class="volume-box">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+                            </svg>
+                            <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.7">
+                        </div>
+                    </div>
+                    <ul class="playlist-items" id="playlist-items"></ul>
                 </div>
             </div>
 
-            <a href="https://www.zhihu.com" target="_blank" class="bubble bubble-br" title="知乎">
-                <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-                    <path d="M5.025 3.326h3.298v10.052h1.614l1.32 1.605 1.815-1.605h2.89V3.326h3.298V16.7h-6.223l-1.782 1.575L9.473 16.7H5.025V3.326zm2.083 2.083v9.208h1.666l1.24 1.096 1.24-1.096h5.36V5.409H7.108z"/>
+            <a href="mailto:yourname@example.com" class="node-bubble node-tr" title="电子邮箱">
+                <svg class="node-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
                 </svg>
-                <span class="bubble-text">知乎</span>
+                <span class="node-label">MAIL</span>
+            </a>
+
+            <a href="#" class="node-bubble node-br" title="随想笔记">
+                <svg class="node-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                </svg>
+                <span class="node-label">NOTES</span>
             </a>
 
         </div>
 
-        <p style="text-align: center; margin-top: 35px; color: var(--text-muted);">
-            欢迎来到我的领域 αωα ...
-        </p>
+        <div class="about-bio">
+            <h1 class="bio-title">DESIGNER & DEVELOPER</h1>
+            <p class="bio-text">
+                PASSIONATE ABOUT MINIMALIST UI/UX, SWISS TYPOGRAPHY, AND CREATIVE CODING.<br>
+                BUILDING DIGITAL EXPERIENCES WITH PRECISION AND SIMPLICITY.
+            </p>
+        </div>
     </main>
 
-    <footer>
-        <p>&copy; 2026 Turok's Laputa</p>
+    <footer class="site-footer">
+        <p>&copy; 2026 TUROK'S LAPUTA.</p>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // 1. 播放列表配置
             const playlist = [
-                { title: "示例曲目 1", src: "audio/01 To the Moon - Main Theme.mp3" },
-                { title: "示例曲目 2", src: "audio/song2.mp3" },
-                { title: "轻音乐 - 灵感", src: "audio/song3.mp3" }
+                { title: "City Lights", artist: "Lofi Chill", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+                { title: "Midnight Walk", artist: "Ambient", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+                { title: "Swiss Rhythm", artist: "Minimal Tech", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" }
             ];
 
             let currentSongIndex = 0;
+            let isPlaying = false;
             let hideProgressTimer = null;
 
-            const audio = document.getElementById('audioPlayer');
-            const playToggleBtn = document.getElementById('playToggleBtn');
-            const playIcon = document.getElementById('playIcon');
-            const pauseIcon = document.getElementById('pauseIcon');
-            const statusText = document.getElementById('musicStatusText');
-            
-            const menuToggleBtn = document.getElementById('menuToggleBtn');
-            const playlistMenu = document.getElementById('playlistMenu');
-            const playlistItems = document.getElementById('playlistItems');
-            const volumeSlider = document.getElementById('volumeSlider');
-            
-            const musicBubble = document.getElementById('musicBubble');
-            const progressContainer = document.getElementById('progressContainer');
-            const progressBar = document.getElementById('progressBar');
-
-            // 默认音量 80%
-            audio.volume = 0.8;
-
-            // 1. 渲染歌单
-            function renderPlaylist() {
-                playlistItems.innerHTML = '';
-                playlist.forEach((song, index) => {
-                    const li = document.createElement('li');
-                    li.textContent = song.title;
-                    if (index === currentSongIndex) li.classList.add('active');
-                    
-                    li.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        switchSong(index);
-                        playlistMenu.classList.remove('open');
-                    });
-                    playlistItems.appendChild(li);
-                });
-            }
+            const audio = document.getElementById('audio-player');
+            const musicBubble = document.getElementById('music-bubble');
+            const musicIcon = document.getElementById('music-icon');
+            const progressBar = document.getElementById('music-progress-bar');
+            const progressContainer = document.getElementById('music-progress-container');
+            const menuBtn = document.getElementById('music-menu-btn');
+            const playlistMenu = document.getElementById('music-playlist-menu');
+            const playlistItems = document.getElementById('playlist-items');
+            const volumeSlider = document.getElementById('volume-slider');
 
             // 2. 加载歌曲
             function loadSong(index) {
                 currentSongIndex = index;
                 audio.src = playlist[index].src;
-                statusText.textContent = playlist[index].title;
-                renderPlaylist();
+                updatePlaylistUI();
             }
 
-            // 3. 切歌
-            function switchSong(index) {
-                loadSong(index);
-                audio.play();
-                updatePlayStateUI(true);
+            // 3. 渲染歌单 UI
+            function updatePlaylistUI() {
+                playlistItems.innerHTML = '';
+                playlist.forEach((song, i) => {
+                    const li = document.createElement('li');
+                    li.className = `playlist-item ${i === currentSongIndex ? 'active' : ''}`;
+                    li.innerHTML = `
+                        <span class="song-title">${song.title}</span>
+                        <span class="song-artist">${song.artist}</span>
+                    `;
+                    li.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        loadSong(i);
+                        playAudio();
+                    });
+                    playlistItems.appendChild(li);
+                });
             }
 
-            // 4. 更新播放按钮UI
-            function updatePlayStateUI(isPlaying) {
-                if (isPlaying) {
-                    playIcon.style.display = 'none';
-                    pauseIcon.style.display = 'block';
-                    musicBubble.classList.add('playing');
-                } else {
-                    playIcon.style.display = 'block';
-                    pauseIcon.style.display = 'none';
-                    musicBubble.classList.remove('playing');
+            // 4. 播放控制
+            function playAudio() {
+                audio.play().then(() => {
+                    isPlaying = true;
+                    musicIcon.innerHTML = `
+                        <svg class="node-icon playing" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                        </svg>`;
+                }).catch(err => console.log('Playback error:', err));
+            }
+
+            function pauseAudio() {
+                audio.pause();
+                isPlaying = false;
+                musicIcon.innerHTML = `
+                    <svg class="node-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                    </svg>`;
+            }
+
+            // 5. 点击气泡本体切换播放/暂停（阻止进度条及下拉列表点击冒泡）
+            musicBubble.addEventListener('click', (e) => {
+                if (e.target.closest('#music-progress-container') || e.target.closest('#music-playlist-menu')) {
+                    return;
                 }
-            }
-
-            // 5. 点击中央控制区播放/暂停
-            playToggleBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (audio.paused) {
-                    audio.play();
-                    updatePlayStateUI(true);
+                if (isPlaying) {
+                    pauseAudio();
                 } else {
-                    audio.pause();
-                    updatePlayStateUI(false);
+                    playAudio();
                 }
             });
 
-            // 6. 点击“三个点”按钮：展开/收起选歌与音量菜单
-            menuToggleBtn.addEventListener('click', (e) => {
+            // 6. 切换选曲弹窗展示
+            menuBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 playlistMenu.classList.toggle('open');
             });
 
-            // 防止点击菜单内部导致菜单关闭
-            playlistMenu.addEventListener('click', (e) => {
-                e.stopPropagation();
+            // 点击外部自动关闭选曲弹窗
+            document.addEventListener('click', (e) => {
+                if (!musicBubble.contains(e.target)) {
+                    playlistMenu.classList.remove('open');
+                }
             });
 
-            // 点击外部关闭菜单
-            document.addEventListener('click', () => {
-                playlistMenu.classList.remove('open');
-            });
-
-            // 7. 音量滑动控制
+            // 7. 音量调节
             volumeSlider.addEventListener('input', (e) => {
                 e.stopPropagation();
                 audio.volume = volumeSlider.value;
             });
 
-            // 8. 进度条更新
+            // 8. 进度条时间同步
             audio.addEventListener('timeupdate', () => {
                 if (audio.duration) {
-                    const progressPercent = (audio.currentTime / audio.duration) * 100;
-                    progressBar.value = progressPercent;
+                    const percent = (audio.currentTime / audio.duration) * 100;
+                    progressBar.value = percent;
                 }
             });
 
@@ -217,7 +220,6 @@
                 progressContainer.classList.add('visible');
                 clearTimeout(hideProgressTimer);
                 hideProgressTimer = setTimeout(() => {
-                    // 若选歌菜单正在展示则不自动隐藏
                     if (!playlistMenu.classList.contains('open')) {
                         progressContainer.classList.remove('visible');
                     }
@@ -228,6 +230,7 @@
             musicBubble.addEventListener('click', resetInactivityTimer);
             musicBubble.addEventListener('touchstart', resetInactivityTimer);
 
+            audio.volume = volumeSlider.value;
             loadSong(0);
         });
     </script>

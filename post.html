@@ -2,8 +2,12 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>文章详情</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POST - TUROK'S LAPUTA</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/post.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked-footnote/dist/index.umd.min.js"></script>
@@ -19,24 +23,38 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="index.html">&larr; 返回首页</a>
+    <header class="site-header">
+        <a href="index.html" class="brand">
+            <div class="logo"></div>
+            <span class="brand-title">TUROK'S LAPUTA</span>
+        </a>
+        <nav class="site-nav">
+            <a href="index.html">首页</a> / 
+            <a href="about.html">关于我</a> / 
+            <a href="#">文章</a> / 
+            <!-- <a href="#">CONTACT</a> -->
         </nav>
     </header>
 
-    <main id="content">
-        <p>正在加载ing...</p>
+    <div class="post-navigation">
+        <a href="index.html" class="back-btn">&larr; 返回首页</a>
+    </div>
+
+    <main class="post-wrapper">
+        <hr class="red-divider">
+
+        <article id="content" class="markdown-body">
+            <p class="loading-text">加载文章ing...</p>
+        </article>
     </main>
 
-    <footer>
-        <p>&copy; 2026 Turok's Laputa</p>
+    <footer class="site-footer">
+        <p>&copy; 2026 TUROK'S LAPUTA.</p>
     </footer>
 
     <script>
-        // 关键修复：包裹在 load 事件中，等待头部所有 CDN 资源全部加载完成后再执行
         window.addEventListener('load', () => {
-            // 安全注册脚注插件
+            // 配置 Marked 插件
             if (typeof markedFootnote !== 'undefined') {
                 marked.use(markedFootnote());
             }
@@ -45,34 +63,43 @@
             const fileName = urlParams.get('file');
 
             if (fileName) {
-                fetch(`posts/${fileName}`)
+                fetch(fileName)
                     .then(response => {
-                        if (!response.ok) throw new Error("这篇文章去旅游了...");
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
                         return response.text();
                     })
                     .then(markdownText => {
                         // 1. 渲染 Markdown
-                        document.getElementById('content').innerHTML = marked.parse(markdownText);
-                        
-                        // 2. 渲染数学公式
-                        if (window.MathJax && MathJax.typesetPromise) {
-                            MathJax.typesetPromise([document.getElementById('content')]);
+                        const contentDiv = document.getElementById('content');
+                        contentDiv.innerHTML = marked.parse(markdownText);
+
+                        // 2. 动态更新网页标题（取第一个 H1 文本）
+                        const firstH1 = contentDiv.querySelector('h1');
+                        if (firstH1) {
+                            document.title = `${firstH1.innerText} - TUROK'S LAPUTA`;
                         }
 
-                        // 3. 为代码块生成顶部语言标签与复制按钮
-                        document.querySelectorAll('pre').forEach(pre => {
+                        // 3. 渲染 MathJax 数学公式
+                        if (window.MathJax && MathJax.typesetPromise) {
+                            MathJax.typesetPromise();
+                        }
+
+                        // 4. 为代码块生成瑞士极简风格工具栏与复制按钮
+                        const codeBlocks = contentDiv.querySelectorAll('pre');
+                        codeBlocks.forEach(pre => {
                             const wrapper = document.createElement('div');
-                            wrapper.className = 'code-wrapper';
-                            
+                            wrapper.className = 'code-block-wrapper';
                             pre.parentNode.insertBefore(wrapper, pre);
                             wrapper.appendChild(pre);
 
                             const codeElement = pre.querySelector('code');
-                            let languageName = 'TEXT';
-                            if (codeElement && codeElement.className) {
-                                const match = codeElement.className.match(/language-(\w+)/);
-                                if (match) {
-                                    languageName = match[1].toUpperCase();
+                            let language = 'TEXT';
+                            if (codeElement) {
+                                const langClass = Array.from(codeElement.classList).find(c => c.startsWith('language-'));
+                                if (langClass) {
+                                    language = langClass.replace('language-', '').toUpperCase();
                                 }
                             }
 
@@ -80,23 +107,22 @@
                             header.className = 'code-header';
 
                             const langSpan = document.createElement('span');
-                            langSpan.textContent = languageName;
+                            langSpan.className = 'code-lang';
+                            langSpan.textContent = language;
 
                             const copyBtn = document.createElement('button');
                             copyBtn.className = 'copy-btn';
-                            copyBtn.textContent = '复制';
+                            copyBtn.textContent = 'COPY';
                             
                             copyBtn.addEventListener('click', () => {
-                                const codeText = codeElement.innerText;
+                                const codeText = codeElement ? codeElement.innerText : pre.innerText;
                                 navigator.clipboard.writeText(codeText).then(() => {
-                                    copyBtn.textContent = '已复制!';
-                                    copyBtn.style.color = '#4ade80';
-                                    copyBtn.style.borderColor = '#4ade80';
+                                    copyBtn.textContent = 'COPIED!';
+                                    copyBtn.classList.add('copied');
                                     
                                     setTimeout(() => {
-                                        copyBtn.textContent = '复制';
-                                        copyBtn.style.color = '';
-                                        copyBtn.style.borderColor = '';
+                                        copyBtn.textContent = 'COPY';
+                                        copyBtn.classList.remove('copied');
                                     }, 2000);
                                 });
                             });
@@ -107,10 +133,14 @@
                         });
                     })
                     .catch(error => {
-                        document.getElementById('content').innerHTML = `<p style="color: #ef4444;">加载失败: ${error.message}</p>`;
+                        document.getElementById('content').innerHTML = `
+                            <p class="error-text">ERROR LOADING POST: ${error.message}</p>
+                        `;
                     });
             } else {
-                document.getElementById('content').innerHTML = '<p>未指定任何文章。</p>';
+                document.getElementById('content').innerHTML = `
+                    <p class="error-text">NO POST SPECIFIED.</p>
+                `;
             }
         });
     </script>

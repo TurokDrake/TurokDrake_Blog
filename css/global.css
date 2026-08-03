@@ -1,0 +1,45 @@
+/* =====================================
+   1. 全局调色板 & 变量
+===================================== */
+:root {
+    --bg-cream: #F7F5F0;         /* 米白色全局背景 */
+    --text-charcoal: #1A1A1A;    /* 炭黑色主标题和正文 */
+    --accent-red: #E63946;       /* 高饱和度亮红色强调色 */
+}
+
+/* =====================================
+   2. 全局基础重置
+===================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-cream);
+    color: var(--text-charcoal);
+    font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    padding: 60px 80px;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    color: var(--text-charcoal);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+/* 红色极细分割线公共组件 */
+.red-divider {
+    border: none;
+    border-top: 1px solid var(--accent-red);
+    margin: 40px 0;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 30px 20px;
+    }
+}

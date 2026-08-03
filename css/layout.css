@@ -1,0 +1,64 @@
+/* =====================================
+   公共布局：Header 导航 & Footer 页脚
+===================================== */
+.site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 80px;
+}
+
+/* 品牌 Logo 与标题 */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+}
+
+.logo {
+    width: 20px;
+    height: 20px;
+    background-color: var(--accent-red);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.brand-title {
+    font-size: 1rem;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    color: var(--text-charcoal);
+    text-transform: uppercase;
+}
+
+.brand:hover .brand-title {
+    color: var(--accent-red);
+}
+
+/* 极简文本导航 */
+.site-nav {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.site-nav a {
+    margin: 0 12px;
+}
+
+.site-nav a:hover,
+.site-nav a.active {
+    color: var(--accent-red);
+}
+
+/* 极简页脚 */
+.site-footer {
+    border-top: 1px solid var(--text-charcoal);
+    padding-top: 24px;
+    margin-top: 100px;
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}

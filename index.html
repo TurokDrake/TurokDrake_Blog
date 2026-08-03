@@ -2,27 +2,97 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>Turok's Laputa - 首页</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turok's Laputa</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/home.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <h1>Turok's Laputa</h1>
-        <nav>
-            <a href="index.html">首页</a> | <a href="about.html">关于我</a>
+    <header class="site-header">
+        <a href="index.html" class="brand">
+            <div class="logo"></div>
+            <span class="brand-title">TUROK'S LAPUTA</span>
+        </a>
+        
+        <nav class="site-nav">
+            <a href="index.html" class="active">首页</a> / 
+            <a href="about.html">关于我</a> / 
+            <a href="archive.html">文章</a> / 
+
         </nav>
     </header>
 
-    <main>
-        <h2>文章列表</h2>
-        <ul>
-            <li><a href="post.html?file=helloworld.md" target="_blank">欢迎来到Laputa</a></li>
-            <!-- <li><a href="post.html?file=css-layout.md" target="_blank">记一次折腾 CSS 布局的心得</a></li> -->
-        </ul>
+    <section class="hero-section">
+        <h1 class="slogan">EXPLORE YOUR LAPUTA<br>THE LAST UTOPIA.</h1>
+        <div class="search-container">
+            <input type="text" placeholder="SEARCH..." class="search-input">
+        </div>
+    </section>
+
+    <div class="action-bar">
+        <div class="filters">
+            <a href="#" class="active">ALL</a>
+            <a href="#">DESIGN</a>
+            <a href="#">TECHNOLOGY</a>
+            <a href="#">LIFE</a>
+        </div>
+        <div class="pagination">
+            <span>PAGE 1 OF 12</span>
+        </div>
+    </div>
+
+    <main class="masonry-grid">
+        
+        <article class="card">
+            <div class="card-image" style="height: 250px; background-color: #E0E0E0;"></div>
+            <div class="card-content">
+                <h2 class="card-title"><a href="post.html?file=posts/helloworld.md">WELCOME TO LAPUTA</a></h2>
+                <div class="card-meta">
+                    <span class="tag">03 AUG 2026 / TECH</span>
+                    <!-- <span class="like-btn">♥ 128</span> -->
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-image" style="height: 380px; background-color: #D5D5D5;"></div>
+            <div class="card-content">
+                <h2 class="card-title"><a href="#">SWISS TYPOGRAPHY & THE MODERN WEB</a></h2>
+                <div class="card-meta">
+                    <span class="tag">01 AUG 2026 / DESIGN</span>
+                    <span class="like-btn">♥ 84</span>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-image" style="height: 180px; background-color: #C0C0C0;"></div>
+            <div class="card-content">
+                <h2 class="card-title"><a href="#">THE ART OF NEGATIVE SPACE</a></h2>
+                <div class="card-meta">
+                    <span class="tag">28 JUL 2026 / DESIGN</span>
+                    <span class="like-btn">♥ 256</span>
+                </div>
+            </div>
+        </article>
+        
+        <article class="card">
+            <div class="card-image" style="height: 300px; background-color: #B0B0B0;"></div>
+            <div class="card-content">
+                <h2 class="card-title"><a href="#">MINIMALIST LIFESTYLE IN 2026</a></h2>
+                <div class="card-meta">
+                    <span class="tag">15 JUL 2026 / LIFE</span>
+                    <span class="like-btn">♥ 102</span>
+                </div>
+            </div>
+        </article>
+
     </main>
 
-    <footer>
-        <p>&copy; 2026 Turok's Laputa</p>
+    <footer class="site-footer">
+        <p>&copy; 2026 TUROK'S LAPUTA.</p>
     </footer>
 </body>
 </html>
