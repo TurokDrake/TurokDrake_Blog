@@ -31,89 +31,138 @@
         <nav class="site-nav">
             <a href="index.html">首页</a> / 
             <a href="about.html">关于我</a> / 
-            <a href="#">文章</a> / 
-            <!-- <a href="#">CONTACT</a> -->
+            <a href="archive.html">文章</a>
         </nav>
     </header>
 
-    <div class="post-navigation">
-        <a href="index.html" class="back-btn">&larr; 返回首页</a>
-    </div>
-
-    <main class="post-wrapper">
-        <hr class="red-divider">
-
+    <main class="post-container">
         <article id="content" class="markdown-body">
-            <p class="loading-text">加载文章ing...</p>
+            <p class="loading-text">LOADING ARTICLE...</p>
         </article>
     </main>
 
-    <footer class="site-footer">
-        <p>&copy; 2026 TUROK'S LAPUTA.</p>
-    </footer>
-
     <script>
-        window.addEventListener('load', () => {
-            // 配置 Marked 插件
-            if (typeof markedFootnote !== 'undefined') {
-                marked.use(markedFootnote());
-            }
-
+        document.addEventListener("DOMContentLoaded", () => {
+            // 1. 获取 URL 中传递的 file 参数 (如: post.html?file=posts/helloworld.md)
             const urlParams = new URLSearchParams(window.location.search);
-            const fileName = urlParams.get('file');
+            const postFilePath = urlParams.get('file');
 
-            if (fileName) {
-                fetch(fileName)
+            if (postFilePath) {
+                // 2. 拉取 Markdown 文件内容
+                fetch(postFilePath)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error(`HTTP error! status: ${response.status}`);
                         }
                         return response.text();
                     })
-                    .then(markdownText => {
-                        // 1. 渲染 Markdown
-                        const contentDiv = document.getElementById('content');
-                        contentDiv.innerHTML = marked.parse(markdownText);
+                    .then(text => {
+                        // 3. 正则匹配，提取文章最顶部的 YAML 元数据 (Front Matter)
+                        const frontMatterRegex = /^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/;
+                        const match = text.match(frontMatterRegex);
+                        
+                        let markdownContent = text;
+                        let meta = {
+                            title: '',
+                            date: '',
+                            category: '',
+                            tags: []
+                        };
 
-                        // 2. 动态更新网页标题（取第一个 H1 文本）
-                        const firstH1 = contentDiv.querySelector('h1');
-                        if (firstH1) {
-                            document.title = `${firstH1.innerText} - TUROK'S LAPUTA`;
+                        if (match) {
+                            const yamlText = match[1];
+                            markdownContent = match[2]; // 剥离元数据后只保留正文内容
+                            
+                            // 提取 title（标题）
+                            const titleMatch = yamlText.match(/title:\s*["']?([^"'\n]+)["']?/);
+                            if (titleMatch) meta.title = titleMatch[1].trim();
+
+                            // 提取 date（日期）
+                            const dateMatch = yamlText.match(/date:\s*["']?([^"'\n]+)["']?/);
+                            if (dateMatch) meta.date = dateMatch[1].trim();
+
+                            // 提取 category（分类）
+                            const categoryMatch = yamlText.match(/category:\s*["']?([^"'\n]+)["']?/);
+                            if (categoryMatch) meta.category = categoryMatch[1].trim();
+
+                            // 提取 tags（标签，格式如: tags: ["Design", "CSS"]）
+                            const tagsMatch = yamlText.match(/tags:\s*\[(.*?)\]/);
+                            if (tagsMatch && tagsMatch[1].trim() !== '') {
+                                meta.tags = tagsMatch[1].split(',').map(t => t.replace(/["'\s]/g, '')).filter(t => t);
+                            }
                         }
 
-                        // 3. 渲染 MathJax 数学公式
+                        // 修改浏览器标签页标题
+                        if (meta.title) {
+                            document.title = `${meta.title} - TUROK'S LAPUTA`;
+                        }
+
+                        // 4. 构建瑞士极简风格（亮红分类 + 大写标题 + 黑框标签 + 分割线）的头部 UI
+                        let metaHTML = '';
+                        if (meta.title || meta.category || meta.date || meta.tags.length > 0) {
+                            metaHTML = `
+                                <header class="post-header-meta" style="margin-bottom: 2.5rem;">
+                                    ${meta.category ? `<div style="color: #E63946; font-size: 0.85rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 0.5rem;">CATEGORY // ${meta.category}</div>` : ''}
+                                    ${meta.title ? `<h1 style="color: #1A1A1A; font-size: 2.2rem; font-weight: 900; line-height: 1.2; text-transform: uppercase; letter-spacing: -0.5px; margin-bottom: 1rem;">${meta.title}</h1>` : ''}
+                                    
+                                    <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; font-size: 0.85rem; font-weight: 700; color: #1A1A1A;">
+                                        ${meta.date ? `<span style="text-transform: uppercase; opacity: 0.8;">DATE: ${meta.date}</span>` : '<span></span>'}
+                                        ${meta.tags.length > 0 ? `
+                                            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                                                ${meta.tags.map(tag => `<span style="border: 1px solid #1A1A1A; padding: 2px 8px; font-size: 0.75rem; text-transform: uppercase;">#${tag}</span>`).join('')}
+                                            </div>
+                                        ` : ''}
+                                    </div>
+                                    <hr style="border: none; border-top: 1px solid #E63946; margin-top: 1.5rem; margin-bottom: 0;">
+                                </header>
+                            `;
+                        }
+
+                        // 5. 将 Markdown 解析为 HTML 页面
+                        if (window.marked) {
+                            if (window.markedFootnote) {
+                                marked.use(markedFootnote());
+                            }
+                            const renderedBody = marked.parse(markdownContent);
+                            document.getElementById('content').innerHTML = metaHTML + renderedBody;
+                        } else {
+                            document.getElementById('content').innerHTML = metaHTML + markdownContent;
+                        }
+
+                        // 6. 重新渲染 MathJax 数学公式
                         if (window.MathJax && MathJax.typesetPromise) {
                             MathJax.typesetPromise();
                         }
 
-                        // 4. 为代码块生成瑞士极简风格工具栏与复制按钮
-                        const codeBlocks = contentDiv.querySelectorAll('pre');
-                        codeBlocks.forEach(pre => {
+                        // 7. 增强代码块：动态添加大写语言标签与 COPY 按钮
+                        const pres = document.querySelectorAll('#content pre');
+                        pres.forEach(pre => {
+                            const codeElement = pre.querySelector('code');
                             const wrapper = document.createElement('div');
                             wrapper.className = 'code-block-wrapper';
                             pre.parentNode.insertBefore(wrapper, pre);
                             wrapper.appendChild(pre);
 
-                            const codeElement = pre.querySelector('code');
-                            let language = 'TEXT';
-                            if (codeElement) {
-                                const langClass = Array.from(codeElement.classList).find(c => c.startsWith('language-'));
-                                if (langClass) {
-                                    language = langClass.replace('language-', '').toUpperCase();
-                                }
-                            }
-
                             const header = document.createElement('div');
                             header.className = 'code-header';
 
+                            let langName = 'CODE';
+                            if (codeElement) {
+                                const classList = Array.from(codeElement.classList);
+                                const langClass = classList.find(c => c.startsWith('language-'));
+                                if (langClass) {
+                                    langName = langClass.replace('language-', '').toUpperCase();
+                                }
+                            }
+
                             const langSpan = document.createElement('span');
                             langSpan.className = 'code-lang';
-                            langSpan.textContent = language;
+                            langSpan.textContent = langName;
 
                             const copyBtn = document.createElement('button');
                             copyBtn.className = 'copy-btn';
                             copyBtn.textContent = 'COPY';
-                            
+
                             copyBtn.addEventListener('click', () => {
                                 const codeText = codeElement ? codeElement.innerText : pre.innerText;
                                 navigator.clipboard.writeText(codeText).then(() => {

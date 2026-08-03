@@ -1,0 +1,18 @@
+[
+  {
+    "title": "Welcome to Laputa",
+    "url": "post.html?file=posts/helloworld.md",
+    "excerpt": "这里啥也没有",
+    "category" : "LIFE",
+    "image": "",
+    "tags": []
+  },
+  {
+    "title": "Test",
+    "url": "post.html?file=posts/test.md",
+    "excerpt": "测试描述",
+    "category" : "TEST",
+    "image": "",
+    "tags": []
+  }
+]

@@ -34,13 +34,13 @@
     <div class="action-bar">
         <div class="filters">
             <a href="#" class="active">ALL</a>
-            <a href="#">DESIGN</a>
+            <!-- <a href="#">DESIGN</a>
             <a href="#">TECHNOLOGY</a>
-            <a href="#">LIFE</a>
+            <a href="#">LIFE</a> -->
         </div>
-        <div class="pagination">
+        <!-- <div class="pagination">
             <span>PAGE 1 OF 12</span>
-        </div>
+        </div> -->
     </div>
 
     <main class="masonry-grid">
@@ -48,7 +48,7 @@
         <article class="card">
             <div class="card-image" style="height: 250px; background-color: #E0E0E0;"></div>
             <div class="card-content">
-                <h2 class="card-title"><a href="post.html?file=posts/helloworld.md">WELCOME TO LAPUTA</a></h2>
+                <h2 class="card-title"><a href="post.html?file=posts/helloworld.md">Welcome to Laputa</a></h2>
                 <div class="card-meta">
                     <span class="tag">03 AUG 2026 / TECH</span>
                     <!-- <span class="like-btn">♥ 128</span> -->
@@ -56,7 +56,7 @@
             </div>
         </article>
 
-        <article class="card">
+        <!-- <article class="card">
             <div class="card-image" style="height: 380px; background-color: #D5D5D5;"></div>
             <div class="card-content">
                 <h2 class="card-title"><a href="#">SWISS TYPOGRAPHY & THE MODERN WEB</a></h2>
@@ -65,9 +65,9 @@
                     <span class="like-btn">♥ 84</span>
                 </div>
             </div>
-        </article>
+        </article> -->
 
-        <article class="card">
+        <!-- <article class="card">
             <div class="card-image" style="height: 180px; background-color: #C0C0C0;"></div>
             <div class="card-content">
                 <h2 class="card-title"><a href="#">THE ART OF NEGATIVE SPACE</a></h2>
@@ -76,9 +76,9 @@
                     <span class="like-btn">♥ 256</span>
                 </div>
             </div>
-        </article>
+        </article> -->
         
-        <article class="card">
+        <!-- <article class="card">
             <div class="card-image" style="height: 300px; background-color: #B0B0B0;"></div>
             <div class="card-content">
                 <h2 class="card-title"><a href="#">MINIMALIST LIFESTYLE IN 2026</a></h2>
@@ -87,12 +87,92 @@
                     <span class="like-btn">♥ 102</span>
                 </div>
             </div>
-        </article>
+        </article> -->
 
     </main>
 
     <footer class="site-footer">
-        <p>&copy; 2026 TUROK'S LAPUTA.</p>
+        <p>&copy; 2026 TUROK'S LAPUTA</p>
     </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // 1. 获取搜索框和文章列表的容器
+            // 注意：这里根据你 index.html 的类名，抓取了 search-input
+            const searchInput = document.querySelector('.search-input'); 
+            const articlesGrid = document.querySelector('.masonry-grid'); // 请确保包裹文章卡片的 div 带有 class="masonry-grid"
+
+            // 2. 如果当前页面没有找到文章容器，则跳过执行
+            if (!articlesGrid) {
+                console.warn("未找到 .masonry-grid 容器，请检查 index.html 中的 class 名。");
+                return;
+            }
+
+            let allArticles = [];
+
+            // 3. 定义一个函数：根据数据动态生成 HTML 文章卡片
+            function renderCards(articles) {
+                articlesGrid.innerHTML = ''; // 清空容器中原有的静态内容
+                
+                if (articles.length === 0) {
+                    articlesGrid.innerHTML = '<p style="text-align:center; grid-column: 1 / -1; font-family: Inter, sans-serif; font-weight: 700; color: #1A1A1A; margin-top: 2rem;">NO RESULTS FOUND.</p>';
+                    return;
+                }
+
+                articles.forEach(article => {
+                    const tagsHtml = article.tags ? article.tags.map(tag => `#${tag}`).join(' ') : '';
+                    
+                    // 动态判断：如果有 image 字段，就显示真实图片；如果没有，就显示极简红色块
+                    const imageCover = article.image 
+                        ? `<div class="card-image" style="height: 200px; background-image: url('${article.image}'); background-size: cover; background-position: center; border-bottom: 1px solid #1A1A1A;"></div>`
+                        : `<div class="card-image" style="height: 180px; background-color: #E63946; border-bottom: 1px solid #1A1A1A;"></div>`;
+                    
+                    const cardHTML = `
+                        <article class="card" style="border: 1px solid #1A1A1A; margin-bottom: 20px; break-inside: avoid; background: #F7F5F0;">
+                            ${imageCover}
+                            <div class="card-content" style="padding: 15px;">
+                                <h2 class="card-title" style="font-weight: 900; text-transform: uppercase; margin-bottom: 8px;">
+                                    <a href="${article.url}" style="color: #1A1A1A; text-decoration: none;">${article.title}</a>
+                                </h2>
+                                <div class="card-meta" style="font-size: 0.75rem; font-weight: 700; color: #1A1A1A;">
+                                    <span class="tag" style="text-transform: uppercase; color: #E63946;">${article.category}</span> 
+                                    <span style="opacity: 0.7;">/ ${tagsHtml}</span>
+                                </div>
+                            </div>
+                        </article>
+                    `;
+                    articlesGrid.innerHTML += cardHTML;
+                });
+            }
+
+            // 4. 从 search.json 获取文章数据
+            fetch('search.json')
+                .then(res => res.json())
+                .then(data => {
+                    allArticles = data;
+                    renderCards(allArticles); // 页面初次加载时，渲染所有文章
+                })
+                .catch(err => {
+                    console.error("无法加载 search.json 文件，请确认根目录下是否创建了该文件！", err);
+                });
+
+            // 5. 监听搜索框的输入事件
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    const keyword = e.target.value.trim().toLowerCase();
+                    
+                    // 进行模糊匹配（标题、分类或标签包含关键词即可）
+                    const filtered = allArticles.filter(article => 
+                        (article.title && article.title.toLowerCase().includes(keyword)) || 
+                        (article.category && article.category.toLowerCase().includes(keyword)) ||
+                        (article.tags && article.tags.some(tag => tag.toLowerCase().includes(keyword)))
+                    );
+                    
+                    renderCards(filtered); // 重新渲染筛选后的文章卡片
+                });
+            }
+        });
+    </script>
+    
 </body>
 </html>

@@ -1,3 +1,10 @@
+---
+title: "Welcom to Laputa"
+date: "2026-08-03"
+category: "Life"
+tags: 
+---
+
 # Hello! World
 
 欢迎来到 **Turok's Laputa** ，"Laputa" 意为“天空之城”[^1]。
