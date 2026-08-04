@@ -2,9 +2,17 @@
   {
     "title": "Welcome to Laputa",
     "url": "post.html?file=posts/helloworld.md",
-    "excerpt": "欢迎来到天空之城",
-    "category" : "LIFE",
-    "image": "",
+    "excerpt": "欢迎来到天空之城……",
+    "category" : "生活",
+    "image": "images/posts_img/天空之城.webp",
     "tags": []
+  },
+  {
+    "title": "[Git Commit]如何优雅的编写提交记录信息？",
+    "url": "post.html?file=posts/Git_Commit_Info.md",
+    "excerpt": "怎么让别人看懂我……",
+    "category" : "Git",
+    "image": "images/posts_img/Git_Commit_Info.webp",
+    "tags": ["版本控制", "提交信息", "Commit"]
   }
 ]

@@ -76,10 +76,36 @@
     margin-bottom: 60px;
 }
 
+/* ==========================================================================
+   首页文章卡片与图片自适应修复方案 (绝对生效版)
+   ========================================================================== */
+
+/* 1. 卡片外层容器：限制最大宽度并使用严谨的网格比例 */
 .card-image {
+    position: relative;
     width: 100%;
-    background-color: #E5E5E5;
-    margin-bottom: 20px;
+    aspect-ratio: 16 / 10; /* 锁定 16:10 黄金比例，契合瑞士风格 */
+    overflow: hidden;
+    display: block;
+    background-color: #eee; /* 图片加载前的底色防闪烁 */
+    margin-bottom: 16px;
+}
+
+/* 2. 核心自适应：强制图片撑满、裁剪、不变形 */
+.card-image img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important; /* 核心：壁纸级平铺裁剪，绝不拉伸 */
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+/* 3. 悬浮微交互动效 */
+.article-card:hover .card-image img {
+    transform: scale(1.03);
 }
 
 .card-title {
