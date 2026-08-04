@@ -63,7 +63,7 @@
             };
 
             // 2. 异步加载 search.json
-            fetch('search.json')
+            fetch('data/search.json')
                 .then(response => {
                     if (!response.ok) throw new Error('网络响应异常');
                     return response.json();

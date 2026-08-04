@@ -1,0 +1,58 @@
+[
+  {
+    "category": "code",
+    "badge": "DEV / FRONTEND",
+    "date": "2026.08",
+    "tags": "#JS #CSS-MODULES",
+    "title": "TUROK'S LAPUTA 个人博客",
+    "summary": "基于 Swiss Design 极简主义排版构建的无后端静态博客系统，支持 Markdown 解析、MathJax 渲染与全站实时搜索。",
+    "link": "index.html",
+    "cover": "",
+    "placeholderBg": "#1A1A1A",
+    "placeholderColor": "#F7F5F0",
+    "placeholderIcon": "💻",
+    "placeholderText": "SWISS BLOG ARCHITECTURE"
+  },
+  {
+    "category": "design",
+    "badge": "DESIGN / SYSTEM",
+    "date": "2026.07",
+    "tags": "#FIGMA #UI/UX",
+    "title": "瑞士排版设计规范与 UI 组件库",
+    "summary": "定义高对比度配色（#F7F5F0 / #1A1A1A / #E63946）、严谨网格与全大写无衬线字体的独立视觉组件系统。",
+    "link": "#",
+    "cover": "",
+    "placeholderBg": "#E63946",
+    "placeholderColor": "#FFFFFF",
+    "placeholderIcon": "🎨",
+    "placeholderText": "SWISS STYLE SYSTEM"
+  },
+  {
+    "category": "tool",
+    "badge": "GEEK TOOLS / UI",
+    "date": "2026.06",
+    "tags": "#WEB-AUDIO #CSS-ANIMATION",
+    "title": "极简浮动音乐播放器",
+    "summary": "集成于“关于我”页面的悬浮节点播放器，支持 2 秒无操作隐显、滑动条音量调节与选曲弹窗置顶防遮挡。",
+    "link": "about.html",
+    "cover": "",
+    "placeholderBg": "#E2DFD7",
+    "placeholderColor": "#1A1A1A",
+    "placeholderIcon": "🎵",
+    "placeholderText": "INTERACTIVE PLAYER"
+  },
+  {
+    "category": "code",
+    "badge": "DEV / TOOL",
+    "date": "2026.05",
+    "tags": "#MARKED #MATHJAX",
+    "title": "轻量级前端渲染引擎",
+    "summary": "解析 Front Matter 元数据并实时将 Markdown 文件转化为极客风格排版，集成代码高亮与一键复制功能。",
+    "link": "#",
+    "cover": "",
+    "placeholderBg": "#2B2B2B",
+    "placeholderColor": "#E63946",
+    "placeholderIcon": "⚡",
+    "placeholderText": "MARKDOWN ENGINE"
+  }
+]

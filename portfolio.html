@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PORTFOLIO - TUROK'S LAPUTA</title>
+
+  <!-- 引入你的全局样式与布局样式 -->
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/portfolio.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- 完全复用 about.html 中的标准导航栏结构 -->
+  <header class="site-header">
+      <a href="index.html" class="brand">
+          <div class="logo"></div>
+          <span class="brand-title">TUROK'S LAPUTA</span>
+      </a>
+      <nav class="site-nav">
+          <a href="index.html">首页</a> /
+          <a href="about.html">关于我</a> /
+          <a href="archive.html">文章</a> /
+          <a href="portfolio.html" class="active">作品集</a>
+      </nav>
+  </header>
+
+  <main class="portfolio-page">
+    <section class="portfolio-hero">
+      <div class="hero-tag">[ SELECTED WORKS / 2026-Now ]</div>
+      <h1 class="hero-title">PORTFOLIO</h1>
+      <p class="hero-desc">
+        Here come the future weapons.
+      </p>
+    </section>
+
+    <!-- 在这里插入了搜索框 -->
+    <section class="portfolio-filter-bar">
+      <div class="filter-wrapper">
+        <button class="filter-btn active" data-filter="all">ALL WORKS (04)</button>
+        <button class="filter-btn" data-filter="code">DEV & CODE</button>
+        <button class="filter-btn" data-filter="design">DESIGN & UI</button>
+        <button class="filter-btn" data-filter="tool">GEEK TOOLS</button>
+      </div>
+      <div class="search-wrapper">
+        <input type="text" id="portfolio-search" placeholder="SEARCH WORKS..." autocomplete="off">
+      </div>
+    </section>
+
+    <!-- 3. 作品网格布局（留空，由底部 JS 自动渲染） -->
+    <section class="portfolio-grid" id="portfolio-grid">
+      <!-- 这里的卡片将被自动注入 -->
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-container">
+      <p>&copy; 2026 TUROK'S LAPUTA</p>
+      <!-- <p class="footer-motto">DESIGNED WITH SWISS PRECISION & GEEK SPIRIT</p> -->
+    </div>
+  </footer>
+
+  <!-- 搜索、筛选与动态渲染交互脚本 -->
+ <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const grid = document.getElementById('portfolio-grid');
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const searchInput = document.getElementById('portfolio-search');
+      
+      let portfolioData = [];
+      let currentCategory = 'all';
+      let currentSearchTerm = '';
+
+      // ==========================================
+      // 1. 异步获取 JSON 数据
+      // ==========================================
+      try {
+        const response = await fetch('data/portfolio.json');
+        
+        // 检查网络请求是否成功
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        portfolioData = await response.json();
+        
+        // 数据加载成功后，开始初始化页面
+        initPortfolio();
+        
+      } catch (error) {
+        console.error("加载作品数据失败:", error);
+        grid.innerHTML = '<p style="text-align:center; padding: 40px; color: #E63946; font-weight: 800;">[ ERROR ] 数据加载失败，请检查网络或控制台。</p>';
+      }
+
+      // ==========================================
+      // 2. 初始化渲染与事件绑定
+      // ==========================================
+      function initPortfolio() {
+        // 更新分类按钮上的总数
+        document.querySelector('[data-filter="all"]').innerText = `ALL WORKS (${portfolioData.length})`;
+        
+        // 渲染 HTML
+        renderCards();
+
+        // **注意**：必须在卡片渲染到页面之后，再去抓取 .portfolio-card 的 DOM 元素！
+        const cards = document.querySelectorAll('.portfolio-card');
+        
+        // 绑定搜索与筛选交互
+        bindInteractions(cards);
+      }
+
+      // ==========================================
+      // 3. 渲染 HTML 卡片逻辑
+      // ==========================================
+      function renderCards() {
+        let htmlContent = '';
+        portfolioData.forEach(item => {
+          const imageContent = item.cover 
+            ? `<img src="${item.cover}" alt="${item.title}" style="width:100%; height:100%; object-fit:cover;">`
+            : `<div class="card-image-placeholder" style="background-color: ${item.placeholderBg}; color: ${item.placeholderColor};">
+                 <span class="placeholder-icon">${item.placeholderIcon}</span>
+                 <span class="placeholder-text">${item.placeholderText}</span>
+               </div>`;
+
+          htmlContent += `
+            <article class="portfolio-card" data-category="${item.category}">
+              <div class="card-image-wrap">
+                ${imageContent}
+                <span class="card-category-badge">${item.badge}</span>
+              </div>
+              <div class="card-content">
+                <div class="card-meta">
+                  <span class="card-date">${item.date}</span>
+                  <span class="card-tag">${item.tags}</span>
+                </div>
+                <h2 class="card-title"><a href="${item.link}">${item.title}</a></h2>
+                <p class="card-summary">${item.summary}</p>
+                <div class="card-footer">
+                  <a href="${item.link}" class="card-link">VIEW PROJECT &rarr;</a>
+                </div>
+              </div>
+            </article>
+          `;
+        });
+        grid.innerHTML = htmlContent;
+      }
+
+      // ==========================================
+      // 4. 筛选与搜索事件逻辑
+      // ==========================================
+      function bindInteractions(cards) {
+        const applyFilters = () => {
+          cards.forEach(card => {
+            const cardCategory = card.getAttribute('data-category');
+            const cardText = card.textContent.toLowerCase(); 
+            
+            const matchCategory = (currentCategory === 'all' || cardCategory === currentCategory);
+            const matchSearch = cardText.includes(currentSearchTerm);
+            
+            if (matchCategory && matchSearch) {
+              card.style.display = 'block';
+              setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+              }, 50);
+            } else {
+              card.style.opacity = '0';
+              card.style.transform = 'translateY(15px)';
+              setTimeout(() => {
+                card.style.display = 'none';
+              }, 300);
+            }
+          });
+        };
+
+        filterBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentCategory = btn.getAttribute('data-filter');
+            applyFilters();
+          });
+        });
+
+        searchInput.addEventListener('input', (e) => {
+          currentSearchTerm = e.target.value.toLowerCase().trim();
+          applyFilters();
+        });
+      }
+    });
+  </script>
