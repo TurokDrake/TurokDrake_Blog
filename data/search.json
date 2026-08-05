@@ -4,7 +4,7 @@
     "url": "post.html?file=posts/helloworld.md",
     "excerpt": "欢迎来到天空之城……",
     "category" : "生活",
-    "image": "images/posts_img/天空之城.webp",
+    "image": "https://img.remit.ee/api/file/CAACAgUAAyEGAASHRsPbAAEYm8Fqc0o7L4Xu7v11LeFFgrnp15u90wACTjYAAniTmFeLgKjTZjpaCz0E.webp",
     "tags": []
   },
   {
@@ -12,7 +12,7 @@
     "url": "post.html?file=posts/Git_Commit_Info.md",
     "excerpt": "怎么让别人看懂我……",
     "category" : "Git",
-    "image": "images/posts_img/Git_Commit_Info.webp",
+    "image": "https://img.remit.ee/api/file/CAACAgUAAyEGAASHRsPbAAEYm7xqc0nYB-qVRWwTEE5TvmldQtg-YwACRDYAAniTmFegvMmiqYo1pD0E.webp",
     "tags": ["版本控制", "提交信息", "Commit"]
   },
   {
@@ -20,7 +20,7 @@
     "url": "post.html?file=posts/scoop_install.md",
     "excerpt": "有了包管理器后，妈妈再也不担心我不会配置环境变量了……",
     "category" : "Software",
-    "image": "images/posts_img/scoop_0.webp",
+    "image": "https://img.remit.ee/api/file/CAACAgUAAyEGAASHRsPbAAEYm75qc0oaH4bnl6d-mlO6AAH8EMP0UqMAAkg2AAJ4k5hXbJUnMpTUFSc9BA.webp",
     "tags": ["Scoop", "包管理器", "Windows","环境变量","版本控制","安装"]
   }
 ]

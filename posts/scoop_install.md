@@ -36,7 +36,7 @@ Scoop 仓库页面：
 
 打开 PowerShell，
 
-![](images/img_dir/scoop_install/打开PowerShell.png)
+![](https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEYm8Nqc0pxaVxVdOSEzlb0LaEokuqJwgACUTYAAniTmFetNcqXBIocDT0E.png)
 
 
 执行以下代码，以在指定范围 `CurrentUser` 内，设置执行策略为 `RemoteSigned`：
@@ -49,7 +49,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 irm get.scoop.sh | iex
 ```
 
-![](images/img_dir/scoop_install/安装scoop.png) 
+![](https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEYm8hqc0rFbxHCd64v40CSp_cP6K6FygACVzYAAniTmFeikYYGDsikcD0E.png) 
 
 `irm` 是 `Invoke-RestMethod` ，作用是将 HTTP 或 HTTPS 请求发送到 RESTful Web 服务。  
 `iex` 是 `Invoke-Expression` ，作用是在本地计算机上运行命令或表达式。
@@ -59,7 +59,7 @@ irm get.scoop.sh | iex
 scoop --version
 ```
 
-![](images/img_dir/scoop_install/查看scoop版本.png)
+![](https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEYm8pqc0rkG_6elEMZy8N4MRnFWRmgVgACWjYAAniTmFfTNT_NSZIGYD0E.png)
 
 你创建的 Scoop 文件夹在 `C:\Users\你的用户名` 处。关于如何用 Scoop 安装软件，可见[如何使用Scoop安装软件](如何使用scoop安装软件.md) 
 
@@ -69,20 +69,20 @@ scoop --version
 
 打开 PowerShell，  
 
-![](images/img_dir/scoop_install/打开PowerShell.png) 
+![](https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEYm8Nqc0pxaVxVdOSEzlb0LaEokuqJwgACUTYAAniTmFetNcqXBIocDT0E.png) 
 
 打开资源管理器，创建文件目录并复制路径，  
 
-![](images/img_dir/scoop_install/创建文件夹.png)
+![](https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEYm8tqc0sO8S8102UqsL5pAjQQMjF6dAACXDYAAniTmFc3mgABNq4loo09BA.png)
 
-![](images/img_dir/scoop_install/复制路径.png)
+![](https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEYm8xqc0sPqMSd8ExBeMAzujz5Hui2UgACXTYAAniTmFfDrSZ5KY5ZTT0E.png)
 
 输入以下代码，进入你指定的文件目录：
 ```PowerShell
 cd <文件路径>
 ```
 
-![](images/img_dir/scoop_install/跳转目标路径.png)
+![](https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEYm9Bqc0tBlhBQkkoKoiGuaiHLk86uaQACYjYAAniTmFdvPr2LVCYjpj0E.png)
 
 执行以下代码，以在指定范围 `CurrentUser` 内，设置执行策略为 `RemoteSigned`：
 ```PowerShell
@@ -96,7 +96,7 @@ irm get.scoop.sh -outfile 'install.ps1'
 
 你可以在你的文件夹中找到该文件 `install.ps1` ，
 
-![](images/img_dir/scoop_install/获取的文件.png)
+![](https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEYm89qc0s7nEbV771e4twX3azKgj9rKwACYTYAAniTmFcVIBQLTtoPID0E.png)
 
 > 另一种获取 `install.ps1` 文件的方法：访问 [ScoopInstaller/Install: 📥 Next-generation Scoop (un)installer](https://github.com/ScoopInstaller/Install) 以下载 `install.ps1` 文件。
 
@@ -129,14 +129,14 @@ irm get.scoop.sh -outfile 'install.ps1'
 
 先创建好指定文件夹 `Scoop` 和 `ScoopGlobal` ，文件夹名字可以自定义。
 
-![](images/img_dir/scoop_install/创建Scoop目录.png)
+![](https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEYm9pqc0uE4-cDzzJh_ZikZc8Iu1cdUAACcjYAAniTmFdUHDu_Xzd9gj0E.png)
 
 假如我想安装到 `C:\Scoop\Scoop`中，全局应用安装到 `C:\Scoop\ScoopGlobal` 中，可以输入：  
 ```PowerShell
 .\install.ps1 -ScoopDir 'C:\Scoop\Scoop' -ScoopGlobalDir 'C:\Scoop\ScoopGlobal'
 ```
 
-![](images/img_dir/scoop_install/成功安装.png)
+![](https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEYm9lqc0uBnjpyub9jTTOVQaSK-HKougACcTYAAniTmFd2LDHtUGK6bj0E.png)
 
 
 ## 总结
