@@ -6,7 +6,7 @@ tags: ["Scoop", "包管理器", "Windows","环境变量","版本控制","安装"
 ---
 
 本文将介绍如何使用 scoop 安装软件，以及一些常用命令。  
-如果你尚未安装 scoop，请见 [如何安装Scoop](post.html?file=posts/scoop_install.md) 
+如果你尚未安装 scoop，请见<a href="post.html?file=posts/scoop_install.md" target="_blank">如何安装Scoop</a>
 
 <h4 id = "04">目录</h4>
 
