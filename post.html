@@ -49,17 +49,16 @@
     </main>
 
     <script>
-        
         document.addEventListener('DOMContentLoaded', () => {
-            // 1. 初始化全屏图片放大灯箱（采用事件委托，完美适应异步加载）
+            // 初始化全屏图片放大功能
             initImageLightbox();
 
-            // 2. 配置 Marked.js 支持脚注扩展
+            // 配置 Marked 支持脚注
             if (typeof markedFootnote !== 'undefined') {
                 marked.use(markedFootnote());
             }
 
-            // 3. 从 URL 解析参数并拉取文章
+            // 从 URL 获取请求的文章路径
             const urlParams = new URLSearchParams(window.location.search);
             const postFilePath = urlParams.get('file');
 
@@ -70,17 +69,42 @@
                         return response.text();
                     })
                     .then(markdown => {
-                        // 渲染 Markdown 内容
-                        document.getElementById('content').innerHTML = marked.parse(markdown);
+                        // 1. 解析 YAML Front Matter 属性
+                        const { attributes, body } = parseFrontMatter(markdown);
 
-                        // 处理代码块：语法高亮 + 显示语言名称 + 复制按钮
+                        // 更新浏览器标签页标题
+                        if (attributes.title) {
+                            document.title = `${attributes.title} - TUROK'S LAPUTA`;
+                        }
+
+                        // 2. 渲染文章属性头部 (Title, Date, Category, Tags)
+                        let headerHtml = '';
+                        if (attributes.title || attributes.category || attributes.date || attributes.tags) {
+                            headerHtml = `
+                                <header class="post-header">
+                                    ${attributes.category ? `<div class="post-category">${attributes.category}</div>` : ''}
+                                    ${attributes.title ? `<h1 class="post-title">${attributes.title}</h1>` : ''}
+                                    <div class="post-meta">
+                                        ${attributes.date ? `<span class="post-date">DATE: ${attributes.date}</span>` : ''}
+                                        ${Array.isArray(attributes.tags) && attributes.tags.length ? `
+                                            <div class="post-tags">
+                                                ${attributes.tags.map(tag => `<span class="tag-badge">#${tag}</span>`).join('')}
+                                            </div>
+                                        ` : ''}
+                                    </div>
+                                </header>
+                            `;
+                        }
+
+                        // 3. 将解析后的正文内容与属性头一起插入页面
+                        document.getElementById('content').innerHTML = headerHtml + `<article class="markdown-body">${marked.parse(body)}</article>`;
+
+                        // 4. 代码块处理：语法高亮 + 提取语言名称 + Consolas 字体显示 + 复制按钮
                         document.querySelectorAll('.markdown-body pre code').forEach((codeBlock) => {
-                            // 安全防错检查：确认 hljs 库加载完成后再执行高亮
                             if (typeof hljs !== 'undefined') {
                                 hljs.highlightElement(codeBlock);
                             }
 
-                            // 提取语言类型（例如 language-javascript -> JAVASCRIPT）
                             let lang = 'CODE';
                             codeBlock.classList.forEach(cls => {
                                 if (cls.startsWith('language-')) {
@@ -124,7 +148,7 @@
                             wrapper.appendChild(pre);
                         });
 
-                        // 数学公式渲染
+                        // 5. 数学公式渲染
                         if (window.MathJax && window.MathJax.typesetPromise) {
                             window.MathJax.typesetPromise().catch((err) => console.log('MathJax error:', err));
                         }
@@ -133,17 +157,53 @@
                         document.getElementById('content').innerHTML = `
                             <p class="error-text">ERROR LOADING POST: ${error.message}</p>
                             <p style="font-size: 0.85rem; color: #666; margin-top: 8px;">尝试请求的相对路径: <code>${postFilePath}</code></p>
-                            <p style="font-size: 0.85rem; color: #E63946; margin-top: 4px;">提示：请检查 GitHub 仓库的 <code>posts/</code> 文件夹中是否存在该文件，且文件名大小写完全一致。</p>
                         `;
                     });
             } else {
-                document.getElementById('content').innerHTML = `
-                    <p class="error-text">NO POST SPECIFIED.</p>
-                `;
+                document.getElementById('content').innerHTML = `<p class="error-text">NO POST SPECIFIED.</p>`;
             }
         });
 
-        // 图片灯箱放大机制 (事件委托，无需关注图片异步加载时机)
+        // YAML Front Matter 解析算法
+        function parseFrontMatter(text) {
+            const frontMatterRegex = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?/;
+            const match = text.match(frontMatterRegex);
+            if (!match) {
+                return { attributes: {}, body: text };
+            }
+
+            const yamlStr = match[1];
+            const body = text.replace(frontMatterRegex, '');
+            const attributes = {};
+
+            yamlStr.split(/\r?\n/).forEach(line => {
+                const colonIdx = line.indexOf(':');
+                if (colonIdx !== -1) {
+                    const key = line.slice(0, colonIdx).trim();
+                    let val = line.slice(colonIdx + 1).trim();
+
+                    // 清除首尾引号
+                    if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+                        val = val.slice(1, -1);
+                    }
+                    // 解析数组格式 ["版本控制", "提交信息", "Commit"]
+                    if (val.startsWith('[') && val.endsWith(']')) {
+                        try {
+                            val = JSON.parse(val.replace(/'/g, '"'));
+                        } catch (e) {
+                            val = val.slice(1, -1).split(',').map(s => s.trim().replace(/^['"]|['"]$/g, ''));
+                        }
+                    }
+                    if (key) {
+                        attributes[key] = val;
+                    }
+                }
+            });
+
+            return { attributes, body };
+        }
+
+        // 全局图片放大灯箱功能
         function initImageLightbox() {
             let overlay = document.querySelector('.lightbox-overlay');
             if (!overlay) {
@@ -155,7 +215,6 @@
 
             const lightboxImg = overlay.querySelector('img');
 
-            // 监听文档所有点击，判断是否点到了正文里的图片
             document.addEventListener('click', (e) => {
                 if (e.target.tagName === 'IMG' && e.target.closest('.markdown-body')) {
                     lightboxImg.src = e.target.src;
@@ -163,7 +222,6 @@
                 }
             });
 
-            // 点击遮罩层或按 Esc 键关闭
             overlay.addEventListener('click', () => overlay.classList.remove('active'));
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') overlay.classList.remove('active');
