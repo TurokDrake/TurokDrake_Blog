@@ -10,13 +10,13 @@
         <loc>https://turokfang.top/about.html</loc>
         <lastmod>2026-08-04</lastmod>
         <changefreq>monthly</changefreq>
-        <priority>0.5</priority>
+        <priority>0.3</priority>
     </url>
     <url>
         <loc>https://turokfang.top/archive.html</loc>
         <lastmod>2026-08-04</lastmod>
         <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
+        <priority>0.5</priority>
     </url>
     <url>
         <loc>https://turokfang.top/post.html?file=posts/helloworld.md</loc>
@@ -33,6 +33,12 @@
     <url>
         <loc>https://turokfang.top/post.html?file=posts/scoop_install.md</loc>
         <lastmod>2026-08-05</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://turokfang.top/post.html?file=posts/scoop_install_software.md</loc>
+        <lastmod>2026-08-07</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>

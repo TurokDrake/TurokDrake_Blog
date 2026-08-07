@@ -15,6 +15,9 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked-footnote/dist/index.umd.min.js"></script>
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/styles/github-dark.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/lib/highlight.min.js"></script>
+
     <script>
         MathJax = {
             tex: {
@@ -46,66 +49,64 @@
     </main>
 
     <script>
-        // 确保页面加载了 marked-footnote 后，进行注册
-        if (typeof markedFootnote !== 'undefined') {
-            marked.use(markedFootnote());
-        }
-        document.addEventListener("DOMContentLoaded", () => {
-            // 1. 获取 URL 中传递的 file 参数 (如: post.html?file=posts/helloworld.md)
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. 初始化全屏图片放大灯箱（采用事件委托，完美适应异步加载）
+            initImageLightbox();
+
+            // 2. 配置 Marked.js 支持脚注扩展
+            if (typeof markedFootnote !== 'undefined') {
+                marked.use(markedFootnote());
+            }
+
+            // 3. 从 URL 解析参数并拉取文章
             const urlParams = new URLSearchParams(window.location.search);
-            let postFilePath = urlParams.get('file');
+            const postFilePath = urlParams.get('file');
 
             if (postFilePath) {
-                // 清洗路径：将反斜杠替换为正斜杠，并去除多余空格
-                postFilePath = postFilePath.replace(/\\/g, '/').trim();
-
-                console.log("正在加载文章路径：", postFilePath);
-
-                // 2. 直接使用相对路径发起请求（不加前面的斜杠，完美兼容本地和线上自定义域名）
                 fetch(postFilePath)
                     .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
+                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                         return response.text();
                     })
-                    .then(markdownText => {
-                        const contentElement = document.getElementById('content');
+                    .then(markdown => {
+                        // 渲染 Markdown 内容
+                        document.getElementById('content').innerHTML = marked.parse(markdown);
 
-                        // 简单的 YAML Front Matter 过滤
-                        let bodyText = markdownText;
-                        if (markdownText.startsWith('---')) {
-                            const parts = markdownText.split('---');
-                            if (parts.length >= 3) {
-                                bodyText = parts.slice(2).join('---');
+                        // 处理代码块：语法高亮 + 显示语言名称 + 复制按钮
+                        document.querySelectorAll('.markdown-body pre code').forEach((codeBlock) => {
+                            // 安全防错检查：确认 hljs 库加载完成后再执行高亮
+                            if (typeof hljs !== 'undefined') {
+                                hljs.highlightElement(codeBlock);
                             }
-                        }
 
-                        contentElement.innerHTML = marked.parse(bodyText);
+                            // 提取语言类型（例如 language-javascript -> JAVASCRIPT）
+                            let lang = 'CODE';
+                            codeBlock.classList.forEach(cls => {
+                                if (cls.startsWith('language-')) {
+                                    lang = cls.replace('language-', '').toUpperCase();
+                                }
+                            });
 
-                        // 代码块 COPY 按钮与高亮逻辑
-                        const preElements = contentElement.querySelectorAll('pre');
-                        preElements.forEach(pre => {
+                            const pre = codeBlock.parentElement;
+                            if (pre.parentNode.classList.contains('code-block-wrapper')) return;
+
                             const wrapper = document.createElement('div');
                             wrapper.className = 'code-block-wrapper';
-                            pre.parentNode.insertBefore(wrapper, pre);
-                            wrapper.appendChild(pre);
 
                             const header = document.createElement('div');
                             header.className = 'code-header';
 
                             const langSpan = document.createElement('span');
                             langSpan.className = 'code-lang';
-                            langSpan.textContent = 'CODE';
+                            langSpan.textContent = lang;
 
                             const copyBtn = document.createElement('button');
                             copyBtn.className = 'copy-btn';
                             copyBtn.textContent = 'COPY';
 
                             copyBtn.addEventListener('click', () => {
-                                const codeElement = pre.querySelector('code');
-                                const codeText = codeElement ? codeElement.innerText : pre.innerText;
-                                navigator.clipboard.writeText(codeText).then(() => {
+                                navigator.clipboard.writeText(codeBlock.textContent).then(() => {
                                     copyBtn.textContent = 'COPIED!';
                                     copyBtn.classList.add('copied');
                                     setTimeout(() => {
@@ -117,7 +118,10 @@
 
                             header.appendChild(langSpan);
                             header.appendChild(copyBtn);
-                            wrapper.insertBefore(header, pre);
+
+                            pre.parentNode.insertBefore(wrapper, pre);
+                            wrapper.appendChild(header);
+                            wrapper.appendChild(pre);
                         });
 
                         // 数学公式渲染
@@ -127,17 +131,44 @@
                     })
                     .catch(error => {
                         document.getElementById('content').innerHTML = `
-                    <p class="error-text">ERROR LOADING POST: ${error.message}</p>
-                    <p style="font-size: 0.85rem; color: #666; margin-top: 8px;">尝试请求的相对路径: <code>${postFilePath}</code></p>
-                    <p style="font-size: 0.85rem; color: #E63946; margin-top: 4px;">提示：请检查 GitHub 仓库的 <code>posts/</code> 文件夹中是否存在该文件，且文件名大小写完全一致。</p>
-                `;
+                            <p class="error-text">ERROR LOADING POST: ${error.message}</p>
+                            <p style="font-size: 0.85rem; color: #666; margin-top: 8px;">尝试请求的相对路径: <code>${postFilePath}</code></p>
+                            <p style="font-size: 0.85rem; color: #E63946; margin-top: 4px;">提示：请检查 GitHub 仓库的 <code>posts/</code> 文件夹中是否存在该文件，且文件名大小写完全一致。</p>
+                        `;
                     });
             } else {
                 document.getElementById('content').innerHTML = `
-            <p class="error-text">NO POST SPECIFIED.</p>
-        `;
+                    <p class="error-text">NO POST SPECIFIED.</p>
+                `;
             }
         });
+
+        // 图片灯箱放大机制 (事件委托，无需关注图片异步加载时机)
+        function initImageLightbox() {
+            let overlay = document.querySelector('.lightbox-overlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.className = 'lightbox-overlay';
+                overlay.innerHTML = '<img src="" alt="Enlarged view">';
+                document.body.appendChild(overlay);
+            }
+
+            const lightboxImg = overlay.querySelector('img');
+
+            // 监听文档所有点击，判断是否点到了正文里的图片
+            document.addEventListener('click', (e) => {
+                if (e.target.tagName === 'IMG' && e.target.closest('.markdown-body')) {
+                    lightboxImg.src = e.target.src;
+                    overlay.classList.add('active');
+                }
+            });
+
+            // 点击遮罩层或按 Esc 键关闭
+            overlay.addEventListener('click', () => overlay.classList.remove('active'));
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') overlay.classList.remove('active');
+            });
+        }
     </script>
 
 </body>

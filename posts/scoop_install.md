@@ -61,7 +61,7 @@ scoop --version
 
 ![](https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEYm8pqc0rkG_6elEMZy8N4MRnFWRmgVgACWjYAAniTmFfTNT_NSZIGYD0E.png)
 
-你创建的 Scoop 文件夹在 `C:\Users\你的用户名` 处。关于如何用 Scoop 安装软件，可见[如何使用Scoop安装软件](如何使用scoop安装软件.md) 
+你创建的 Scoop 文件夹在 `C:\Users\你的用户名` 处。关于如何用 Scoop 安装软件，可见[如何使用Scoop安装软件](post.html?file=posts/scoop_install_software.md) 
 
 ---
 

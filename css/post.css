@@ -191,3 +191,53 @@
     border-top: 1px solid var(--accent-red);
     font-size: 0.85rem;
 }
+
+/* =====================================
+   文章正文图片自适应与点击放大样式
+===================================== */
+/* 1. 限制文章图片宽度，防止溢出屏幕 */
+.markdown-body img {
+    max-width: 100% !important;  /* 限制最大宽度不超过正文容器 */
+    height: auto !important;     /* 保持原始宽高比，防止变形 */
+    display: block;
+    margin: 24px auto;          /* 居中排版 */
+    border: 1px solid var(--text-charcoal); /* 契合瑞士极简风格的边框 */
+    cursor: zoom-in;            /* 鼠标悬停提示可放大 */
+    transition: opacity 0.2s ease;
+}
+
+.markdown-body img:hover {
+    opacity: 0.85;
+}
+
+/* 2. 全屏灯箱遮罩层 */
+/* 全屏灯箱遮罩层 */
+.lightbox-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(26, 26, 26, 0.92);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease-in-out;
+    cursor: zoom-out;
+}
+
+.lightbox-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.lightbox-overlay img {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+    border: 1px solid #FFFFFF;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}

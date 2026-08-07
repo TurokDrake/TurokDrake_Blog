@@ -22,5 +22,13 @@
     "category" : "Software",
     "image": "https://img.remit.ee/api/file/CAACAgUAAyEGAASHRsPbAAEYm75qc0oaH4bnl6d-mlO6AAH8EMP0UqMAAkg2AAJ4k5hXbJUnMpTUFSc9BA.webp",
     "tags": ["Scoop", "包管理器", "Windows","环境变量","版本控制","安装"]
+  },
+  {
+    "title": "[Scoop]如何使用Scoop安装软件？",
+    "url": "post.html?file=posts/scoop_install_software.md",
+    "excerpt": "轻松掌握如何使用Scoop……",
+    "category" : "Software",
+    "image": "https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEYw-JqddfphRsjzy9T7trh1a31OkHhfQACgScAAvmbsFdxNcnvkVmFgD0E.png",
+    "tags": ["Scoop", "包管理器", "Windows","环境变量","版本控制","安装","命令"]
   }
 ]
