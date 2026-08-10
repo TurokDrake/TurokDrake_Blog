@@ -15,8 +15,11 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked-footnote/dist/index.umd.min.js"></script>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/styles/github-dark.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/lib/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/powershell.min.js"></script>
 
     <script>
         MathJax = {
@@ -49,6 +52,46 @@
     </main>
 
     <script>
+        // 编程语言别名规范化与顶部美化名称映射表
+        const LANGUAGE_MAP = {
+            // C 语言家族
+            'c': { hljs: 'c', display: 'C' },
+            'h': { hljs: 'c', display: 'C' },
+            'cpp': { hljs: 'cpp', display: 'C++' },
+            'c++': { hljs: 'cpp', display: 'C++' },
+            'hpp': { hljs: 'cpp', display: 'C++' },
+            'csharp': { hljs: 'csharp', display: 'C#' },
+            'c#': { hljs: 'csharp', display: 'C#' },
+            'cs': { hljs: 'csharp', display: 'C#' },
+
+            // 命令行与 Shell
+            'powershell': { hljs: 'powershell', display: 'POWERSHELL' },
+            'ps': { hljs: 'powershell', display: 'POWERSHELL' },
+            'ps1': { hljs: 'powershell', display: 'POWERSHELL' },
+            'gitbash': { hljs: 'bash', display: 'GIT BASH' },
+            'git-bash': { hljs: 'bash', display: 'GIT BASH' },
+            'bash': { hljs: 'bash', display: 'GIT BASH' },
+            'sh': { hljs: 'bash', display: 'SH' },
+            'zsh': { hljs: 'bash', display: 'ZSH' },
+
+            // 脚本与热门语言（包含 Python, Go, Lua 等）
+            'python': { hljs: 'python', display: 'PYTHON' },
+            'py': { hljs: 'python', display: 'PYTHON' },
+            'go': { hljs: 'go', display: 'GO' },
+            'golang': { hljs: 'go', display: 'GO' },
+            'lua': { hljs: 'lua', display: 'LUA' },
+            'js': { hljs: 'javascript', display: 'JAVASCRIPT' },
+            'javascript': { hljs: 'javascript', display: 'JAVASCRIPT' },
+            'ts': { hljs: 'typescript', display: 'TYPESCRIPT' },
+            'typescript': { hljs: 'typescript', display: 'TYPESCRIPT' },
+            'html': { hljs: 'xml', display: 'HTML' },
+            'xml': { hljs: 'xml', display: 'XML' },
+            'css': { hljs: 'css', display: 'CSS' },
+            'json': { hljs: 'json', display: 'JSON' },
+            'sql': { hljs: 'sql', display: 'SQL' },
+            'yaml': { hljs: 'yaml', display: 'YAML' },
+            'yml': { hljs: 'yaml', display: 'YAML' }
+        };
         document.addEventListener('DOMContentLoaded', () => {
             // 初始化全屏图片放大功能
             initImageLightbox();
@@ -99,19 +142,36 @@
                         // 3. 将解析后的正文内容与属性头一起插入页面
                         document.getElementById('content').innerHTML = headerHtml + `<article class="markdown-body">${marked.parse(body)}</article>`;
 
-                        // 4. 代码块处理：语法高亮 + 提取语言名称 + Consolas 字体显示 + 复制按钮
+                        // 4. 代码块高亮与黑客风顶栏渲染
                         document.querySelectorAll('.markdown-body pre code').forEach((codeBlock) => {
+                            // 提取 Markdown 编写的原始语言标识
+                            let rawLang = '';
+                            codeBlock.classList.forEach(cls => {
+                                if (cls.startsWith('language-')) {
+                                    rawLang = cls.replace('language-', '').toLowerCase();
+                                }
+                            });
+
+                            // 检索语言映射表，自动适配 Highlight.js 识别规则与顶部美化名称
+                            let hljsLang = rawLang;
+                            let displayLang = rawLang ? rawLang.toUpperCase() : 'CODE';
+
+                            if (rawLang && LANGUAGE_MAP[rawLang]) {
+                                hljsLang = LANGUAGE_MAP[rawLang].hljs;
+                                displayLang = LANGUAGE_MAP[rawLang].display;
+                            }
+
+                            // 动态赋予 Highlight.js 可精准识别的 class
+                            if (hljsLang) {
+                                codeBlock.className = `language-${hljsLang}`;
+                            }
+
+                            // 执行语法高亮
                             if (typeof hljs !== 'undefined') {
                                 hljs.highlightElement(codeBlock);
                             }
 
-                            let lang = 'CODE';
-                            codeBlock.classList.forEach(cls => {
-                                if (cls.startsWith('language-')) {
-                                    lang = cls.replace('language-', '').toUpperCase();
-                                }
-                            });
-
+                            // 构造黑客风格包裹容器与顶栏
                             const pre = codeBlock.parentElement;
                             if (pre.parentNode.classList.contains('code-block-wrapper')) return;
 
@@ -123,7 +183,7 @@
 
                             const langSpan = document.createElement('span');
                             langSpan.className = 'code-lang';
-                            langSpan.textContent = lang;
+                            langSpan.textContent = displayLang;
 
                             const copyBtn = document.createElement('button');
                             copyBtn.className = 'copy-btn';

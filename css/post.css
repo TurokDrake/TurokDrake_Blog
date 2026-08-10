@@ -101,15 +101,6 @@
     margin-bottom: 8px;
 }
 
-.markdown-body :not(pre) > code {
-    background-color: #EAE8E3;
-    color: var(--accent-red);
-    padding: 2px 6px;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 0.9em;
-    font-weight: 700;
-}
-
 .markdown-body table {
     width: 100%;
     border-collapse: collapse;
@@ -129,62 +120,6 @@
     font-weight: 900;
 }
 
-/* 黑框代码块 & 工具栏 */
-.code-block-wrapper {
-    margin: 32px 0;
-    border: 1px solid var(--text-charcoal);
-    background-color: #1A1A1A;
-}
-
-.code-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #111111;
-    padding: 8px 16px;
-    border-bottom: 1px solid #333333;
-    font-size: 0.75rem;
-    font-weight: 900;
-    letter-spacing: 1px;
-}
-
-.code-lang {
-    color: #888888;
-}
-
-.copy-btn {
-    background: transparent;
-    border: 1px solid #555555;
-    color: #FFFFFF;
-    padding: 3px 8px;
-    font-family: inherit;
-    font-size: 0.7rem;
-    font-weight: 900;
-    cursor: pointer;
-    border-radius: 0;
-    transition: all 0.2s ease;
-}
-
-.copy-btn:hover {
-    border-color: var(--accent-red);
-    color: var(--accent-red);
-}
-
-.copy-btn.copied {
-    border-color: #4ADE80;
-    color: #4ADE80;
-}
-
-.code-block-wrapper pre {
-    margin: 0;
-    padding: 20px;
-    overflow-x: auto;
-    color: #F7F5F0;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 0.9rem;
-    line-height: 1.6;
-}
-
 .footnotes {
     margin-top: 60px;
     padding-top: 20px;
@@ -193,62 +128,12 @@
 }
 
 /* =====================================
-   文章正文图片自适应与点击放大样式
-===================================== */
-/* 1. 限制文章图片宽度，防止溢出屏幕 */
-.markdown-body img {
-    max-width: 100% !important;  /* 限制最大宽度不超过正文容器 */
-    height: auto !important;     /* 保持原始宽高比，防止变形 */
-    display: block;
-    margin: 24px auto;          /* 居中排版 */
-    border: 1px solid var(--text-charcoal); /* 契合瑞士极简风格的边框 */
-    cursor: zoom-in;            /* 鼠标悬停提示可放大 */
-    transition: opacity 0.2s ease;
-}
-
-.markdown-body img:hover {
-    opacity: 0.85;
-}
-
-/* 2. 全屏灯箱遮罩层 */
-/* 全屏灯箱遮罩层 */
-.lightbox-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(26, 26, 26, 0.92);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s ease-in-out;
-    cursor: zoom-out;
-}
-
-.lightbox-overlay.active {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.lightbox-overlay img {
-    max-width: 90vw;
-    max-height: 90vh;
-    object-fit: contain;
-    border: 1px solid #FFFFFF;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-}
-
-/* =====================================
    1. 文章头部属性 (Front Matter) 瑞士风格样式
 ===================================== */
 .post-header {
     margin-bottom: 32px;
     padding-bottom: 20px;
-    border-bottom: 2px solid var(--accent-red); /* 瑞士排版经典红细线 */
+    border-bottom: 2px solid var(--accent-red);
 }
 
 .post-category {
@@ -303,7 +188,7 @@
 /* =====================================
    2. 代码块与 Consolas 字体专属样式
 ===================================== */
-/* 强行指定代码块与行内代码统一使用 Consolas 字体 */
+/* 指定代码块统一使用 Consolas 极客等宽字体 */
 .markdown-body pre,
 .markdown-body code,
 .code-block-wrapper pre,
@@ -312,7 +197,7 @@
     font-family: 'Consolas', Monaco, 'Courier New', Courier, monospace !important;
 }
 
-/* 行内代码样式 */
+/* 行内代码样式 (非代码块) */
 .markdown-body code:not(pre code) {
     background-color: #EAE8E3;
     color: var(--accent-red);
@@ -371,15 +256,17 @@
 .markdown-body pre {
     margin: 0 !important;
     padding: 16px !important;
-    background: transparent !important;
+    background: #0d1117 !important;
     overflow-x: auto;
 }
 
+/* 核心修复点：强制代码块的基础文本为 GitHub 浅灰白色 (#c9d1d9)，防止继承正文的纯黑色导致文字隐形 */
 .markdown-body pre code {
     font-size: 0.9rem;
     line-height: 1.5;
     background: transparent !important;
     padding: 0 !important;
+    color: #c9d1d9 !important; 
 }
 
 /* =====================================
