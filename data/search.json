@@ -30,5 +30,13 @@
     "category" : "Software",
     "image": "https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEYw-JqddfphRsjzy9T7trh1a31OkHhfQACgScAAvmbsFdxNcnvkVmFgD0E.png",
     "tags": ["Scoop", "包管理器", "Windows","环境变量","版本控制","安装","命令"]
+  },
+  {
+    "title": "[C#]什么是接口？",
+    "url": "post.html?file=posts/csharp_interface.md",
+    "excerpt": "C# 中的接口是抽象化的约定……",
+    "category" : "C#",
+    "image": "https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEYw-JqddfphRsjzy9T7trh1a31OkHhfQACgScAAvmbsFdxNcnvkVmFgD0E.png",
+    "tags": ["C#", "接口"]
   }
 ]
