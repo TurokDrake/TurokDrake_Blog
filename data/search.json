@@ -12,7 +12,7 @@
     "url": "post.html?file=posts/Git_Commit_Info.md",
     "excerpt": "怎么让别人看懂我……",
     "category" : "Git",
-    "image": "https://img.remit.ee/api/file/CAACAgUAAyEGAASHRsPbAAEYm7xqc0nYB-qVRWwTEE5TvmldQtg-YwACRDYAAniTmFegvMmiqYo1pD0E.webp",
+    "image": "https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEY_Wtqe8gXz0rwEpXJqGt91QWrpRwOcQACcyYAAkWI4FeQ6iLZg3L-QT0E.png",
     "tags": ["版本控制", "提交信息", "Commit"]
   },
   {
@@ -20,7 +20,7 @@
     "url": "post.html?file=posts/scoop_install.md",
     "excerpt": "有了包管理器后，妈妈再也不担心我不会配置环境变量了……",
     "category" : "Software",
-    "image": "https://img.remit.ee/api/file/CAACAgUAAyEGAASHRsPbAAEYm75qc0oaH4bnl6d-mlO6AAH8EMP0UqMAAkg2AAJ4k5hXbJUnMpTUFSc9BA.webp",
+    "image": "https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEY_b5qe8ydsuImFvZRLkVF88HUh_nOrAAC0yYAAkWI4FdbAXpAt6CTST0E.png",
     "tags": ["Scoop", "包管理器", "Windows","环境变量","版本控制","安装"]
   },
   {
@@ -28,7 +28,7 @@
     "url": "post.html?file=posts/scoop_install_software.md",
     "excerpt": "轻松掌握如何使用Scoop……",
     "category" : "Software",
-    "image": "https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEYw-JqddfphRsjzy9T7trh1a31OkHhfQACgScAAvmbsFdxNcnvkVmFgD0E.png",
+    "image": "https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEY_b5qe8ydsuImFvZRLkVF88HUh_nOrAAC0yYAAkWI4FdbAXpAt6CTST0E.png",
     "tags": ["Scoop", "包管理器", "Windows","环境变量","版本控制","安装","命令"]
   },
   {
@@ -36,7 +36,7 @@
     "url": "post.html?file=posts/csharp_interface.md",
     "excerpt": "C# 中的接口是抽象化的约定……",
     "category" : "C#",
-    "image": "https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEYw-JqddfphRsjzy9T7trh1a31OkHhfQACgScAAvmbsFdxNcnvkVmFgD0E.png",
+    "image": "https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEY_cNqe8zh4Stkj7bgdTf1TqGny0EgXQAC2CYAAkWI4FeoAx3b5i_SrD0E.png",
     "tags": ["C#", "接口"]
   }
 ]
