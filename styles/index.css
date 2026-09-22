@@ -1,0 +1,84 @@
+/*设置根元素的样式，包括字体、背景颜色*/
+html
+{
+    font-size: 14px;
+    font-family:
+        "Open Sans", sans-serif;
+}
+
+h1
+{
+    font-size: 60px;
+    text-align: center;
+    margin: 0;
+    padding: 20px 0;
+    color: #00539f;
+    text-shadow: 3px 2px 1px black;
+}
+
+p,
+li
+{
+    font-size: 16px;
+    line-height: 1;
+    letter-spacing: 1px;
+}
+
+/*图像*/
+img
+{
+    display: block;
+    margin: 0 auto;
+}
+
+/*分割线*/
+hr
+{
+    border: none;
+    height: 4px;
+    background-color: black;
+    width: 70%;
+}
+
+/*超链接*/
+a:link
+{
+    color: blue;
+    text-decoration: none;
+}
+
+a:hover
+{
+    color: purple;
+    text-decoration: none;
+}
+
+.link
+{
+    text-align: center;
+    font-size: 25px;
+}
+
+/*左中右三区块*/
+.grid-layout
+{
+    display: grid;
+    grid-template-columns: 0.5fr 1fr 0.5fr;
+}
+
+.grid-layout .left
+{
+    background: #00539f;
+    border-radius: 10px 0px 0px 10px;
+}
+
+.grid-layout .middle
+{
+    background: #ff9500;
+}
+
+.grid-layout .right
+{
+    background: #00539f;
+    border-radius: 0px 10px 10px 0px;
+}
