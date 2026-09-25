@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en-US">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+
+  <title>TurokDrake's Blog</title>
+  <link rel="stylesheet" href="styles/posts.css"/>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
+
+</head>
+
+<body>
+  <div class="grid-layout">
+    <div class="left"></div>
+
+    <div class="middle">
+      <h1>文章</h1>
+
+      <hr />
+
+      <section class="post-browser" aria-label="文章目录">
+        <div class="post-toolbar">
+          <label for="post-search">搜索文章</label>
+          <input id="post-search" type="search" placeholder="输入标题或关键词" autocomplete="off" />
+        </div>
+
+        <p id="post-summary" class="post-summary" aria-live="polite"></p>
+        <div id="post-list" class="post-list"></div>
+
+        <nav class="pagination" aria-label="文章分页">
+          <button id="previous-page" type="button" aria-label="上一页">上一页</button>
+          <div id="page-numbers" class="page-numbers"></div>
+          <button id="next-page" type="button" aria-label="下一页">下一页</button>
+        </nav>
+      </section>
+
+    </div>
+
+    <div class="right"></div>
+  </div>
+
+  <script src="scripts/posts.js"></script>
+
+
+</body>
+
+</html>
