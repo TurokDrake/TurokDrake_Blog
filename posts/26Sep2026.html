@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+
+  <title>TurokDrake's Blog</title>
+  <link href="../styles/article.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
+  <meta name="msvalidate.01" content="0B170310F1852A6D4B8F35FD1265F175" />
+  <meta name='description' content='本文介绍了如何判断坐标空间的旋向性，即左手坐标系还是右手坐标系。举个例子，在Unity引擎中使用的就是左手坐标系；在我上学的时候，数学课堂中使用的则是右手坐标系。'>。
+</head>
+
+<body>
+  <div class="grid-layout">
+    <div class="left"></div>
+
+    <div class="middle">
+      <article class="article">
+        <header class="article-header">
+          <p class="article-label">博客文章</p>
+          <h1>如何判断左手和右手坐标系？</h1>
+          <p class="article-meta">
+            <time datetime="2024-01-01">2026-09-26</time>
+            <span aria-hidden="true">·</span>
+            <span>数学</span>
+          </p>
+        </header>
+
+        <hr />
+
+        <div class="article-content">
+          <blockquote>蒙惠者虽知其然，而未必知其所以然也。</blockquote>
+          <h2>一、如何判断左、右手坐标系？</h2>
+          <p>伸出左手，大拇指指向的是<b>+x</b>方向，食指指向的是<b>+y</b>方向，中指指向的是<b>+z</b>方向，如果一个坐标系的三个坐标方向和左手摆出的一样，那么这就是左手坐标系。</p>
+          <p>Unity引擎中，使用的就是左手坐标系。</p>
+          <p>伸出右手，大拇指指向的是<b>+x</b>方向，食指指向的是<b>+y</b>方向，中指指向的是<b>+z</b>方向，如果一个坐标系的三个坐标方向和右手摆出的一样，那么这就是右手坐标系。</p>
+          <p>在我上学的时候，课堂上用的就是右手坐标系。</p>
+          <h2>二、如何<b>规定</b>左、右手坐标系中旋转的正方向？</h2>
+          <p>在讨论这个话题之前，得先说几句：如果两个坐标空间的旋向是相同的，那么它们可以通过旋转来与对方对齐。（旋向相同指的是都是左手坐标系或者都是右手坐标系）如果两个坐标空间的旋向不同，那么不管怎么旋转，它们总是无法对齐。</p>
+          <p>确定左手坐标系中旋转的正方向：拿出左手，竖起你的大拇指，作出一个鼓励的手势，你的四指弯曲的方向就是该坐标系中旋转的正方向。</p>
+          <p>例如，在左手坐标系中，如果你从<b>+y轴</b>方向往原点看，那么<b>+z</b>向<b>+x</b>方向转就是旋转的正方向，此时也就是顺时针转。</p>
+          <p>确定右手坐标系中旋转的正方向：拿出右手，竖起你的大拇指，作出一个鼓励的手势，你的四指弯曲的方向就是该坐标系中旋转的正方向。</p>
+          <p>例如，在右手坐标系中，如果你从<b>+y轴</b>方向往原点看，那么<b>+z</b>向<b>+x</b>方向转就是旋转的正方向，此时也就是逆时针转。</p>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="right"></div>
+  </div>
+
+
+
+</body>
+
+</html>
