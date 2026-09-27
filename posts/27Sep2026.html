@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+
+  <title>TurokDrake's Blog</title>
+  <link href="../styles/article.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
+  <meta name="msvalidate.01" content="0B170310F1852A6D4B8F35FD1265F175" />
+  <meta name='description' content='Unity中，想必很多人都想尝试通过代码来获取对象从而控制对象的显隐。当然，这种方式很实用，但是当想显示一个在场景中一开始就已经隐藏的物体就有点问题。问题出在哪里？出在获取对象这一步。GameObject.Find()是无法找到场景中隐藏的对象的，只能找到激活的对象。'>。
+</head>
+
+<body>
+  <div class="grid-layout">
+    <div class="left"></div>
+
+    <div class="middle">
+      <article class="article">
+        <header class="article-header">
+          <p class="article-label">博客文章</p>
+          <h1>在Unity中显示隐藏的UI对象</h1>
+          <p class="article-meta">
+            <time datetime="2024-01-01">2026-09-27</time>
+            <span aria-hidden="true">·</span>
+            <span>GameDev</span>
+          </p>
+        </header>
+
+        <hr />
+
+        <div class="article-content">
+          <blockquote>业精于勤，荒于嬉；行成于思，毁于随。</blockquote>
+          <h2>一、问题描述</h2>
+          <p>当我们想点击主界面的设置按钮时，我们希望会显示隐藏的设置面板。如果我们通过在脚本中使用<code>GameObject.Find(string n)</code>获取我们的面板，运行时我们会发现问题，就是我们并没有成功获取这个面板。</p>
+          <p>原因很简单，<code>GameObject.Find(string n)</code>这个API只能找到场景中已经激活（即<code>active</code>的对象），由于我们隐藏了设置面板，那么我们无法获取它的引用。针对这个问题，我给出了以下的解决方式。</p>
+          <h2>二、解决方式</h2>
+          <p>我可以先在脚本中声明一个<code>GameObject</code>类型成员，然后我在 Inspector界面中把设置面板拖拽到脚本上，这样一来，我们就不需要在场景开始时通过代码去找我们的面板，从而避免了我们的设置面板是空引用的问题。</p>
+          <h2>三、总结</h2>
+          <p>总之，就是不用API，靠自己手动把面板对象拖拽到脚本的成员位置上。当然，在面对大型项目时，还是推荐实现一个UI管理器类和面板基类。但是对于小项目，可以用手拖，毕竟Unity提供了这样的一个方式，为何不用呢？XD</p>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="right"></div>
+  </div>
+
+
+
+</body>
+
+</html>
