@@ -13,32 +13,38 @@
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>https://turokfang.top/template.html</loc>
+        <loc>https://turokfang.top/posts/template.html</loc>
         <lastmod>2026-09-24</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.1</priority>
     </url>
     <url>
-        <loc>https://turokfang.top/25Sep2026.html</loc>
+        <loc>https://turokfang.top/posts/25Sep2026.html</loc>
         <lastmod>2026-09-25</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://turokfang.top/26Sep2026.html</loc>
+        <loc>https://turokfang.top/posts/26Sep2026.html</loc>
         <lastmod>2026-09-26</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://turokfang.top/27Sep2026.html</loc>
+        <loc>https://turokfang.top/posts/27Sep2026.html</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://turokfang.top/29Sep2026.html</loc>
+        <loc>https://turokfang.top/posts/29Sep2026.html</loc>
         <lastmod>2026-09-29</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://turokfang.top/posts/30Sep2026.html</loc>
+        <lastmod>2026-09-230</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>

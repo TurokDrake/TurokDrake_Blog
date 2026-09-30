@@ -1,5 +1,11 @@
 [
   {
+    "title": "Unity中刚体的isKinematic属性",
+    "date": "2026-09-30",
+    "tags": ["GameDev"],
+    "url": "posts/30Sep2026.html"
+  },
+  {
     "title": "C#命名约定",
     "date": "2026-09-29",
     "tags": ["文档"],
