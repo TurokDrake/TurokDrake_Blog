@@ -1,5 +1,11 @@
 [
   {
+    "title": "Unity Input.GetAxis()",
+    "date": "2026-10-02",
+    "tags": ["GameDev"],
+    "url": "posts/02Oct2026_1.html"
+  },
+  {
     "title": "Unity中刚体的isKinematic属性",
     "date": "2026-09-30",
     "tags": ["GameDev"],
