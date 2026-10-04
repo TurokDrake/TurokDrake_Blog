@@ -1,5 +1,11 @@
 [
   {
+    "title": "Unity中Transform如何实现的枚举器",
+    "date": "2026-10-04",
+    "tags": ["GameDev"],
+    "url": "posts/04Oct2026.html"
+  },
+  {
     "title": "Unity Input.GetAxis()",
     "date": "2026-10-02",
     "tags": ["GameDev"],

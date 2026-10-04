@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+
+  <title>TurokDrake's Blog</title>
+  <link href="../styles/article.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
+  <meta name="msvalidate.01" content="0B170310F1852A6D4B8F35FD1265F175" />
+  <meta name='description' content='TurokDrake的所有文章都以此为模板，在此基础上编写内容。'>。
+</head>
+
+<body>
+  <div class="grid-layout">
+    <div class="left"></div>
+
+    <div class="middle">
+      <article class="article">
+        <header class="article-header">
+          <p class="article-label">博客文章</p>
+          <h1>Unity中Transform如何实现的枚举器</h1>
+          <p class="article-meta">
+            <time datetime="2024-01-01">2026-10-04</time>
+            <span aria-hidden="true">·</span>
+            <span>GameDev</span>
+          </p>
+        </header>
+
+        <hr />
+
+        <div class="article-content">
+          <h2>前言</h2>
+          <p>我使用Unity时，发现<code>Transform</code>这个类可以使用foreach语句遍历其子对象，这是因为其在内部实现了一个枚举器。本文将阐述我关于实现枚举器的理解。</p>
+
+          <hr>
+
+          <h2>如何实现迭代器？</h2>
+          <p>下方是Microsoft C#开发文档中关于IEnumerator的介绍，示例中为一个类实现了枚举器。</p>
+          <a href="https://learn.microsoft.com/zh-cn/dotnet/api/system.collections.ienumerator?view=net-10.0"
+            target="_blank">Microsoft Doc IEnumerator 接口</a>
+          <p>对于这个示例，我的理解是，一个类要想实现枚举器，以使用foreach语句遍历这个非Generics类的集合，需要满足两个条件：</p>
+          <ol>
+            <li>可以枚举（继承了<code>IEnumerable</code>接口并实现其中的方法）</li>
+            <li>制定了一个遍历的规则（有当前的对象，能跳转到下一个对象，能回到最初的位置），即继承了<code>IEnumerator</code>接口并实现其成员</li>
+          </ol>
+
+          <hr>
+
+          <p>接下来我将进一步输出我的观点。在此之前，我想用自己的话解释<code>UnityEngine.Transform</code>是如何实现可以遍历子对象的<code>Transform</code>组件的枚举器的。</p>
+
+          <p>以下来自Unity官方的UnityCsReference仓库：<a href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Transform/ScriptBindings/Transform.bindings.cs" target="_blank">UnityCsReference</a></p>
+
+          <pre><code class="language-csharp">
+public class Transform : Component, IEnumerable
+{
+    public IEnumerator GetEnumerator()
+        {
+            return new Transform.Enumerator(this);
+        }
+
+        private class Enumerator : IEnumerator
+        {
+            Transform outer;
+            int currentIndex = -1;
+
+            internal Enumerator(Transform outer)
+            {
+                this.outer = outer;
+            }
+
+            //*undocumented*
+            public object Current
+            {
+                get { return outer.GetChild(currentIndex); }
+            }
+
+            //*undocumented*
+            public bool MoveNext()
+            {
+                int childCount = outer.childCount;
+                return ++currentIndex < childCount;
+            }
+
+            //*undocumented*
+            public void Reset() { currentIndex = -1; }
+        }
+    ...
+}
+          </code></pre>
+
+          <p><b>首先，<code>Transform</code>类继承了<code>Component</code>类和<code>IEnumerable</code>接口,并实现了接口中的方法</b>。继承<code>IEnumerable</code>接口，说明其<b>可以枚举</b>！<br></p>
+
+          <p><b>然后，其内部实现了一个内部类<code>Enumerator</code>，这个类继承了<code>IEnumerator</code>接口。</b>这说明它定义了枚举器遍历的规则。</p>
+
+          <p>内部类中，<code>Transform outer;</code>声明了一个Transform类型的变量，Enumerator的构造函数需要传入一个Transform类型变量，然后将传入的变量赋予outer。<br>在GetEnumerator()方法中，可以看到，调用了Enumerator的构造函数，传入的参数是Transform这个类的实例本身。说了这么多，意思就是内部类中outer指的就是Transform的一个实例本身。</p>
+          
+          <p>currentIndex为当前索引，从-1开始，因为枚举器一开始就会调用MoveNext()方法，使得currentIndex变为0。</p>
+
+          <p>Current是当前对象，是一个属性，返回的是本Transform的一个实例的索引为currentIndex的子对象的Transform组件</p>
+
+          <p>MoveNext()方法中，先获取了当前Transform一个实例拥有的子对象数，再判断当前索引+1后，是否小于子对象总数，如果小于，说明可以继续往下遍历；反之不行，因为超出了索引范围。</p>
+
+          <p>Reset()方法能重置索引，当使用foreach遍历完后会自动调用该方法。</p>
+
+          <p>可能讲得不是很清楚，后续我会补充……</p>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="right"></div>
+  </div>
+
+
+
+</body>
+
+</html>
