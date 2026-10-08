@@ -7,9 +7,14 @@
 
   <title>TurokDrake's Blog</title>
   <link href="../styles/article.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
   <meta name="msvalidate.01" content="0B170310F1852A6D4B8F35FD1265F175" />
-  <meta name='description' content='Unity中，想必很多人都想尝试通过代码来获取对象从而控制对象的显隐。当然，这种方式很实用，但是当想显示一个在场景中一开始就已经隐藏的物体就有点问题。问题出在哪里？出在获取对象这一步。GameObject.Find()是无法找到场景中隐藏的对象的，只能找到激活的对象。'>。
+  <meta name='description'
+    content='Unity中，想必很多人都想尝试通过代码来获取对象从而控制对象的显隐。当然，这种方式很实用，但是当想显示一个在场景中一开始就已经隐藏的物体就有点问题。问题出在哪里？出在获取对象这一步。GameObject.Find()是无法找到场景中隐藏的对象的，只能找到激活的对象。'>
+  。
 </head>
 
 <body>
@@ -32,13 +37,44 @@
 
         <div class="article-content">
           <blockquote>业精于勤，荒于嬉；行成于思，毁于随。</blockquote>
+
+          <h2>前言</h2>
+
+          <p>在游戏开发过程中，我们会遇到各种各样的问题。在此为了更方便地说明问题，我会假设一个场景。假如我们制作了一个敌人，但是他不能立刻显示在玩家的视角中，而是来一个JumpScare！我打算先隐藏他，然后在需要的时机唤醒他。</p>
+
           <h2>一、问题描述</h2>
-          <p>当我们想点击主界面的设置按钮时，我们希望会显示隐藏的设置面板。如果我们通过在脚本中使用<code>GameObject.Find(string n)</code>获取我们的面板，运行时我们会发现问题，就是我们并没有成功获取这个面板。</p>
-          <p>原因很简单，<code>GameObject.Find(string n)</code>这个API只能找到场景中已经激活（即<code>active</code>的对象），由于我们隐藏了设置面板，那么我们无法获取它的引用。针对这个问题，我给出了以下的解决方式。</p>
-          <h2>二、解决方式</h2>
-          <p>我可以先在脚本中声明一个<code>GameObject</code>类型成员，然后我在 Inspector界面中把设置面板拖拽到脚本上，这样一来，我们就不需要在场景开始时通过代码去找我们的面板，从而避免了我们的设置面板是空引用的问题。</p>
-          <h2>三、总结</h2>
-          <p>总之，就是不用API，靠自己手动把面板对象拖拽到脚本的成员位置上。当然，在面对大型项目时，还是推荐实现一个UI管理器类和面板基类。但是对于小项目，可以用手拖，毕竟Unity提供了这样的一个方式，为何不用呢？XD</p>
+
+          <p>我在场景中将这个敌人对象隐藏，给摄像机绑定一个脚本，假如他会20s后显示，我在脚本中这样写：</p>
+
+          <pre><code>
+GameObject enemy; // 等待唤醒的敌人
+
+void Start()
+{
+  enemy = GameObject.Find("Enemy"); // 场景中敌人对象的名称就是 Enemy
+  Invoke("ShowEnemy",20); // 在20s后唤醒他
+}
+
+void ShowEnemy()
+{
+  enemy.SetActive(true); // 显示敌人
+}
+          </code></pre>
+
+          <p>当运行时，会报错。原因是enemy没有引用对象，即enemy是空的！</p>
+
+          <p>究竟是哪一步出错了？</p>
+
+          <p>如果你鼠标悬浮在<code>GameObject.Find()</code>方法上，或者选中它按下F12查看定义，会了解到这个方法仅能找到场景中<code>Active</code>的对象，找不到隐藏的对象！</p>
+
+          <h2>二、一种解决方式</h2>
+
+         <p>我可以不使用API获取对象，直接在Inspector面板中选中这个GameObject enemy成员，将场景中的Enemy对象赋予它，确保它不为空即可。</p>
+
+          <h2>总结</h2>
+
+          <p>总之，就是不用API，靠自己手动把面板对象拖拽到脚本的成员位置上。
+          </p>
         </div>
       </article>
 

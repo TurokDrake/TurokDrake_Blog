@@ -12,7 +12,7 @@
   <script>hljs.highlightAll();</script>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
   <meta name="msvalidate.01" content="0B170310F1852A6D4B8F35FD1265F175" />
-  <meta name='description' content='TurokDrake的所有文章都以此为模板，在此基础上编写内容。'>。
+  <meta name='description' content='Unity中，允许使用foreach语句遍历游戏对象所有子对象的Transform组件，这是因为UnityEngine.Transform内部实现了枚举器'>。
 </head>
 
 <body>
@@ -39,7 +39,7 @@
 
           <hr>
 
-          <h2>如何实现迭代器？</h2>
+          <h2>如何实现枚举器？</h2>
           <p>下方是Microsoft C#开发文档中关于IEnumerator的介绍，示例中为一个类实现了枚举器。</p>
           <a href="https://learn.microsoft.com/zh-cn/dotnet/api/system.collections.ienumerator?view=net-10.0"
             target="_blank">Microsoft Doc IEnumerator 接口</a>
@@ -107,7 +107,14 @@ public class Transform : Component, IEnumerable
 
           <p>Reset()方法能重置索引，当使用foreach遍历完后会自动调用该方法。</p>
 
-          <p>可能讲得不是很清楚，后续我会补充……</p>
+
+          <h2>总结</h2>
+
+          <p>为一个类实现枚举器，需要让这个类继承<code>IEnumerable</code>和<code>IEnumerator</code>接口，继承<code>IEnumerable</code>接口时实现了一个<code>GetEnumerator()</code>方法，用于返回一个枚举器；继承<code>IEnumerator</code>接口时实现的成员和方法，规定了<b>如何枚举</b>。</p>
+
+          <p><code>IEnumerable</code>生成一个枚举器实例。</p>
+          <p><code>IEnumerator</code>是一个具体的迭代器，完成枚举的工作。</p>
+          
         </div>
       </article>
 

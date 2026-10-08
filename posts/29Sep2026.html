@@ -7,6 +7,9 @@
 
   <title>TurokDrake's Blog</title>
   <link href="../styles/article.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
   <meta name="msvalidate.01" content="0B170310F1852A6D4B8F35FD1265F175" />
   <meta name='description' content='本文介绍了C#的命名约定，意在写出让他人和未来的自己能够理解的代码。'>。
@@ -31,15 +34,40 @@
         <hr />
 
         <div class="article-content">
+
+          <h2>前言</h2>
+
+          <p>有一天，你打开了过去的项目，想回顾自己的手里的代码……</p>
+
+          <pre><code>
+public static float haliluya; // 鸡你太美
+public void NISHISHEI()
+{
+
+}
+public float jinitaimei;
+public void HAHAD()
+{
+  
+}
+          </code></pre>
+
+          <p>然后看到这些你终于气笑了。本文将介绍代码命名约定。不同的开发者有不同的风格，保持<b>求同存异</b>的开放心态很重要XD</p>
+
+
           <h2>命名约定</h2>
+
           <p>在c#编程过程中，遵循良好的命名约定能使代码更易读。尽管每个人都有自己的风格，但是只要不太特立独行（指的是故意为难他人）就可以。</p>
+
           <p>这里介绍一下命名约定，读者可以培养成习惯。</p>
+
           <p>1.全部使用驼峰命名。在由多个单词组成的变量名中，驼峰命名每个单词首字母大写（除了变量名的第一个单词）。例如<code>myGame, randomNumber</code></p>
           <p>2.<b>变量名</b>必须以小写字母开头，例如<code>someVariableName</code>。</p>
           <p>3.<b>函数名</b>必须以大写字母开头。例如<code>Start(), Update()</code>。</p>
           <p>4.<b>类名</b>应该以大写字母开头。例如<code>GameObject, Camera</code>。</p>
           <p>5.<b>私有变量名</b>可以使用下划线开头。例如<code>_privateVariable</code>。</p>
           <p>6.静态变量名可以使用蛇形命名全部大写。例如<code>NUM_INSTANCE</code>。如例子中，每个单词的字母都大写，并用下划线结合。</p>
+          
           <p>再次强调，每个人有自己的风格，只要让他人和未来的你能够理解你当前的代码即可。</p>
         </div>
       </article>

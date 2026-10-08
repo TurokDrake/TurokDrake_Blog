@@ -20,7 +20,7 @@
       <article class="article">
         <header class="article-header">
           <p class="article-label">博客文章</p>
-          <h1>Unity Input.GetAxis()</h1>
+          <h1>Unity Input Manager</h1>
           <p class="article-meta">
             <time datetime="2024-01-01">2026-10-02</time>
             <span aria-hidden="true">·</span>
@@ -31,18 +31,27 @@
         <hr />
 
         <div class="article-content">
-          <h2>Input.GetAxis()</h2>
-          <p><code>public static float Input.GetAxis(string axisName) </code>将返回由<code>axisName</code>标识的虚拟轴的值。对于键盘和游戏杆输入设备，该值将处于-1...1的范围内。</p>
-          <p>该值的含义取决于输入控制的类型，例如，对于游戏杆的水平轴，值为 1 表示游戏杆向右推到底，值为 -1 表示游戏杆向左推到底；值为 0 表示游戏杆处于中性位置。</p>
-          <br>
-          <p>如果想设置或检查<code>axisName</code>的选项，可以在<code>Edit&gt;Project&gt; Settings&gt;Input Manager</code>中查看。</p>
-          <p>当打开Input Manager查看时，可以展开Axes，并选中某个按键名称，展开后能看到以下属性。</p>
-          <img src="https://img.remit.ee/i/mbyd7XeA6CdW" alt="mbyd7XeA6CdW.png" />
+          <h2>前言</h2>
+          <p>笔者在进行<i>《游戏设计、原型与开发》</i>中的<i>《Space SHMUP Prototype》</i>数字原型开发时，书中介绍了关于Input Manager中的设置。在看完书中相关介绍和官方文档后，想输出一下这些内容。</p>
+
+          <h2>Input Manager中的两个参数</h2>
+          
+          <p>可以在<code>Edit&gt;Project&gt; Settings&gt;Input Manager</code>中查看Input Manager的设置。</p>
+
           <p>详细的参数说明可以看这里：<a href="https://docs.unity.cn/cn/2022.3/Manual/class-InputManager.html" target="_blank">Input Manager-Unity手册</a></p>
-          <p>我在本文只提及两个参数，<code>Sensitivity</code>和<code>Gravity</code>。</p>
+
+          <p>我在本文谈谈两个参数，<code>Sensitivity</code>和<code>Gravity</code>。</p>
+
           <p><code>Sensitivity</code>是灵敏度，表示轴 向目标值移动的速度。例如如果Horizontal轴的灵敏度是3，表示按下右方向键时，数值从0平滑过渡到1需要1/3s的时间。</p>
+
           <p><code>Gravity</code>是重力，表示不存在输入时，轴 下降到中性点（即0）的速度。例如如果Horizontal轴的重力是3，表示松开右方向键后，数值从1平滑过渡到0需要1/3s的时间。</p>
+
           <p>应该不难发现，这两者的数值越大，平滑过渡的时间就越短。</p>
+
+          <h2>总结</h2>
+
+          <p>调节这两个参数，可以调整控制角色移动的手感。</p>
+
         </div>
       </article>
 
