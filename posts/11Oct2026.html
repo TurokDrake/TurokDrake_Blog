@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+
+  <title>TurokDrake's Blog</title>
+  <link href="../styles/article.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+  <meta name="msvalidate.01" content="0B170310F1852A6D4B8F35FD1265F175" />
+  <meta name='description' content='笔者在初次阅读《3D数学基础：图形与游戏开发》关于矩阵的介绍时，尚未理解其几何意义，但是在过了一段时间后，回顾这一章，恍然大悟，有一种茅塞顿开的感觉。故写此文分享。'>
+</head>
+
+<body>
+  <div class="grid-layout">
+    <div class="left"></div>
+
+    <div class="middle">
+      <article class="article">
+        <header class="article-header">
+          <p class="article-label">博客文章</p>
+          <h1>理解“矩阵是用来描述空间变换的”</h1>
+          <p class="article-meta">
+            <time datetime="2024-01-01">2026-10-11</time>
+            <span aria-hidden="true">·</span>
+            <span>数学</span>
+          </p>
+        </header>
+
+        <hr />
+
+        <div class="article-content">
+          
+          <h2>前言</h2>
+
+          <p>笔者初次阅读《3D数学基础：图形学与游戏开发》关于矩阵的几何意义的介绍时，仍带着困惑，为什么“矩阵是用来描述空间变换的”？最近趁闲再阅读这一章节，突然茅塞顿开，感觉思路通畅了，宛如龙场悟道。故作此文输出一下我的看法。</p>
+
+          <hr>
+
+          <h2>矩阵是用来描述坐标空间变换的</h2>
+
+          <p>假设我们有一个矢量\((x,y,z)\)（一个三维矢量），还有一个矩阵<b>A</b>（我使用方括号包裹，你可以看到其他人使用圆括号包裹）</p>
+
+          <b>A</b> = \(
+            \begin{bmatrix}
+            m_{11} & m_{12} & m_{13} \\
+            m_{21} & m_{22} & m_{23} \\
+            m_{31} & m_{32} & m_{33}
+            \end{bmatrix}
+            \)
+
+          <p>一个三维行矢量，可以左乘一个3 X 3的矩阵，因为行矢量是1 X 3的，它左乘矩阵得到的仍是一个行矢量。</p>
+
+          <p>你应该记得，矩阵之间的乘法是如何进行的。若称新矩阵的第i行第j列元素为\(m_{ij}\)，那么\(m_{ij}\)等于左边的矩阵的第i行的矢量与右边的矩阵的第j列的矢量的点积。上面举的例子的结果如下：</p>
+
+          \(
+            \begin{bmatrix}
+            m_{11}x+m_{21}y+m_{31}z & m_{12}x+m_{22}y+m_{32}z & m_{13}x+m_{23}y+m_{33}z
+            \end{bmatrix}
+          \)
+
+          <p>请问一个问题：这个矩阵对矢量做了什么？还记得我刚刚提的<b>矩阵之间的乘法是如何进行的</b>吗？我提到了<b>点积</b>。新的行矢量的x轴坐标记为x'，那么x'是怎么来的？——是由矢量\((x,y,z)\)与矢量\( \begin{bmatrix} m_{11} & m_{21} & m_{31} \end{bmatrix}\)点积得到的结果。</p>
+          <p>同理，新的行矢量的y轴坐标记为y'，那么y'是怎么来的？——是由矢量\((x,y,z)\)与矢量\( \begin{bmatrix} m_{12} & m_{22} & m_{32} \end{bmatrix} \)点积得到的结果。</p>
+          <p>新的行矢量的z轴坐标记为z'，那么z'是怎么来的？——是由矢量\((x,y,z)\)与矢量\( \begin{bmatrix} m_{13} & m_{23} & m_{33} \end{bmatrix} \)点积得到的结果。</p>
+
+          <p>点积的结果是什么，是一个数值，而不是向量。实际上新的向量应该是：</p>
+
+          \(
+              \begin{bmatrix}
+            m_{11}x+m_{21}y+m_{31}z & m_{12}x+m_{22}y+m_{32}z & m_{13}x+m_{23}y+m_{33}z
+            \end{bmatrix}
+
+            =
+
+           ( m_{11}x+m_{21}y+m_{31}z ) \mathbf{i} + ( m_{12}x+m_{22}y+m_{32}z ) \mathbf{j} + ( m_{13}x+m_{23}y+m_{33}z ) \mathbf{k}
+          \)
+
+          <p>你有感觉了吗？ \(i,j,k\)为立体直角坐标系的基矢量，原本的矢量\((x,y,z)\)是在以\(i,j,k\)为基矢量的空间（即立体直角坐标系）中的，当矢量左乘矩阵<b>A</b>后，新的矢量\((x',y',z')\)是在以\(( m_{11}x+m_{21}y+m_{31}z ) \mathbf{i}, ( m_{12}x+m_{22}y+m_{32}z ) \mathbf{j}, ( m_{13}x+m_{23}y+m_{33}z ) \mathbf{k}\)为基矢量的空间（经过线性变换后的新空间）中的。你Get到我的意思了吗？</p>
+
+          <p>实际上，行矢量左乘矩阵后，基矢量变了，空间也变了。如果你把经过变化的矢量放在原本的空间中观察，由于矩阵的不同，你可能能观察到这个矢量发生了<b>旋转、缩放</b>等变换。接下来我将用手绘制一张极其粗略的草图解释，希望能够加深读者的印象。</p>
+
+        </div>
+      </article>
+
+    </div>
+
+    <div class="right"></div>
+  </div>
+
+
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "\\[", right: "\\]", display: true },
+          { left: "\\(", right: "\\)", display: false }
+        ],
+        throwOnError: false
+      });
+    });
+  </script>
+</body>
+
+</html>
