@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+
+  <title>TurokDrake's Blog</title>
+  <link href="../styles/article.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+  <meta name="msvalidate.01" content="0B170310F1852A6D4B8F35FD1265F175" />
+  <meta name='description' content=''>
+</head>
+
+<body>
+  <div class="grid-layout">
+    <div class="left"></div>
+
+    <div class="middle">
+      <article class="article">
+        <header class="article-header">
+          <p class="article-label">博客文章</p>
+          <h1>插值</h1>
+          <p class="article-meta">
+            <time datetime="2024-01-01">2026-10-10</time>
+            <span aria-hidden="true">·</span>
+            <span>数学</span>
+          </p>
+        </header>
+
+        <hr />
+
+        <div class="article-content">
+          <h4>目录</h4>
+          <ul>
+            <li><a href="#前言">前言</a></li>
+            <li><a href="#CHA1">一、线性插值</a></li>
+            <li><a href="#CHA2">二、使用插值让一个对象跟随另一个对象移动</a></li>
+            <li><a href="#CHA3">三、更平滑的插值</a></li>
+            <li><a href="#CHA4">四、贝塞尔曲线</a></li>
+            <li><a href="#SUM">总结</a></li>
+          </ul>
+
+          <hr>
+
+          <h2 id="前言">前言</h2>
+
+          <p>
+            生活中，插值很实用，但是我们似乎没意识到。你在使用的PhotoShop、Krita等绘图软件绘制线条时，平滑的线条实际上就经过了插值处理。随着短视频的流行，剪映的出现，大家可以简单地剪辑视频，视频中过渡时也会用到插值。游戏开发过程中，实现一个角色的平滑移动，也用到了插值。本文将从游戏开发的角度介绍插值。
+            本项目可以从这里获取：<a href="https://github.com/TurokDrake/Linear-Interpolation-In-Unity" target="_blank">插值</a>
+          </p>
+
+          <hr>
+
+          <h2 id="CHA1">一、线性插值</h2>
+
+          <p>插值：在两个值之间取一个值。（这个定义怎么这么粗略XD）</p>
+
+          <p>插值公式，万变不离其宗。</p> \(p_{current} = (1-u) \times p_{start} + u \times p_{end}\) <br>
+
+          <p>上面的是最常用的插值公式，\(p_{current}\)为当前值，\(p_{start}\)为起始值，\(p_{end}\)为最终值，\(u\)为进度。</p>
+
+          <p>u是什么的进度？我的见解是该插值过程的进度。线性内插值中，u的取值范围从0到1。</p>
+          <p>若令u = 0，那么当前值等于起始值，也就意味着<b>插值进展为0，还没开始</b>；</p>
+          <p>若令u = 1，那么当前值等于最终值，也就意味着<b>插值进展为100%（1），已经完成了。</b></p>
+
+          <p>如果我想让一个物体在指定时间内到达指定位置，应该如何做呢？</p>
+
+          <pre><code>
+// 绑定至小方块上
+public class Interpolation : MonoBehaviour
+{
+    public Vector3 curPos; // 当前位置
+    public Vector3 startPos; // 起点位置
+    public Vector3 endPos = new Vector3(0,0,10); // 最终点的位置
+    public float startTime; // 开始运动的起始时间
+
+    public Transform testCubeTransform; // 这个小方块将从初始位置运动到（0，0，10）
+
+    public float timeDuration = 1f; // 插值过程（小方块移动到鼠标的位置这个过程）持续时间
+
+    public bool canMove = false; // 是否可以移动
+
+    private void Start()
+    {
+        // 获取小方块的Transform组件
+        testCubeTransform = this.GetComponent<Transform>();
+    }
+
+    private void Update()
+    {
+        // 当按下空格键，可以开始测试；按下P键，退出测试
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            canMove = true;
+            // 记录开始运动的时间
+            startTime = Time.time;
+        }
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            canMove = false;
+        }
+
+        // 没开始测试就不计算这些插值
+        if (!canMove)
+        {
+            return;
+        }
+
+        // 记录起始点
+        startPos = testCubeTransform.position;
+
+        // 计算u值
+        float u = (Time.time - startTime) / timeDuration;
+
+        // 限制u的值
+        if (u >= 1)
+        {
+            u = 1;
+            canMove = false;
+        }
+
+        // 计算当前位置
+        curPos = (1 - u) * startPos + u * endPos;
+
+        testCubeTransform.position = curPos;
+        
+    }
+}
+          </code></pre>
+
+          <p>在Unity中创建一个Cube对象，并设置其位置为（0，0，0），将上面的脚本附加到该对象上，点击运行后，按下空格即可开始测试，大概效果如图。</p>
+
+          <img src="https://i.imgs.ovh/2026/10/08/cf7bd14534262b43c1f28394ab42dc62.gif" alt="01线性插值运动的小方块.gif" />
+          <p align="center">线性插值运动的小方块</p>
+
+          <hr>
+
+          <h2 id="CHA2">二、使用插值让一个对象跟随另一个对象移动</h2>
+
+          <blockquote>小插曲：你听说过Zeno悖论吗？有一只青蛙，每次向前跳跃都只能到达距离前方的墙一半的位置，它永远也无法跳到墙上……</blockquote>
+
+          <p>话不多说，直接附上代码。</p>
+
+          <pre><code>
+public class FollowMouse : MonoBehaviour
+{
+    public Transform cube; // 小方块的transform组件
+
+
+    private void Update()
+    {
+        Vector3 mouseScreenPos = Input.mousePosition; // 鼠标屏幕坐标
+        mouseScreenPos.z = 10; // 手动设置一下
+        if (Input.GetKeyDown(KeyCode.S))
+            Debug.Log(mouseScreenPos);
+
+        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos); // 将屏幕坐标转换成世界坐标
+        if(Input.GetKeyDown(KeyCode.W))
+            Debug.Log(mouseWorldPos);
+
+        float u = 0.5f;
+
+        cube.position = (1 - u) * cube.position + u * mouseWorldPos;
+        
+
+
+    }
+}
+          </code></pre>
+
+          <p>效果如下：</p>
+
+          <img src="https://i.imgs.ovh/2026/10/10/55fd2cc61701344c5c8befedae3cc4aa.gif" alt="12.gif" />
+          <p align="center">方块跟随鼠标移动</p>
+
+          <hr>
+
+          <h2 id="CHA3">三、更平滑的插值</h2>
+
+          <p>1. 缓入；2. 缓出；3. 缓入缓出；4. Sin；5. Sin缓入；6. Sin缓出。</p>
+
+          <h3>1. 缓入</h3>
+
+          <p>缓入呈现出的效果是开始的运动较慢，逐渐加快运动。实现缓入的方法是通过令\(u = u^{easingModify}\)，其中easingModify指的是缓入的平滑程度。接下来我将修改代码，让物体实现缓入的效果。
+          </p>
+
+          <p>当easingModify为1时，实际上和前面提到的线性插值没有区别。</p>
+
+          <p>以下为修改后的代码：</p>
+
+          <pre><code>
+// 绑定至小方块上
+public class Interpolation : MonoBehaviour
+{
+    public Vector3 curPos; // 当前位置
+    public Vector3 startPos; // 起点位置
+    public Vector3 endPos = new Vector3(0,0,10); // 最终点的位置
+    public float startTime; // 开始运动的起始时间
+
+    //----------新增的代码----------//
+    public float easingModify = 2; // 缓动的修饰值
+    //----------新增的代码----------//
+
+    public Transform testCubeTransform; // 这个小方块将从初始位置运动到（0，0，10）
+
+    public float timeDuration = 1f; // 插值过程（小方块移动到鼠标的位置这个过程）持续时间
+
+    public bool canMove = false; // 是否可以移动
+
+    private void Start()
+    {
+        // 获取小方块的Transform组件
+        testCubeTransform = this.GetComponent<Transform>();
+    }
+
+    private void Update()
+    {
+        // 当按下空格键，可以开始测试；按下P键，退出测试并回到原点
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            canMove = true;
+            // 记录开始运动的时间
+            startTime = Time.time;
+        }
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            canMove = false;
+            testCubeTransform.position = new Vector3(0, 0, 0);
+        }
+
+        // 没开始测试就不计算这些插值
+        if (!canMove)
+        {
+            return;
+        }
+
+        // 记录起始点
+        startPos = testCubeTransform.position;
+
+        // 计算u值
+        float u = (Time.time - startTime) / timeDuration;
+
+        
+
+        // 限制u的值
+        if (u >= 1)
+        {
+            u = 1;
+            canMove = false;
+        }
+
+        //----------新增的代码----------//
+        float u2 = Mathf.Pow(u, easingModify);
+        //----------新增的代码----------//
+
+        // 计算当前位置，将u换成u2测试缓动
+        curPos = (1 - u2) * startPos + u2 * endPos;
+
+        testCubeTransform.position = curPos;
+        
+    }
+}
+          </code></pre>
+
+          <p>来看看效果如何，以下分别为easingModify为2和3的时候的效果：</p>
+
+          <img src="https://i.imgs.ovh/2026/10/09/77b4499fa046d52d29ef615f15729e45.gif" alt="02easingModify=2.gif" />
+          <p align="center">easingModify = 2， \(u2 = u^{easingModify}\)</p>
+
+          <img src="https://i.imgs.ovh/2026/10/09/dba31d6022c781548070e3f708bd44be.gif" alt="03easingModify=3.gif" />
+          <p align="center">easingModify = 3， \(u2 = u^{easingModify}\)</p>
+
+          <h3>2. 缓出</h3>
+
+          <p>缓出的效果是物体快到达终点时速度变缓。实现的方式是令\(u=1-(1-u)^{easingModify}\),请定位到这一句代码并修改。</p>
+
+          <pre><code>
+            // 修改前的代码
+            float u2 = Mathf.Pow(u, easingModify);
+
+            // 修改后的代码
+            float u2 = 1 - Mathf.Pow(1-u,easingModify);
+          </code></pre>
+
+          <p>由于是缓出，为了更明显地看出区别，我将endPos设为了（0，0，30），timeDuration设为了4。读者可以调整至合适的数值以观察出区别。</p>
+
+          <img src="https://i.imgs.ovh/2026/10/09/3bc9b12c8fa2b341c276054d45c37300.gif" alt="04easingModify=1.gif" />
+          <p align="center">easingModify = 1， \(u2=1-(1-u)^{easingModify}\)</p>
+
+          <img src="https://i.imgs.ovh/2026/10/09/f2025fde24fa93b7635c376e24b71179.gif" alt="05easingModify=2.gif" />
+          <p align="center">easingModify = 2， \(u2=1-(1-u)^{easingModify}\)</p>
+
+          <p>当easingModify=1时，是最原始的线性插值；当easingModify=2时，是缓出更平滑，可以看到刚开始运动得快一些。</p>
+
+          <h3>3. 缓入缓出</h3>
+
+          <p>当\(u<=0.5\)时，令\(u=0.5 \times \frac{(2u)^{easingModify}}{2}\)；当\(u>0.5\)时，令\(u=0.5 + 0.5 -
+              \frac{[1-2(u-0.5)]^{easingModify}}{2}\)。</p>
+
+          <p>请修改u2的值。</p>
+
+          <pre><code>
+float u2 = u;
+if (u <= 0.5)
+{
+    u2 = Mathf.Pow(u, easingModify);
+}
+else if(u>0.5)
+{
+    u2 = 1 - Mathf.Pow(1 - u, easingModify);
+}
+          </code></pre>
+
+          <p>下面是效果展示：</p>
+
+          <img src="https://i.imgs.ovh/2026/10/09/e3c86b1af614da0bdbc24d25b8b81397.gif" alt="06easingModify=1.gif" />
+          <p align="center">easingModify = 1， 当\(u<=0.5\)时，令\(u=0.5 \times \frac{(2u)^{easingModify}}{2}\)；当\(u>
+              0.5\)时，令\(u=0.5 + 0.5 -
+              \frac{[1-2(u-0.5)]^{easingModify}}{2}\)</p>
+
+          <img src="https://i.imgs.ovh/2026/10/10/9636f3875c0afe67c5aa7776ef6f3e1a.gif" alt="07easingModify=2.gif" />
+          <p align="center">easingModify = 2， 当\(u<=0.5\)时，令\(u=0.5 \times \frac{(2u)^{easingModify}}{2}\)；当\(u>
+              0.5\)时，令\(u=0.5 + 0.5 -
+              \frac{[1-2(u-0.5)]^{easingModify}}{2}\)</p>
+
+
+          <p>可以明显发现缓入缓出在开始和快到达终点时都较慢。</p>
+
+          <h3>4. Sin</h3>
+
+          <p>Sin，令\(u2=u+easingModify \times \sin(2\pi u) \)。</p>
+
+          <p>修改代码如下：</p>
+
+          <pre><code>
+float u2 = u + easingModify * Mathf.Sin(Mathf.PI * u * 2);
+          </code></pre>
+
+          <p>效果如下图所示，timeDuration=1，endPos = (0,0,5)，分别展示了easingModify = 1， easingModify =-0.2的情形。</p>
+
+          <img src="https://i.imgs.ovh/2026/10/10/75ea1003c06f87cb1472357cdcc446c7.gif" alt="08easingModify=1.gif" />
+          <p align="center">easingModify = 1， \(u2=u+easingModify \times \sin(2\pi u) \)</p>
+
+          <img src="https://i.imgs.ovh/2026/10/10/4c0eed0b79c19b6addf092bbf0b9417f.gif" alt="09easingModify=-0.2.gif" />
+          <p align="center">easingModify = -0.2， \(u2=u+easingModify \times \sin(2\pi u) \)</p>
+
+          <p>可以发现，当easingModify = -0.2时，可以看见小方块先往后移动了一小段距离再往前运动，有一种蓄力助跑的感觉。</p>
+
+          <h3>5. Sin缓入</h3>
+
+          <p>Sin缓入，令\(u2=1-\cos(\frac{\pi}{2}u)\),你应该注意到了，这个效果中没有使用easingModify。</p>
+
+          <p>修改代码如下：</p>
+
+          <pre><code>
+float u2 = 1 - Mathf.Cos(Mathf.PI * 0.5f * u);
+          </code></pre>
+
+          <img src="https://i.imgs.ovh/2026/10/10/a9483cf5ae413650c25c0a9df2142d3f.gif" alt="10.gif" />
+          <p align="center">\(u2=1-\cos(\frac{\pi}{2}u)\)</p>
+
+          <p>你能观察到效果还不错。</p>
+
+          <h3>6. Sin缓出</h3>
+
+          <p>Sin缓出，令\(u2=sin(\frac{\pi}{2}u)\)</p>
+
+          <p>修改代码如下：</p>
+
+          <pre><code>
+float u2 = Mathf.Sin(Mathf.PI * 0.5f * u);            
+          </code></pre>
+
+          <img src="https://i.imgs.ovh/2026/10/10/5019b58791daffb857ec52d5b5b368d6.gif" alt="11.gif" />
+          <p align="center">\(u2=sin(\frac{\pi}{2}u)\)</p>
+
+          <p>效果还行，开始比较快。</p>
+
+          <h2 id="CHA4">四、贝塞尔曲线</h2>
+
+          <p>贝塞尔曲线实际上实现的是三个及以上的点的插值，有点像<b>俄罗斯套娃</b>。</p>
+
+          <p>举个例子，有三个点，分别为P1、P2和P3点。过程如下：</p>
+
+          <ol>
+            <li>使用公式\(p_{current} = (1-u) \times p_{start} + u \times p_{end}\)计算P1点和P2点间的插值，记为P-12。</li>
+            <li>同理计算P2点和P3点间的插值，记为P-23。</li>
+            <li>最后计算P-12和P-23之间的插值，作为最终结果。</li>
+          </ol>
+
+          <p>实际上这个过程进行了3次插值运算，再举个例子，有三个点，分别为P1、P2、P3和P4。插值过程如下：</p>
+
+          <ol>
+            <li>使用公式\(p_{current} = (1-u) \times p_{start} + u \times p_{end}\)计算P1点和P2点间的插值，记为P-12。</li>
+            <li>同理计算P2点和P3点间的插值，记为P-23。</li>
+            <li>同理计算P3和P4间的插值，记为P-34。</li>
+            <li>接着计算P-12和P-23间的插值，记为P-123。</li>
+            <li>接着计算P-23和P-34间的插值，记为P-234。</li>
+            <li>最后计算P-123和P-234间的插值，记为P-1234，作为最终结果。</li>
+          </ol>
+
+          <p>可以看到，四个点进行了6次插值运算。</p>
+
+          <p>接下来在Unity中看看效果如何。</p>
+
+          <pre><code>
+public class InterpolationBezier : MonoBehaviour
+{
+    public Transform cube; // 小方块
+
+    // 三个点均在检查器面板设置
+    public Vector3 pos1;
+    public Vector3 pos2;
+    public Vector3 pos3;
+
+    public float startTime;
+    public float timeDuration;
+    public bool canMove;
+
+    private void Update()
+    {
+        // 开始测试
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            canMove = true;
+            startTime = Time.time;
+        }
+        // 回到原点
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            cube.position = Vector3.zero;
+            canMove = false;
+        }
+        if (!canMove)
+            return;
+
+        float u = (Time.time - startTime) / timeDuration;
+
+        if (u >= 1)
+        {
+            u = 1;
+            canMove = false;
+        }
+
+        Vector3 pos12 = (1 - u) * pos1 + u * pos2;
+        Vector3 pos23 = (1 - u) * pos2 + u * pos3;
+
+        Vector3 pos123 = (1 - u) * pos12 + u * pos23;
+
+        cube.position = pos123;
+
+    }
+}
+          </code></pre>
+
+          <img src="https://i.imgs.ovh/2026/10/10/4c0eed0b79c19b6addf092bbf0b9417f.gif" alt="13.gif" />
+          <p align="center">贝塞尔曲线，(0,0,0)->(10,0,10)->(0,0,30),timeDuration=1</p>
+
+          <p>效果还不错XD</p>
+
+          <h2><a id ="SUM"></a>总结</h2>
+
+          <p>本文介绍了几种线性插值，利用这些插值实现平滑的移动吧！</p>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="right"></div>
+  </div>
+
+
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "\\[", right: "\\]", display: true },
+          { left: "\\(", right: "\\)", display: false }
+        ],
+        throwOnError: false
+      });
+    });
+  </script>
+</body>
+
+</html>

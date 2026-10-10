@@ -12,7 +12,7 @@
   <script>hljs.highlightAll();</script>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
   <meta name="msvalidate.01" content="0B170310F1852A6D4B8F35FD1265F175" />
-  <meta name='description' content='Unity中，允许使用foreach语句遍历游戏对象所有子对象的Transform组件，这是因为UnityEngine.Transform内部实现了枚举器'>。
+  <meta name='description' content='Unity中，允许使用foreach语句遍历游戏对象所有子对象的Transform组件，这是因为UnityEngine.Transform内部实现了枚举器'>
 </head>
 
 <body>
@@ -51,9 +51,12 @@
 
           <hr>
 
-          <p>接下来我将进一步输出我的观点。在此之前，我想用自己的话解释<code>UnityEngine.Transform</code>是如何实现可以遍历子对象的<code>Transform</code>组件的枚举器的。</p>
+          <p>接下来我将进一步输出我的观点。在此之前，我想用自己的话解释<code>UnityEngine.Transform</code>是如何实现可以遍历子对象的<code>Transform</code>组件的枚举器的。
+          </p>
 
-          <p>以下来自Unity官方的UnityCsReference仓库：<a href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Transform/ScriptBindings/Transform.bindings.cs" target="_blank">UnityCsReference</a></p>
+          <p>以下来自Unity官方的UnityCsReference仓库：<a
+              href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Transform/ScriptBindings/Transform.bindings.cs"
+              target="_blank">UnityCsReference</a></p>
 
           <pre><code class="language-csharp">
 public class Transform : Component, IEnumerable
@@ -93,12 +96,16 @@ public class Transform : Component, IEnumerable
 }
           </code></pre>
 
-          <p><b>首先，<code>Transform</code>类继承了<code>Component</code>类和<code>IEnumerable</code>接口,并实现了接口中的方法</b>。继承<code>IEnumerable</code>接口，说明其<b>可以枚举</b>！<br></p>
+          <p>
+            <b>首先，<code>Transform</code>类继承了<code>Component</code>类和<code>IEnumerable</code>接口,并实现了接口中的方法</b>。继承<code>IEnumerable</code>接口，说明其<b>可以枚举</b>！<br>
+          </p>
 
           <p><b>然后，其内部实现了一个内部类<code>Enumerator</code>，这个类继承了<code>IEnumerator</code>接口。</b>这说明它定义了枚举器遍历的规则。</p>
 
-          <p>内部类中，<code>Transform outer;</code>声明了一个Transform类型的变量，Enumerator的构造函数需要传入一个Transform类型变量，然后将传入的变量赋予outer。<br>在GetEnumerator()方法中，可以看到，调用了Enumerator的构造函数，传入的参数是Transform这个类的实例本身。说了这么多，意思就是内部类中outer指的就是Transform的一个实例本身。</p>
-          
+          <p>
+            内部类中，<code>Transform outer;</code>声明了一个Transform类型的变量，Enumerator的构造函数需要传入一个Transform类型变量，然后将传入的变量赋予outer。<br>在GetEnumerator()方法中，可以看到，调用了Enumerator的构造函数，传入的参数是Transform这个类的实例本身。说了这么多，意思就是内部类中outer指的就是Transform的一个实例本身。
+          </p>
+
           <p>currentIndex为当前索引，从-1开始，因为枚举器一开始就会调用MoveNext()方法，使得currentIndex变为0。</p>
 
           <p>Current是当前对象，是一个属性，返回的是本Transform的一个实例的索引为currentIndex的子对象的Transform组件</p>
@@ -107,14 +114,17 @@ public class Transform : Component, IEnumerable
 
           <p>Reset()方法能重置索引，当使用foreach遍历完后会自动调用该方法。</p>
 
+          <hr>
 
           <h2>总结</h2>
 
-          <p>为一个类实现枚举器，需要让这个类继承<code>IEnumerable</code>和<code>IEnumerator</code>接口，继承<code>IEnumerable</code>接口时实现了一个<code>GetEnumerator()</code>方法，用于返回一个枚举器；继承<code>IEnumerator</code>接口时实现的成员和方法，规定了<b>如何枚举</b>。</p>
+          <p>
+            为一个类实现枚举器，需要让这个类继承<code>IEnumerable</code>和<code>IEnumerator</code>接口，继承<code>IEnumerable</code>接口时实现了一个<code>GetEnumerator()</code>方法，用于返回一个枚举器；继承<code>IEnumerator</code>接口时实现的成员和方法，规定了<b>如何枚举</b>。
+          </p>
 
           <p><code>IEnumerable</code>生成一个枚举器实例。</p>
           <p><code>IEnumerator</code>是一个具体的迭代器，完成枚举的工作。</p>
-          
+
         </div>
       </article>
 

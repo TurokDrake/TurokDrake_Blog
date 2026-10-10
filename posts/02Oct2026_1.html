@@ -9,7 +9,9 @@
   <link href="../styles/article.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
   <meta name="msvalidate.01" content="0B170310F1852A6D4B8F35FD1265F175" />
-  <meta name='description' content='作者在阅读一本书时，进行书中的《Space SHMUP Prototype》游戏开发，看到了该方法的使用，虽然平常经常用，但是很少打开Input Manager看看里面的属性。这一次突然想看看文档，于是便记录一下。'>。
+  <meta name='description'
+    content='作者在阅读一本书时，进行书中的《Space SHMUP Prototype》游戏开发，看到了该方法的使用，虽然平常经常用，但是很少打开Input Manager看看里面的属性。这一次突然想看看文档，于是便记录一下。'>
+  
 </head>
 
 <body>
@@ -32,13 +34,16 @@
 
         <div class="article-content">
           <h2>前言</h2>
-          <p>笔者在进行<i>《游戏设计、原型与开发》</i>中的<i>《Space SHMUP Prototype》</i>数字原型开发时，书中介绍了关于Input Manager中的设置。在看完书中相关介绍和官方文档后，想输出一下这些内容。</p>
+          <p>笔者在进行<i>《游戏设计、原型与开发》</i>中的<i>《Space SHMUP Prototype》</i>数字原型开发时，书中介绍了关于Input
+            Manager中的设置。在看完书中相关介绍和官方文档后，想输出一下这些内容。</p>
+          <hr>
 
           <h2>Input Manager中的两个参数</h2>
-          
+
           <p>可以在<code>Edit&gt;Project&gt; Settings&gt;Input Manager</code>中查看Input Manager的设置。</p>
 
-          <p>详细的参数说明可以看这里：<a href="https://docs.unity.cn/cn/2022.3/Manual/class-InputManager.html" target="_blank">Input Manager-Unity手册</a></p>
+          <p>详细的参数说明可以看这里：<a href="https://docs.unity.cn/cn/2022.3/Manual/class-InputManager.html" target="_blank">Input
+              Manager-Unity手册</a></p>
 
           <p>我在本文谈谈两个参数，<code>Sensitivity</code>和<code>Gravity</code>。</p>
 
@@ -47,6 +52,7 @@
           <p><code>Gravity</code>是重力，表示不存在输入时，轴 下降到中性点（即0）的速度。例如如果Horizontal轴的重力是3，表示松开右方向键后，数值从1平滑过渡到0需要1/3s的时间。</p>
 
           <p>应该不难发现，这两者的数值越大，平滑过渡的时间就越短。</p>
+          <hr>
 
           <h2>总结</h2>
 

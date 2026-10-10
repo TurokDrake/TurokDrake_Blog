@@ -1,5 +1,11 @@
 [
   {
+    "title": "插值",
+    "date": "2026-10-10",
+    "tags": ["数学"],
+    "url": "posts/10Oct2026.html"
+  },
+  {
     "title": "Unity中Transform如何实现的枚举器",
     "date": "2026-10-04",
     "tags": ["GameDev"],
