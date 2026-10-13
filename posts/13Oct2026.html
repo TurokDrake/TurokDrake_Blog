@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+
+  <title>TurokDrake's Blog</title>
+  <link href="../styles/article.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="msvalidate.01" content="0B170310F1852A6D4B8F35FD1265F175" />
+  <meta name='description'
+    content='Unity游戏开发中，有时需要用到读取XML文件的技能，其实使用这方面的API很简单，只要多用，就能熟悉。笔者在《游戏设计、原型与开发》一书中第四个实例《Prospector》——一款纸牌游戏里读取卡牌信息时用到了……'>
+</head>
+
+<body>
+  <div class="grid-layout">
+    <div class="left"></div>
+
+    <div class="middle">
+      <article class="article">
+        <header class="article-header">
+          <p class="article-label">博客文章</p>
+          <h1>C#中如何读取XML文件</h1>
+          <p class="article-meta">
+            <time datetime="2024-01-01">2026-10-13</time>
+            <span aria-hidden="true">·</span>
+            <span>GameDev</span>
+          </p>
+        </header>
+
+        <hr />
+
+        <div class="article-content">
+          <h4>目录</h4>
+
+          <ul>
+            <li><a href ="#0">前言</a></li>
+            <li><a href="#CHA1">一、相关API概述</a></li>
+            <li><a href = "#CHA2">二、如何读取XML文件</a></li>
+            <li><a href = "#SUM">总结</a></li>
+          </ul>
+
+          <hr>
+
+          <h2 id = "0">前言</h2>
+
+          <p>读者在阅读《游戏设计、原型与开发》中第四个实例原型《Prospector》的过程中，看到源代码使用的是自己创建的PT_XMLReader脚本，名字应该表示“Prototool_XML
+            Reader”的意思。在使用该脚本读取XML文件时，稍有繁琐，需要考虑XML文件某个节点的属性是否存在等问题。我在跟着教程写代码时，写了使用C#里的API读取XML文件的版本。在此先给出这一部分代码以供参考。</p>
+
+          <pre><code>
+#region 从XML文件中获取Sprite的位置信息——C#
+/* ---读取XML文件--- */
+
+// Resources文件夹比较特殊，不能使用相对路径访问
+// 注意，无需为文件添加后缀
+TextAsset xmlAsset = Resources.Load<TextAsset>("XML Versions of Deck & Layout/XML_Deck");
+
+// 检查是否获取到文件
+if (xmlAsset == null)
+{
+    Debug.Log("XML_Deck文件获取失败！");
+    return;
+}
+else
+{
+    Debug.Log("XML_Deck文件获取成功！");
+}
+
+XmlDocument doc = new XmlDocument();
+doc.LoadXml(xmlAsset.text);
+
+/* 读---取XML文件中的 decorator节点--- */
+// 在 decorator前添加 // 表示是在文件全局中寻找
+XmlNodeList nodesDeco = doc.SelectNodes("//decorator");
+Debug.Log($"nodesDeco.Count:{nodesDeco.Count}");
+
+decorators = new List<Decorator>();
+Decorator deco;
+
+if (nodesDeco.Count > 0)
+{
+    // 读取并设置decorator
+    foreach (XmlNode n in nodesDeco)
+    {
+        deco = new Decorator();
+        // 添加?作为可空类型，可以避免XML中没写这个属性，但是却使用了其Value，导致空引用报错
+        deco.type = n.Attributes["type"]?.Value;
+        deco.loc.x = Convert.ToSingle(n.Attributes["x"]?.Value);
+        deco.loc.y = Convert.ToSingle(n.Attributes["y"]?.Value);
+        deco.loc.z = Convert.ToSingle(n.Attributes["z"]?.Value);
+        deco.flip = n.Attributes["flip"]?.Value == "1";
+        deco.scale = Convert.ToSingle(n.Attributes["scale"]?.Value);
+
+        decorators.Add(deco);
+    }
+}
+
+/* ---读取XML文件中的 card 节点--- */
+XmlNodeList nodesCard = doc.SelectNodes("//card");
+
+cardDefs = new List<CardDefinition>();
+CardDefinition cDef;
+
+if (nodesCard.Count > 0)
+{
+    foreach (XmlNode n in nodesCard)
+    {
+        cDef = new CardDefinition();
+
+        cDef.rank = int.Parse(n.Attributes["rank"]?.Value);
+
+        XmlNodeList childNodesCard = n.ChildNodes;
+
+        foreach (XmlNode childN in childNodesCard)
+        {
+            deco = new Decorator();
+
+            deco.type = "pip";
+
+            deco.flip = childN.Attributes["flip"]?.Value == "1";
+            deco.loc.x = Convert.ToSingle(childN.Attributes["x"]?.Value);
+            deco.loc.y = Convert.ToSingle(childN.Attributes["y"]?.Value);
+            deco.loc.z = Convert.ToSingle(childN.Attributes["z"]?.Value);
+            deco.scale = Convert.ToSingle(childN.Attributes["scale"]?.Value);
+
+            cDef.pips.Add(deco);
+        }
+
+        // J、Q、K卡面是人脸
+        cDef.face = n.Attributes["face"]?.Value;
+        cardDefs.Add(cDef);
+
+    }
+}
+#endregion
+          </code></pre>
+
+          <p>以下是我上面代码读取的Xml文件</p>
+
+          <pre><code>
+&lt;xml&gt;
+	<!-- decorators appear on every card. They are the suit and rank in the corners. -->
+	&lt;decorator type="letter" x="-1.05" y="1.42"  z="0" flip="0" scale="1.25"/&gt;
+	&lt;decorator type="suit"   x="-1.05" y="1.03"  z="0" flip="0" scale="0.4" /&gt;
+	&lt;decorator type="suit"   x="1.05"  y="-1.03" z="0" flip="1" scale="0.4" /&gt;
+	&lt;decorator type="letter" x="1.05"  y="-1.42" z="0" flip="1" scale="1.25"/&gt;
+	<!-- A list of all cards that defines where pips are placed. -->
+	&lt;card rank="1"&gt;
+		&lt;pip x="0" y="0" z="0" flip="0" scale="2"/&gt;
+	&lt;/card&gt;
+	&lt;card rank="2"&gt;
+		&lt;pip x="0" y="1.1" z="0" flip="0"/&gt;
+		&lt;pip x="0" y="-1.1" z="0" flip="1"/&gt;
+	&lt;/card&gt;
+	&lt;card rank="3"&gt;
+		&lt;pip x="0" y="1.1" z="0" flip="0"/&gt;
+		&lt;pip x="0" y="0" z="0" flip="0"/&gt;
+		&lt;pip x="0" y="-1.1" z="0" flip="1"/&gt;
+	&lt;/card&gt;
+	&lt;card rank="4"&gt;
+		&lt;pip x="-.55" y="1.1" z="0" flip="0"/&gt;
+		&lt;pip x=".55" y="1.1" z="0" flip="0"/&gt;
+		&lt;pip x="-.55" y="-1.1" z="0" flip="1"/&gt;
+		&lt;pip x=".55" y="-1.1" z="0" flip="1"/&gt;
+	&lt;/card&gt;
+	&lt;card rank="5"&gt;
+		&lt;pip x="-.55" y="1.1" z="0" flip="0"/&gt;
+		&lt;pip x=".55" y="1.1" z="0" flip="0"/&gt;
+		&lt;pip x="0" y="0" z="0" flip="0"/&gt;
+		&lt;pip x="-.55" y="-1.1" z="0" flip="1"/&gt;
+		&lt;pip x=".55" y="-1.1" z="0" flip="1"/&gt;
+	&lt;/card&gt;
+	&lt;card rank="6"&gt;
+		&lt;pip x="-.55" y="1.1" z="0" flip="0"/&gt;
+		&lt;pip x=".55" y="1.1" z="0" flip="0"/&gt;
+		&lt;pip x="-.55" y="0" z="0" flip="0"/&gt;
+		&lt;pip x=".55" y="0" z="0" flip="0"/&gt;
+		&lt;pip x="-.55" y="-1.1" z="0" flip="1"/&gt;
+		&lt;pip x=".55" y="-1.1" z="0" flip="1"/&gt;
+	&lt;/card&gt;
+	&lt;card rank="7"&gt;
+		&lt;pip x="-.55" y="1.1" z="0" flip="0"/&gt;
+		&lt;pip x=".55" y="1.1" z="0" flip="0"/&gt;
+		&lt;pip x="0" y=".55" z="0" flip="0"/&gt;
+		&lt;pip x="-.55" y="0" z="0" flip="0"/&gt;
+		&lt;pip x=".55" y="0" z="0" flip="0"/&gt;
+		&lt;pip x="-.55" y="-1.1" z="0" flip="1"/&gt;
+		&lt;pip x=".55" y="-1.1" z="0" flip="1"/&gt;
+	&lt;/card&gt;
+	&lt;card rank="8"&gt;
+		&lt;pip x="-.55" y="1.1" z="0" flip="0"/&gt;
+		&lt;pip x=".55" y="1.1" z="0" flip="0"/&gt;
+		&lt;pip x="0" y=".55" z="0" flip="0"/&gt;
+		&lt;pip x="-.55" y="0" z="0" flip="0"/&gt;
+		&lt;pip x=".55" y="0" z="0" flip="0"/&gt;
+	  &lt;pip x="0" y="-.55" z="0" flip="1"/&gt;
+		&lt;pip x="-.55" y="-1.1" z="0" flip="1"/&gt;
+		&lt;pip x=".55" y="-1.1" z="0" flip="1"/&gt;
+	&lt;/card&gt;
+	&lt;card rank="9"&gt;
+		&lt;pip x="-.58" y="1.1" z="0" flip="0"/&gt;
+		&lt;pip x=".58" y="1.1" z="0" flip="0"/&gt;
+		&lt;pip x="-.58" y=".37" z="0" flip="0"/&gt;
+		&lt;pip x=".58" y=".37" z="0" flip="0"/&gt;
+		&lt;pip x="0" y="0" z="0" flip="0"/&gt;
+		&lt;pip x="-.58" y="-.37" z="0" flip="1"/&gt;
+		&lt;pip x=".58" y="-.37" z="0" flip="1"/&gt;
+		&lt;pip x="-.58" y="-1.1" z="0" flip="1"/&gt;
+		&lt;pip x=".58" y="-1.1" z="0" flip="1"/&gt;
+	&lt;/card&gt;
+	&lt;card rank="10"&gt;
+		&lt;pip x="-.58" y="1.1" z="0" flip="0"/&gt;
+		&lt;pip x=".58" y="1.1" z="0" flip="0"/&gt;
+		&lt;pip x="0" y=".73" z="0" flip="0"/&gt;
+		&lt;pip x="-.58" y=".37" z="0" flip="0"/&gt;
+		&lt;pip x=".58" y=".37" z="0" flip="0"/&gt;
+		&lt;pip x="-.58" y="-.37" z="0" flip="1"/&gt;
+		&lt;pip x=".58" y="-.37" z="0" flip="1"/&gt;
+		&lt;pip x="0" y="-.73" z="0" flip="1"/&gt;
+		&lt;pip x="-.58" y="-1.1" z="0" flip="1"/&gt;
+		&lt;pip x=".58" y="-1.1" z="0" flip="1"/&gt;
+	&lt;/card&gt;
+	<!-- Face cards have no pips, so this references the name of the Sprite to be shown. -->
+	&lt;card rank="11" face="FaceCard_11"/&gt;
+	&lt;card rank="12" face="FaceCard_12"/&gt;
+	&lt;card rank="13" face="FaceCard_13"/&gt;
+&lt;/xml&gt;
+          </code></pre>
+
+          <hr>
+
+          <h2 id = "CHA1">一、相关API概述</h2>
+
+          <p>开门见山！<br>
+          <pre><code>
+using System.IO; // 引用该命名空间，以使用读写操作的API，在本文章中暂不说明，读者可以在互联网或者结合AI了解如何使用
+using System.Xml; // 引用该命名空间，以使用操作Xml文件的API
+            </code></pre>
+
+          <code>XDocument</code><p>是一个类，它的实例是用来存放Xml文件的。</p>
+          <code>XmlNodeList</code><p>是一个类，它的实例是Xml节点的列表，存放一堆Xml节点</p>
+          <code>XmlNode</code><p>是一个类，它的实例表示一个Xml节点</p>
+          <code>void XDocument.LoadXml(string xml)</code><p>是一个成员方法，根据xml文件的名称加载Xml文件</p>
+          <code>XmlNodeList XmlNode.SelectNodes(string xpath)</code><p>是一个成员方法，根据节点名称获取所有符合条件的节点</p>
+          <code>SelectNode(string xpath)</code><p>根据节点名称找到一个符合条件的节点 </p>
+          <p>再继续下去就有点像XML API介绍了，其实这些内容可以从微软官方文档中找到<a href="https://learn.microsoft.com/zh-cn/dotnet/api/system.xml.xmldocument?view=net-10.0" target="_blank">XmlDocument类定义-Microsoft</a></p>
+          <p>接下来我将介绍如何使用。</p>
+          </p>
+
+          <hr>
+
+          <h2 id = "CHA2">二、如何读取XML文件</h2>
+
+          <p>步骤说明：</p>
+
+          <ol>
+            <li>创建一个<code>XDocument</code>实例，并调用其<code>LoadXml()</code>方法获取Xml文件</li>
+            <li>如果需要获取某个节点，使用SelectNode(string xpath)方法；如果需要获取相同名称的所有节点，使用SelectNodes(string xpath)方法</li>
+            <li>需要获取节点的属性，使用节点的attribute["属性名"]获取。</li>
+          </ol>
+
+          <p>以上面的示例代码为例，</p>
+          <pre><code>
+XmlDocument doc = new XmlDocument();
+doc.LoadXml(xmlAsset.text);
+          </code></pre>
+
+          <p>这一步获取Xml文件。</p>
+
+          <pre><code>
+ /* ---读取XML文件中的 decorator节点--- */
+ // 在 decorator前添加 // 表示是在文件全局中寻找
+ XmlNodeList nodesDeco = doc.SelectNodes("//decorator");
+ Debug.Log($"nodesDeco.Count:{nodesDeco.Count}");            
+          </code></pre>
+
+          <p>这一步在整个Xml文件中寻找名为"decorator"的节点</p>
+          <blockquote>注意：这里的节点名称前添加了“//”，表示会在整个Xml文件中寻找。你也可以先获取Xml中的某个根节点，然后在根节点的子节点里寻找。</blockquote>
+
+          <pre><code>
+ if (nodesDeco.Count > 0)
+ {
+     // 读取并设置decorator
+     foreach (XmlNode n in nodesDeco)
+     {
+         deco = new Decorator();
+         // 添加?作为可空类型，可以避免XML中没写这个属性，但是却使用了其Value，导致空引用报错
+         deco.type = n.Attributes["type"]?.Value;
+         deco.loc.x = Convert.ToSingle(n.Attributes["x"]?.Value);
+         deco.loc.y = Convert.ToSingle(n.Attributes["y"]?.Value);
+         deco.loc.z = Convert.ToSingle(n.Attributes["z"]?.Value);
+         deco.flip = n.Attributes["flip"]?.Value == "1";
+         deco.scale = Convert.ToSingle(n.Attributes["scale"]?.Value);
+
+         decorators.Add(deco);
+     }
+ }            
+          </code></pre>
+
+          <p>这一步遍历获取到的节点，并读取节点中属性的值。你可以看到在<code>Attributes["x"]?</code>后跟了个"?"，表示这是个可空类型，如果它为null，就不会自动使用其Value属性；如果不为null，才使用。这个问号可以避免报错。</p>
+
+          <p>在这一步，我将读取到的值一个一个赋予我创建的类对象。</p>
+
+          <hr>
+
+          <h2 id = "SUM">总结</h2>
+
+          <p>读取XML文件的步骤：</p>
+          <ol>
+            <li>获取XML文件</li>
+            <li>读取XML文件的节点</li>
+            <li>操作XML文件节点的值</li>
+          </ol>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="right"></div>
+  </div>
+
+
+
+</body>
+
+</html>
