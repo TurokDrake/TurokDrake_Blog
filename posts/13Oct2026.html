@@ -5,12 +5,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width" />
 
-  <title>TurokDrake's Blog</title>
+  <title>C#中如何读取XML文件</title>
   <link href="../styles/article.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
-  <script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-  <script>hljs.highlightAll();</script>
+  <link href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/atom-one-dark.min.css" rel="stylesheet">
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script >hljs.initHighlightingOnLoad();</script> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="msvalidate.01" content="0B170310F1852A6D4B8F35FD1265F175" />
   <meta name='description'
@@ -27,7 +27,7 @@
           <p class="article-label">博客文章</p>
           <h1>C#中如何读取XML文件</h1>
           <p class="article-meta">
-            <time datetime="2024-01-01">2026-10-13</time>
+            <time datetime="2026-10-13">2026-10-13</time>
             <span aria-hidden="true">·</span>
             <span>GameDev</span>
           </p>
@@ -52,7 +52,7 @@
           <p>读者在阅读《游戏设计、原型与开发》中第四个实例原型《Prospector》的过程中，看到源代码使用的是自己创建的PT_XMLReader脚本，名字应该表示“Prototool_XML
             Reader”的意思。在使用该脚本读取XML文件时，稍有繁琐，需要考虑XML文件某个节点的属性是否存在等问题。我在跟着教程写代码时，写了使用C#里的API读取XML文件的版本。在此先给出这一部分代码以供参考。</p>
 
-          <pre><code>
+          <pre><code class = "csharp">
 #region 从XML文件中获取Sprite的位置信息——C#
 /* ---读取XML文件--- */
 
@@ -142,7 +142,7 @@ if (nodesCard.Count > 0)
 
           <p>以下是我上面代码读取的Xml文件</p>
 
-          <pre><code>
+          <pre><code  class = "xml">
 &lt;xml&gt;
 	<!-- decorators appear on every card. They are the suit and rank in the corners. -->
 	&lt;decorator type="letter" x="-1.05" y="1.42"  z="0" flip="0" scale="1.25"/&gt;
@@ -237,14 +237,14 @@ if (nodesCard.Count > 0)
           <h2 id = "CHA1">一、相关API概述</h2>
 
           <p>开门见山！<br>
-          <pre><code>
+          <pre><code class = "csharp">
 using System.IO; // 引用该命名空间，以使用读写操作的API，在本文章中暂不说明，读者可以在互联网或者结合AI了解如何使用
 using System.Xml; // 引用该命名空间，以使用操作Xml文件的API
             </code></pre>
 
-          <code>XDocument</code><p>是一个类，它的实例是用来存放Xml文件的。</p>
-          <code>XmlNodeList</code><p>是一个类，它的实例是Xml节点的列表，存放一堆Xml节点</p>
-          <code>XmlNode</code><p>是一个类，它的实例表示一个Xml节点</p>
+          <code>XDocument</code><p>是一个类，表示一个Xml文件</p>
+          <code>XmlNodeList</code><p>是一个类，表示存储Xml文件中的节点的列表</p>
+          <code>XmlNode</code><p>是一个类，表示一个节点</p>
           <code>void XDocument.LoadXml(string xml)</code><p>是一个成员方法，根据xml文件的名称加载Xml文件</p>
           <code>XmlNodeList XmlNode.SelectNodes(string xpath)</code><p>是一个成员方法，根据节点名称获取所有符合条件的节点</p>
           <code>SelectNode(string xpath)</code><p>根据节点名称找到一个符合条件的节点 </p>
@@ -265,14 +265,14 @@ using System.Xml; // 引用该命名空间，以使用操作Xml文件的API
           </ol>
 
           <p>以上面的示例代码为例，</p>
-          <pre><code>
+          <pre><code class = "csharp">
 XmlDocument doc = new XmlDocument();
 doc.LoadXml(xmlAsset.text);
           </code></pre>
 
           <p>这一步获取Xml文件。</p>
 
-          <pre><code>
+          <pre><code class = "csharp">
  /* ---读取XML文件中的 decorator节点--- */
  // 在 decorator前添加 // 表示是在文件全局中寻找
  XmlNodeList nodesDeco = doc.SelectNodes("//decorator");
@@ -282,7 +282,7 @@ doc.LoadXml(xmlAsset.text);
           <p>这一步在整个Xml文件中寻找名为"decorator"的节点</p>
           <blockquote>注意：这里的节点名称前添加了“//”，表示会在整个Xml文件中寻找。你也可以先获取Xml中的某个根节点，然后在根节点的子节点里寻找。</blockquote>
 
-          <pre><code>
+          <pre><code class = "csharp">
  if (nodesDeco.Count > 0)
  {
      // 读取并设置decorator
