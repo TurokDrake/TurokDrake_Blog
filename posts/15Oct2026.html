@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+
+  <title>Unity中的特殊文件夹</title>
+  <link href="../styles/article.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="msvalidate.01" content="0B170310F1852A6D4B8F35FD1265F175" />
+  <meta name='description'
+    content='本文介绍Unity中的几个特殊文件夹, 包括Resource, StreamingAssets, PersistentDataPath, Plugins, Editor, Standard Assets。我将从这些文件夹在哪，编译后能不能访问等角度介绍。'>
+</head>
+
+<body>
+  <div class="grid-layout">
+    <div class="left"></div>
+
+    <div class="middle">
+      <article class="article">
+        <header class="article-header">
+          <p class="article-label">博客文章</p>
+          <h1>Unity中的特殊文件夹</h1>
+          <p class="article-meta">
+            <time datetime="2026-10-15">2026-10-15</time>
+            <span aria-hidden="true">·</span>
+            <span>GameDev</span>
+          </p>
+        </header>
+
+        <hr />
+
+        <div class="article-content">
+          <h4>目录</h4>
+
+          <ul>
+            <li><a href="#00">前言</a></li>
+            <li><a href="#01">工程路径获取</a></li>
+            <li><a href="#02">Resources</a></li>
+            <li><a href="#03">StreamingAssets</a></li>
+            <li><a href="#04">PersistentDataPath</a></li>
+            <li><a href="#05">Plugins</a></li>
+            <li><a href="#06">Editor</a></li>
+            <li><a href="#07">Standard Assets</a></li>
+            <li><a href="#08">总结</a></li>
+          </ul>
+
+          <hr>        
+
+          <h2 id="00">前言</h2>
+          <p>Unity中创建一个项目时，会有许多默认文件夹，这些文件夹是用来存放什么文件的呢？我们能否访问这些文件夹？本文将介绍这些文件夹。</p>
+
+          <hr>
+
+          <h2 id="01">工程路径获取</h2>
+          <p>工程文件路径指的是你创建这个项目时，游戏数据文件夹的路径。这就意味着如果这个项目打包/构建后，将构建后的游戏文件夹发送到另一台电脑上，在另一台电脑上是无法获取工程文件路径的（当然也没必要获取）。<br>
+          在Unity编辑模式下，我们才可能使用到工程路径。<br>
+          这个路径取决于<b>运行时</b>所基于的平台，详见<a href="https://docs.unity.cn/cn/2022.3/ScriptReference/Application-dataPath.html" target="_blank">Application.dataPath</a>.<br>
+          可以使用<code>Application.dataPatg</code>获取其路径。</p>
+
+          <blockquote>“运行时”被加粗了，这个指的是Run Time，构建后的程序实际执行的阶段。</blockquote>
+
+          <hr>
+
+          <h2 id="02">Resources</h2>
+          <p>这个文件夹在开发过程中经常使用，一些需要动态加载的资源都会放在该文件夹下。Unity创建项目模板后，不会自动创建Resources文件夹，所以我们需要手动在Assets文件夹下创建Resources文件夹。<br>
+          我们能通过<code>Application.dataPath + 路径名</code>获得其文件夹路径。<br>
+          这个文件夹有以下特点：
+          </p>
+
+          <ol>
+            <li>需要使用Resources API动态加载的资源可以放在该文件夹；</li>
+            <li>游戏构建时，该文件夹会被打包，也就是说构建后的游戏文件夹中的游戏资源不会一个一个展示，全都打包在一个文件里了；</li>
+            <li>文件夹打包时会压缩加密；</li>
+            <li>打包后的文件夹内容只可读，只能通过Resources API加载。</li>
+          </ol>
+
+          <hr>
+
+          <h2 id="03">StreamingAssets</h2>
+          <p>该文件夹和Resources一样，不会自动创建，需要我们手动创建。<br>
+          <code>Application.streamingAssetsPath</code>获得该文件夹的路径。</p>
+
+          <blockquote>打包后无法通过<code>Application.dataPath</code>拼接路径以获得其路径，不同平台的路径是不同的。</blockquote>
+
+          <p>该文件夹具有以下特点：</p>
+
+          <ol>
+            <li>打包后无加密；</li>
+            <li>移动平台只读，PC可读可写；</li>
+            <li>可以放入一些自定义加载规则的资源，比如纸牌游戏动态制卡时，存放纸牌角码和花色的XML配置文件。</li>
+          </ol>
+
+          <hr>
+
+          <h2 id="04">PersistentDataPath</h2>
+          <p>该文件夹无需自己创建。一般是游戏运行过程中保存的数据，例如存档。游戏存档在Windows平台下一般在`用户名/AppData`中能够找到。<br>
+          可以使用<code>Application.persistentDataPath</code>获取该文件夹路径，不同平台，路径是不同的。</p>
+
+          <p>该文件具有以下特点：</p>
+
+          <ol>
+            <li>所有平台可读可写；</li>
+            <li>一般放置动态下载或动态创建的文件，游戏的下载或创建的文件，例如存档、配置信息等。</li>
+          </ol>
+          
+          <hr>
+
+          <h2 id="05">Plugins</h2>
+          <p>该文件夹存储插件、第三方库以及原生平台代码。具有以下特点：</p>
+
+          <ol>
+            <li>存放插件；</li>
+            <li>存储多个平台的插件的文件夹。</li>
+          </ol>
+
+          <hr>
+
+          <h2 id="06">Editor</h2>
+          <p>该文件夹存放只在Unity编辑器中运行的脚本或工具。具有以下特点：</p>
+          
+          <ol>
+            <li>可以通过Application.dataPath拼接获取其路径;</li>
+            <li>存放对编辑器进行修改的相关脚本，例如自定义菜单命令和自定义Inspector面板;</li>
+            <li>不会被打包，因为只在编辑器中运行。</li>
+          </ol>
+
+          <hr>
+
+          <h2 id="07">Standard Assets</h2>
+          <p>该文件是Unity提供的默认资源文件夹和一些通用的脚本，在一些官方模板项目中会有。</p>
+
+          <hr>
+
+          <h2 id="08">总结</h2>
+          <table>
+            <tr>
+              <th>文件夹</th>
+              <th>是否需要手动创建</th>
+              <th>作用</th>
+            </tr>
+            <tr>
+              <th>Resources</th>
+              <th>是</th>
+              <th>使用相关API动态加载资源，压缩加密打包内容</th>
+            </tr>
+            <tr>
+              <th>StreamingAssets</th>
+              <th>是</th>
+              <th>自定义资源加载规则，打包内容不会加密</th>
+            </tr>
+            <tr>
+              <th>PersistentDataPath</th>
+              <th>否</th>
+              <th>放置动态下载或创建的资源，游戏下载或创建的资源</th>
+            </tr>
+            <tr>
+              <th>Plugins</th>
+              <th>是</th>
+              <th>存储多个平台的插件</th>
+            </tr>
+            <tr>
+              <th>Editor</th>
+              <th>是</th>
+              <th>放置编辑器拓展脚本</th>
+            </tr>
+            <tr>
+              <th>Standard Assets</th>
+              <th>是</th>
+              <th>默认资源文件夹，存放一些Unity自带组件</th>
+            </tr>
+          </table>
+
+        </div>
+      </article>
+
+    </div>
+
+    <div class="right"></div>
+  </div>
+
+
+
+</body>
+
+</html>
