@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+
+  <title>迭代法求非线性方程的解中关于不动点的存在性与收敛性的证明</title>
+  <link href="../styles/article.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="msvalidate.01" content="0B170310F1852A6D4B8F35FD1265F175" />
+  <meta name='description' content='笔者在上完计算方法这门课时，接触到了非线性方程的求解方法，我在学习了二分法后，紧接着学习的是不动点迭代法，在书中关于不动点迭代法的论证引起了我的兴趣，作为一名非数学系学生，我想输出我的理解，其中可能存在错误，如有错误，可发送邮件给我。'>
+</head>
+
+<body>
+  <div class="grid-layout">
+    <div class="left"></div>
+
+    <div class="middle">
+      <article class="article">
+        <header class="article-header">
+          <p class="article-label">博客文章</p>
+          <h1>迭代法求非线性方程的解中关于不动点的存在性与收敛性的证明</h1>
+          <p class="article-meta">
+            <time datetime="2026-10-16">2026-10-16</time>
+            <span aria-hidden="true">·</span>
+            <span>数学</span>
+          </p>
+        </header>
+
+        <hr />
+
+        <div class="article-content">
+          <h2>前言</h2>
+          <p>笔者在上完计算方法这门课时，接触到了非线性方程的求解方法，我在学习了二分法后，紧接着学习的是不动点迭代法，在书中关于不动点迭代法的论证引起了我的兴趣，作为一名非数学系学生，我想输出我的理解，其中可能存在错误，如有错误，可发送邮件给我。我的邮件：turokdrake@outlook.com</p>
+
+          <hr>
+
+          <h2>一、书中的内容</h2>
+          <p>设方程 \( f(x) = 0 \), 其迭代函数为 \( x_{k+1} = \varphi(x_k) \quad k = 0,1,2,... \quad x_0 \in [a, b] \)</p>
+          <p>以下是迭代函数 \( \varphi(x) \)在满足什么条件时迭代法收敛的讨论：</p>
+
+          <p>设迭代函数\( \varphi(x)在  [a,b]  \)上<b><i>具有连续的一阶导数</i></b>，且</p>
+
+          <ol>
+            <li>当\( x \in [a,b] \)时，\( a \leq \varphi(x) \leq b\) ;</li>
+            <li>存在正数\(L < 1\)，对任意 \( x \in [a,b] \), 有\( |\varphi'(x)| \leq L < 1 \) 成立，则 \( x = \varphi(x) \)在\([a,b]\)上有唯一解\(x^*\)，且对任意初始近似值\(x_0 \in [a,b]\)，迭代过程\( x_{k+1} = \varphi(x_k)(k = 0,1,2,...)\)收敛，且\( \lim\limits_{k \to \infty} x_k = x^*\)</li>
+          </ol>
+
+          <p>上面的定理为收敛性定理，下面是关于证明的讨论，我将使用手写的方式阐述，这样就不用编辑Latex公式了XD</p>
+
+          <hr>
+
+          <h2>二、关于证明的讨论</h2>
+          <img src="https://i.imgs.ovh/2026/10/16/f87637abb0d95374bacdce4924bcb4fc.png" alt="1.png" />
+          <p align="center">\(x^*\)的存在性与唯一性</p>
+
+          <img src="https://i.imgs.ovh/2026/10/16/b74f08678d089297cfd22763d1bc4dda.png" alt="2.png" />
+          <p align="center">\(x^*\)最终收敛于\(x^*\)</p>
+          
+        </div>
+      </article>
+
+    </div>
+
+    <div class="right"></div>
+  </div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "\\[", right: "\\]", display: true },
+          { left: "\\(", right: "\\)", display: false }
+        ],
+        throwOnError: false
+      });
+    });
+  </script>
+</body>
+
+</html>
