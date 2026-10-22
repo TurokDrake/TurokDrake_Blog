@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+
+  <title>旋转矩阵</title>
+  <link href="../styles/article.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="msvalidate.01" content="0B170310F1852A6D4B8F35FD1265F175" />
+  <meta name='description'
+    content='笔者在看《3D数学基础：图形学与游戏开发》这本书关于旋转矩阵的介绍时沉浸在如何找出一个描述绕过原点轴旋转一定角度的矩阵，我在本文将介绍描述二维平面中的旋转矩阵和三维坐标系中绕各轴旋转的矩阵，在最后介绍我提到的描述绕原点轴旋转一定角度的矩阵。'>
+</head>
+
+<body>
+  <div class="grid-layout">
+    <div class="left"></div>
+
+    <div class="middle">
+      <article class="article">
+        <header class="article-header">
+          <p class="article-label">博客文章</p>
+          <h1>旋转矩阵</h1>
+          <p class="article-meta">
+            <time datetime="2026-10-22">2026-10-22</time>
+            <span aria-hidden="true">·</span>
+            <span>数学</span>
+          </p>
+        </header>
+
+        <hr />
+
+        <div class="article-content">
+          <h2>前言</h2>
+          <p>
+            笔者在阅读《3D数学基础：图形学与游戏开发》中矩阵的线性变换一章的第一小节——旋转时，被书中的内容激起了好奇心。于是我会在本文介绍描述二维平面中旋转的矩阵，描述在三维空间中绕坐标轴旋转的矩阵，最后将介绍描述在三维坐标空间中，绕任意过原点轴旋转的矩阵。本文若有错误，可通过邮箱联系我turokdrake@outlook.com
+            XD</p>
+
+          <hr>
+
+          <h2>一、描述二维平面中旋转的矩阵</h2>
+          <p>前面我写过一篇博客，这是一个链接：<a href="https://turokfang.top/posts/12Oct2026.html"
+              target="_blank">理解矩阵是用来描述空间变换的</a>，读过这篇文章，能更清晰地理解我们是如何寻找旋转矩阵的。</p>
+
+          <p>我会在每一个小节附上草图XD。</p>
+
+          <p>这里的旋转指的是绕原点旋转。</p>
+
+          <p>二维平面笛卡尔坐标系的基矢量为 \(\vec{i} = (1,0)\) （x轴的基矢量）和 \(\vec{j} = (0,1)\) （y轴的基矢量）</p>
+
+          <p>如果规定逆时针旋转为正，那么假设旋转角度为 \(\theta\)，那么旋转后的基矢量变为:</p>
+
+          <p>\(\vec{i'} = (\cos\theta , \sin\theta)\)， \(\vec{j'} = (-\sin\theta,\cos\theta) \)</p>
+
+          <p>那么表示二维平面绕原点正旋转的矩阵就为：\(\begin{bmatrix} \cos\theta & \sin\theta \\ -\sin\theta&\cos\theta \end{bmatrix}\)</p>
+
+          <img src="https://i.imgs.ovh/2026/10/22/66ad58bba4953e9a6b6fb31220057a44.png" alt="1.png" />
+          <p align="center">描述二维平面绕原点正旋转的矩阵</p>
+
+          <h2>二、描述在三维空间中绕坐标轴旋转的矩阵</h2>
+          <p>开门见山，我先给出原本的基矢量，然后再看经过旋转的基矢量是什么样的，就能确认矩阵是什么样的了。</p>
+
+          <p>原本的基矢量：</p>
+
+          <p>\(\vec{i} = (1,0,0), \vec{j} = (0,1,0), \vec{k} = (0,0,1)\) 分别为 x轴的基矢量, y轴的基矢量, z轴的基矢量。</p>
+
+          <h3>描述绕x轴正旋转的矩阵</h3>
+          <p>关于在左手坐标系和右手坐标系中判断旋向的正负可以看这篇文章：<a href="https://turokfang.top/posts/26Sep2026.html"
+              target="_blank">如何判断左手和右手坐标系？</a></p>
+          <p>旋转后的基矢量为：</p>
+
+          <p>\(\vec{i'} = (1,0,0) , \vec{j'} = (0,\cos\theta,\sin\theta) , \vec{k'} = (0,-\sin\theta,\cos\theta)\)</p>
+
+          <p>则矩阵为：\(\begin{bmatrix}
+            1 &0&0 \\
+            0&\cos\theta&\sin\theta \\
+            0&-\sin\theta&\cos\theta
+            \end{bmatrix}
+            \)</p>
+
+          <img src="https://i.imgs.ovh/2026/10/22/6898c3a508c58ecf29ae9cef46e2f50c.png" alt="2.png" />
+          <p align="center">描述三维空间绕x轴正旋转的矩阵</p>
+
+          <h3>描述绕y轴正旋转的矩阵</h3>
+          <p>旋转后的基矢量为：</p>
+
+          <p>\(\vec{i'} = (\cos\theta,0,-\sin\theta) , \vec{j'} = (0,1,0) , \vec{k'} = (\sin\theta,0,\cos\theta)\)</p>
+
+          <p>则矩阵为：\(\begin{bmatrix}
+            \cos\theta&0&-\sin\theta \\
+            0&1&0 \\
+            \sin\theta&0&\cos\theta
+            \end{bmatrix}
+            \)</p>
+
+          <img src="https://i.imgs.ovh/2026/10/22/abaf4f33b9b52d29b181eda1ac71c10e.png" alt="3.png" />
+          <p align="center">描述三维空间绕y轴正旋转的矩阵</p>
+
+          <h3>描述绕z轴正旋转的矩阵</h3>
+          <p>旋转后的基矢量为：</p>
+
+          <p>\(\vec{i'} = (\cos\theta,\sin\theta,0) , \vec{j'} = (-\sin\theta,\cos\theta,0) , \vec{k'} = (0,0,1)\)</p>
+
+          <p>则矩阵为：\(\begin{bmatrix}
+            \cos\theta&\sin\theta&0 \\
+            -\sin\theta&\cos\theta&0 \\
+            0&0&1
+            \end{bmatrix}
+            \)</p>
+
+          <img src="https://i.imgs.ovh/2026/10/22/066e2ccce9014bf616f7d9f6ecadf408.png" alt="4.png" />
+          <p align="center">描述三维空间绕z轴正旋转的矩阵</p>
+
+          <h2>三、描述在三维坐标空间中，绕任意过原点轴旋转的矩阵</h2>
+          <p>来到本文的最后一个矩阵，这个矩阵需要一点思考。假设矢量\(\vec{v}\)围绕单位矢量\(\vec{n}\)旋转\(\theta\)角度后得到\(\vec{v'}\)，如何找出描述这样的旋转的矩阵呢？这个问题中我没有特地给出具体的向量，但是我想说明矢量\(\vec{v}\)的坐标我们是知道的，单位矢量\(\vec{n}\)的坐标我们也是知道的，旋转的角度也是知道的。我先列出思路：</p>
+          <blockquote>单位矢量\(\vec{n}\)表示过原点的轴，令它的模长为1，但是它在三维直角坐标系中各轴的坐标可不是1，可以记为\((n_x,n_y,n_z)\)</blockquote>
+
+          <ol>
+            <li>目标是找到旋转后的基矢量；</li>
+            <li>旋转过程中，如果直接研究矢量 \(\vec{v}\) 和 \(\vec{n}\) 并不直观；因此，我把矢量 \(\vec{v}\) 分为平行于 \(\vec{n}\) 与垂直于 \(\vec{n}\) 的两个矢量，不难发现，平行于 \(\vec{n}\) 的一部分我称之为 \(\vec{v_{\parallel}}\)，这一部分在旋转过程中是没有变化的，因为它与 \(\vec{n}\) 平行；而变化的部分是 \(\vec{v_{\perp}}\) 。因此，接下来的问题是如何分解 \(\vec{v}\)。</li>
+            <li>实际上可以通过点积运算分解，详细的过程在草图中给出；</li>
+            <li>在前文“理解矩阵是用来描述空间变换的”中，提到了，旋转矩阵旋转的是<b>坐标系</b>，不是向量；因此旋转后的向量 \(\vec{v'}\) 的坐标是<b>没有变的</b>（我指的是在旋转后的坐标系下），也就是它的坐标还是 \( (v_x, v_y, v_z) \)。但是放在原本的坐标系（由基矢量 \( \vec{i} , \vec{j} , \vec{k} \)构成的空间）下，坐标就变化了，变化的部分正是新的基矢量，我们可以通过描述 \(\vec{v'}\) 的坐标，进而找到新的基矢量！</li>
+          </ol>
+
+          <img src="https://i.imgs.ovh/2026/10/22/b7723a955ebb683fb604da60b085c026.png" alt="5.png" />
+          <p align="center">推导过程1</p>
+
+          <img src="https://i.imgs.ovh/2026/10/22/4c27fa20093c3d324272780b53ac0bd6.png" alt="6.png" />
+          <p align="center">推导过程2</p>
+
+          <p>新的基矢量为：</p>
+          <p>
+            \(
+              {\small
+                \vec{i'} = ([(1-\cos\theta)n^2_x+\cos\theta], [(1-\cos\theta)n_x n_y + \sin\theta n_z],  [(1-\cos\theta)n_x n_z - \sin\theta n_y])
+              }  \\
+              {\small
+                \vec{j'} = ([(1-\cos\theta)n_x n_y - \sin\theta n_z], [(1-\cos\theta)n^2_y + \cos\theta], [(1-\cos\theta)n_y n_z - \sin\theta n_x])
+              } \\
+              {\small 
+                \vec{k'}=([(1-\cos\theta)n_x n_z - \sin\theta n_y], [(1-\cos\theta)n_y n_z - \sin\theta n_x], [(1-\cos\theta)n_z^2+\cos\theta])
+              }
+            \)
+          </p>
+
+          <p>矩阵为：</p>
+          <p>
+            \( 
+              {\small \begin{bmatrix}
+            (1-\cos\theta)n^2_x+\cos\theta & (1-\cos\theta)n_x n_y + \sin\theta n_z & (1-\cos\theta)n_x n_z - \sin\theta n_y \\
+            (1-\cos\theta)n_x n_y - \sin\theta n_z & (1-\cos\theta)n^2_y + \cos\theta & (1-\cos\theta)n_y n_z - \sin\theta n_x \\
+            (1-\cos\theta)n_x n_z - \sin\theta n_y & (1-\cos\theta)n_y n_z - \sin\theta n_x & (1-\cos\theta)n_z^2+\cos\theta
+            \end{bmatrix}}
+            \)</p>
+
+        </div>
+      </article>
+
+    </div>
+
+    <div class="right"></div>
+  </div>
+
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "\\[", right: "\\]", display: true },
+          { left: "\\(", right: "\\)", display: false }
+        ],
+        throwOnError: false
+      });
+    });
+  </script>
+</body>
+
+</html>
