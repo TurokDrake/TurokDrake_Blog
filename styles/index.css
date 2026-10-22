@@ -9,6 +9,7 @@ html
 
 body {
     height:100%;
+    color:#343434
 }
 
 h1
@@ -17,7 +18,7 @@ h1
     text-align: center;
     margin: 0;
     padding: 20px 0;
-    color: #00539f;
+    color: #242424;
     text-shadow: 3px 2px 1px black;
 }
 
@@ -76,17 +77,17 @@ a:hover
 .grid-layout .left
 {
     border: 4px solid #000;
-    background: #00539f;
+    background: #EAF0F5;
 }
 
 .grid-layout .middle
 {
     border: 4px solid #000;
-    background: #ff9500;
+    background: #FAF6ED;
 }
 
 .grid-layout .right
 {
     border: 4px solid #000;
-    background: #00539f;
+    background: #EAF0F5;
 }
