@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+
+  <title>表示缩放的矩阵</title>
+  <link href="../styles/article.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="msvalidate.01" content="0B170310F1852A6D4B8F35FD1265F175" />
+  <meta name='description' content='笔者读完《3D数学基础：图形学与游戏开发》关于表示缩放、反射和投影的矩阵后，我恍然大悟，书中这三种矩阵在某种意义上都是缩放矩阵！！！'>
+</head>
+
+<body>
+  <div class="grid-layout">
+    <div class="left"></div>
+
+    <div class="middle">
+      <article class="article">
+        <header class="article-header">
+          <p class="article-label">博客文章</p>
+          <h1>表示缩放的缩放矩阵</h1>
+          <p class="article-meta">
+            <time datetime="2026-10-27">2026-10-27</time>
+            <span aria-hidden="true">·</span>
+            <span>数学</span>
+          </p>
+        </header>
+
+        <hr />
+
+        <div class="article-content">
+          <h2>前言</h2>
+          <p>
+            笔者在阅读完《3D数学基础：图形学与游戏开发》关于表示缩放、反射和投影的矩阵后，印象十分深刻。为什么印象深呢？——因为这三种均为线性变换（当然，我前面的文章谈到的旋转也是线性变换），而且这三种变换其实在某种意义上都是<b>缩放</b>！关于具体内容，且看下文……
+          </p>
+          <p>在<a href="https://turokfang.top/posts/12Oct2026.html" target="_blank">理解“矩阵是用来描述空间变换的”</a>一文中，有关于“矩阵是如何描述空间变换的”的讨论，在<a href="https://turokfang.top/posts/22Oct2026.html" target="_blank">旋转矩阵</a>一文中，有关于找到“旋转矩阵”的讨论。如果阅读了这两篇文章，再阅读这一篇文章，便会触类旁通。我会在讨论的过程中给出一些草图，虽然草了些，但是希望能有帮助 :)</p>
+
+          <blockquote>笔者可能在文中出现一些没有发现的错误，如有错误，可以联系我的邮箱turokdrake@outlook.com</blockquote>
+
+          <hr/>
+
+          <h2>一、表示沿主轴缩放的矩阵</h2>
+          <p>小标题中的“主轴”指的坐标轴，例如笛卡尔坐标系下的 x轴、y轴。</p>
+
+          <h3>在二维平面中表示缩放的矩阵</h3>
+          <p>二维平面中，假设我们有一个矢量 \(\vec{v}\)， 我们想让其沿 x轴缩放 \(k_x\)倍，沿 y轴缩放 \(k_y\)倍，以得到新的矢量 \(\vec{v'}\)。\(k_x\) 和 \(k_y\) 被称作<b>缩放因子</b>，决定了我们要将我们的矢量缩放多少倍，缩放因子影响了矢量最后的形态。</p>
+
+          <p>二维平面笛卡尔坐标系的基矢量为 \(\vec{i} = (1,0)\) （x轴的基矢量）和 \(\vec{j} = (0,1)\) （y轴的基矢量）</p>
+          <p>那么，经过缩放后的基矢量实际上是 \(\vec{i'} = (k_x,0)\) 和 \(\vec{j'} = (0,k_y)\).</p>
+          <p>那么表示二维平面沿坐标轴缩放的矩阵就为：\(\begin{bmatrix} k_x & 0 \\ 0 & k_y \end{bmatrix}\)</p>
+
+          <img src="https://i.imgs.ovh/2026/10/27/b1a3a5f3a6b4a5e94568b50ae6b32d10.png" alt="1.png" />
+          <p align="center">表示二维平面中沿坐标轴缩放的矩阵</p>
+
+          <h3>在三维空间中表示缩放的矩阵</h3>
+          <p>根据二维平面中表示缩放的矩阵，其实也能想到立体空间中的表示缩放的矩阵。假设沿 x轴缩放 \(k_x\)倍，沿 y轴缩放 \(k_y\)倍， z轴缩放 \(k_z\)倍。</p>
+
+          <p>三维空间中，基矢量为 \(\vec{i} = (1,0,0)\)，\(\vec{i} = (0,1,0)\) 和 \(\vec{i} = (0,0,1)\)</p>
+          <p>那么，经过缩放后的基矢量实际上是 \(\vec{i'} = (k_x,0,0)\) 和 \(\vec{j'} = (0,k_y,0)\) 以及 \(\vec{k'} = (0,0,k_z)\).</p>
+          <p>那么表示三维空间沿坐标轴缩放的矩阵就为：\(\begin{bmatrix} k_x & 0 & 0 \\ 0 & k_y & 0 \\ 0 & 0 & k_z \end{bmatrix}\)</p>
+
+          <hr/>
+
+          <h2>二、表示沿任意轴缩放的矩阵</h2>
+          <p>二维平面中，假设我们已知 \(\vec{v}\) 沿着 轴 \(\vec{n}\) 缩放 \(k\) 倍得到了新的矢量 \(\vec{v'}\)。我们在寻找一个表示缩放的矩阵。如果你阅读过<a href="https://turokfang.top/posts/22Oct2026.html" target="_blank">旋转矩阵</a>一文，你应该知道我会采用什么样的方法。</p>
+          <blockquote>注意：为了方便处理，我用单位矢量 \(\vec{n}\) 表示轴，这意味着这个矢量的模长为1.</blockquote>
+          <p>思路如下：</p>
+          <ol>
+            <li>我希望求出新的矢量 \(\vec{v'}\) 来找到<b>新的基矢量</b>；</li>
+            <li>直接研究 \(\vec{v}\) 找不到头绪，应该把它分解成平行于 \(\vec{n}\) 和 垂直于 \(\vec{n}\) 的矢量。而真正执行<b>缩放</b>这个操作的只有平行于 \(\vec{n}\)的矢量 \(\vec{v_{\parallel}}\)，而垂直于 \(\vec{n}\) 的矢量 \(\vec{v_{\perp}}\) 由于在 \(\vec{n}\) 上的投影是一个点，点沿着线缩放仍然是一个点，那么这个 \(\vec{v_{\perp}}\) 相当于没有缩放。那么我们只需要讨论的只有 \(\vec{v_{\parallel}}\)；</li>
+            <li>接下来的过程就容易了，跟之前我们一起处理旋转矩阵一样，详见草图。</li>
+          </ol>
+
+          <img src="https://i.imgs.ovh/2026/10/27/85ac73af54f2e99363ff4e73c8c8deb4.png" alt="2.png" />
+          <p align="center">表示二维平面中沿任意轴缩放的矩阵</p>
+
+          <p>那么缩放后的基矢量为：</p>
+          <p>\(((k-1) n^2_x+1, (k-1)n_xn_y)\)</p>
+          <p>\( ((k-1)n_xn_y, (k-1)n^2_y+1)\)</p>
+
+          <p>那么表示沿着\(\vec{n}\)缩放\(k\)倍的矩阵就为 \(S(\vec{n},k)\) = </p>
+          <p>
+            \( 
+              {\small \begin{bmatrix}
+            (k-1) n^2_x+1 & (k-1)n_xn_y \\
+           (k-1)n_xn_y & (k-1)n^2_y+1 
+            \end{bmatrix}}
+            \)
+          </p>
+
+          <p>对于三维空间中的矩阵，我也能够按照上面的方法给出，我这里为了节省行文空间直接给出，具体的可以自行推导（只是把二维坐标换成了三维坐标）：</p>
+          <p>
+              \( 
+              {\small \begin{bmatrix}
+          (k-1) n^2_x+1 & (k-1)n_xn_y & (k-1)n_xn_z \\
+           (k-1)n_xn_y & (k-1)n^2_y+1 & (k-1)n_yn_z \\
+           (k-1)n_xn_z & (k-1)n_yn_z & (k-1)n^2_z+1
+            \end{bmatrix}}
+            \)
+          </p>
+
+          <hr/>
+
+          <h2>三、正交投影</h2>
+          <p>我至今印象深刻，因为一个很帅的词，我在读《3D数学基础：图形学与游戏开发》这本书时遇到的，它就是“<b>降维</b>”！投影是一个降维操作，你在五维空间，经过投影后你在思维空间，你失去了一些维度的信息！这简直是降维打击 XD</p>
+
+          <p>我在读这本书时，里面还提到了一句话，是关于<b>正交投影</b>（也称为平行投影）的介绍的。<b>正交投影是将体投影到某个面上，或者是将面投影到线上。这是一个扁平化的过程！</b></p>
+          <p>你还记得我在前言中提及到的“投影、反射其实也是种缩放”吗？书中使用 \(S(\vec{n},k)\) 表示一个沿 \(\vec{n}\) 缩放 \(k\)倍的矩阵。而在二维平面中的图像，投影到 x 轴上这个操作实际上可以使用这个矩阵来描述： \(S([0,1],0)\)</p>
+
+          <p>上面提到的这个矩阵表示什么？沿着 y 轴缩放到0，也就是丢弃掉 y 轴的部分，保留 x 轴的分量，这实际上正是投影！你可以将 \(n_x = 0, n_y =1\) 代入上面的缩放矩阵中，看看新矩阵长什么样。这个矩阵正是投影操作 :)</p>
+
+          <p>
+            \( 
+              {\small \begin{bmatrix}
+            1 & 0 \\
+           0 & 0
+            \end{bmatrix}}
+            \)
+          </p>
+
+          <p>如果仔细观察这个矩阵，可以看出新的基矢量为：</p>
+          <p>\(\vec{i'} = (1,0)\) , \(\vec{j'} = (0,0)\)</p>
+
+          <p>它舍弃了 y 方向上的分量，如果我换到三维空间中，投影到 xy 平面，不就是舍弃 z 方向上的分量吗。因此，矩阵即：
+          </p>
+
+          </p>
+\( 
+              {\small \begin{bmatrix}
+            1 & 0 & 0\\
+           0 & 1 & 0\\
+           0 & 0 & 0
+            \end{bmatrix}}
+            \)
+          <p>
+
+          <hr/>
+
+          <h2>四、反射</h2>
+          <p>反射其实就相当于照镜子，镜中的你的左手能和现实中的你的左手对齐，因为镜中世界的你和现实世界的你是关于镜面对称的，对称面就是镜子。</p>
+
+          <p>还记得吗，我也说过<b>反射也是一种缩放</b>。在二维平面中，如果我把一个矢量围绕 x 轴反射，假如我这个矢量在第一象限，那反射后它就在第四象限。这个操作实际上可以使用矩阵 \(S([0,1],-1)\) 来描述。</p>
+
+          <p>上面这个矩阵表示将矢量沿着 y轴 缩放 -1，相当于新的基矢量为：</p>
+          <p>\(\vec{i'} = (1,0)\), \(\vec{j'} = (0,-1)\)。</p>
+
+          <p>矩阵也就是：</p>
+          <p>
+            \( 
+              {\small \begin{bmatrix}
+            1 & 0\\
+           0 & -1 \\
+            \end{bmatrix}}
+            \)
+          </p>
+
+          <p>正交投影、反射都能当成缩放，但是它们其实描述的方式不同。接下来将对比一下，假设变换都发生在二维平面中：</p>
+          <p><b>正交投影：投影到 x轴上；</b> 这等同于 <b>沿着与 x轴垂直的 y轴缩放0倍。</b> </p>
+          <p><b>反射：围绕 x轴反射；</b> 这等同于 <b>沿着与 x轴垂直的 y轴缩放-1倍。</b></p>
+
+        </div>
+      </article>
+
+    </div>
+
+    <div class="right"></div>
+  </div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "\\[", right: "\\]", display: true },
+          { left: "\\(", right: "\\)", display: false }
+        ],
+        throwOnError: false
+      });
+    });
+  </script>
+</body>
+
+</html>
