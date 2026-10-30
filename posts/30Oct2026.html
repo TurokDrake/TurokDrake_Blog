@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+
+  <title>Unity中的MVC思想</title>
+  <link href="../styles/article.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="msvalidate.01" content="0B170310F1852A6D4B8F35FD1265F175" />
+  <meta name='description' content='MVC思想是 Model-View-Controller，常用于与用户交互的元素，例如UI，靠Controller在中间管理数据和视图的更新，以确保程序正常运行……'>
+</head>
+
+<body>
+  <div class="grid-layout">
+    <div class="left"></div>
+
+    <div class="middle">
+      <article class="article">
+        <header class="article-header">
+          <p class="article-label">博客文章</p>
+          <h1>Unity中的MVC思想</h1>
+          <p class="article-meta">
+            <time datetime="2026-10-30">2026-10-30</time>
+            <span aria-hidden="true">·</span>
+            <span>GameDev</span>
+          </p>
+        </header>
+
+        <hr />
+
+        <div class="article-content">
+          <h2>前言</h2>
+          <p>我在看完<b>唐老狮</b>关于 MVC思想的介绍的视频后，颇有见解，这是否是一种<i>Data Driven</i>呢？本文将谈谈我的感悟……</p>
+
+          <h2>一、我对 MVC 的理解</h2>
+          <p>在视频中，唐老狮风趣地提了一个我也想提的问题：<b>为什么 MVC 不是 CVM、VCM、或者MCV呢？</b>
+          <br>
+          唐老狮解释道：<i>这或许是按照重要程度来排序的，Model（数据层）、View（视图层）和Controller（控制层）。数据是最重要的，次之是用户直接能看见的视图，最后才是<b>在背后处理一堆逻辑的控制层</b>。</i>
+          <br>
+          我的理解是：用户最关注的就是数据，数据一旦修改，视图也得跟着修改，Controller就担当一个中间商，Model（数据层）发生修改，就通知 Controller <b>该干活了！</b> Controller 就会拿着修改后的数据找 View（视图层），命令视图 <b>修改</b>。这整个流程就是用户做了某些事导致数据修改了，视图是在<b>明面上</b>第二个变化的，而背后还有一个干最多活的 Controller。上面我的理解或许不是对“为什么 MVC 叫作 MVC”问题的解释，或许又是 XD
+          <br>
+          MVC 思想最适合的应用场景就是 UI这样存在交互的元素。在我们日常生活中，实际上有一堆运用了 MVC 思想的地方。比如，书店中书架、管理进货的店长和管理摆放书籍的员工的关系有点类似，店长专门管进货，购买书本，并将它们归好类别，并记录数量；员工在被告知哪些书应该放在哪些区域后，就将书籍摆放到书架上；顾客进店后就能看见书架上整整齐齐的书。书架就像 View（视图层），店长就像 Model（数据层），员工就像 Controller（控制层）。
+          </p>
+
+          <h2>二、我对 MVC 三部分的职责的总结</h2>
+          <p>
+           <b>Model（数据层），专门管理数据，其职责如下：</b> 
+            <ol>
+              <li>记录有哪些类型的数据，相当于给数据分类；</li>
+              <li>应该具备<b>管理数据</b>的能力，例如增（添加新数据）、删（删除数据）、查（获取数据）、改（修改数据），以及保存数据等操作；</li>
+              <li>为了不与其他数据层混淆，这个数据层需要具备唯一性。</li>
+            </ol>
+          <br>
+          </p>
+
+          <p>
+          <b>View（视图层），专门修改视图，其职责如下：</b>
+          <ol>
+            <li>应记录需要修改的控件，例如文本、按钮、滑动条和下拉框等控件；</li>
+            <li>能够接收数据，根据数据修改控件。</li>
+          </ol>
+          <br>
+          </p>
+
+          <p>
+          <b>Controller（控制层），专门处理数据的更新以及视图的更新，其职责如下：</b>
+          <ol>
+            <li>接收用户操作的通知，根据通知修改数据层；</li>
+            <li>接收数据修改的通知，同时处理视图层的更新；</li>
+            <li>同样地，控制层需要专门控制某个视图，为了避免某个视图被多个控制层同时操作，我们得确保控制层的唯一性。</li>
+          </ol>
+          </p>
+
+          <p>在本文中，我没有给出代码示例，仅谈谈我的感想，这或许称不上一篇“Unity中的MVC思想”的文章。XD
+          <br>
+          
+          </p>
+
+        </div>
+      </article>
+
+    </div>
+
+    <div class="right"></div>
+  </div>
+
+
+
+</body>
+
+</html>
