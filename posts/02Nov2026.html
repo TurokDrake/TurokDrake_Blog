@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+
+  <title>C#中的接口</title>
+  <link href="../styles/article.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/atom-one-dark.min.css" rel="stylesheet">
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script >hljs.initHighlightingOnLoad();</script> 
+  <meta name="msvalidate.01" content="0B170310F1852A6D4B8F35FD1265F175" />
+  <meta name='description'
+    content='我在整理文件时，突然找到了以前使用NexT框架搭建的静态博客的文档，我在里面找到了以前我写的关于C#的接口的介绍，我挺喜欢这篇的，于是打算把这篇文章搬迁到现在的纯HTML博客。本文介绍了C#中的接口，从我的爱好——特摄入手，用类比的方式讲述。'>
+</head>
+
+<body>
+  <div class="grid-layout">
+    <div class="left"></div>
+
+    <div class="middle">
+      <article class="article">
+        <header class="article-header">
+          <p class="article-label">博客文章</p>
+          <h1>C#中的接口</h1>
+          <p class="article-meta">
+            <time datetime="2026-11-02">2026-11-02</time>
+            <span aria-hidden="true">·</span>
+            <span>GameDev</span>
+          </p>
+        </header>
+
+        <hr />
+
+        <div class="article-content">
+          <h2 id="user-content-目录">目录</h2>
+          <p>
+          <li><a href="#user-content-01">一、C#中的接口</a></li>
+          <li><a href="#user-content-02">二、C#接口语法介绍</a></li>
+          <li><a href="#user-content-03">总结</a></li>
+          </p>
+
+          <hr>
+
+          <h2 id="user-content-01">一、C#中的接口</h2>
+          <p>C# 中，可以使用 <code>interface</code>
+            关键字定义接口。接口实际上是一种<strong>抽象集</strong>。我之所以使用“抽象集”这个词描述接口，是因为接口的作用就是<strong>约定一些抽象的性质和行为</strong>。<br>
+            假设我正在写一本小说，我在为小说人物写设定。我平常喜欢看特摄作品，诸如《假面骑士空我》、《假面骑士亚极陀》、《假面骑士创骑》和《假面骑士Ex-aid》等，假面骑士中有一个设定——敌我同源<sup><a
+                href="#user-content-user-content-fn-1" id="user-content-user-content-fnref-1" data-footnote-ref=""
+                aria-describedby="user-content-footnote-label">1</a></sup>
+            。我想把敌我同源的设定用在小说人物里，在此之前我先剖析一下《假面骑士Ex-aid》的设定。<br>
+            在这部作品当中，敌人是 <strong>游戏病病毒</strong> ，<strong>镜飞彩（天才外科医生）</strong>、<strong>九条贵利矢（法医）</strong> 和
+            <strong>檀黎斗（创梦社长）</strong> 都能够变身成假面骑士是因为他们接受了适能者手术。游戏病病毒的力量来自创梦集团的游戏卡带，假面骑士们的力量也来自游戏卡带——力量来源是游戏卡带。<br>
+            在《假面骑士创骑》中，敌人是吸收了星云气体而变成怪人的人类，假面骑士是吸收了星云气体仍能保持理智的人类，并使用<strong>满装瓶</strong>变身，与怪人作战。——力量来源是星云气体。<br>
+            我介绍了这两部特摄作品中的设定，怪人和假面骑士的力量来源均来自同一事物。如果我想把敌我同源的设定运用在我的小说中，应该如何做呢？我会这样做：</p>
+          <ol>
+            <li><strong>确定力量来源的设定</strong>，比如这股力量的来源是一块石头，石头有形状、大小和颜色，可以释放力量包裹全身。</li>
+            <li>
+              <strong>接下来确定主角的力量设定</strong>，比如主角使用力量和怪人使用力量是不同的方式，主角需要把石头放在特制的抑制容器中才能变身，以防止暴走。主角的石头的形状均为三角形，颜色为绿色。主角能够利用力量发射光线。
+            </li>
+            <li><strong>再确定怪人的力量设定</strong>，比如怪人需要吞下石头才能获得力量，而且每次都会暴走。怪人的石头的形状为圆形，颜色为红色。不同的怪人能够利用力量使出不同的技能。</li>
+            <li><strong>在写的过程中新增各种各样的怪人力量设定</strong>，比如量产版怪人，吞下的石头都是灰色的，使用的技能都是相同的。</li>
+          </ol>
+          <p>
+            我第一步做的事情是<strong>确定力量来源的设定</strong>，其实我就是<strong>提前</strong>约定好力量的本质，但是我不<strong>具象化</strong>它，因为不同的人的<strong>力量来源的性质</strong>和<strong>使用力量的方式</strong>也不同，所以我先<strong>抽象化</strong>出一些相同的性质，我上面举的例子中提到的石头是力量来源，性质有形状、大小和颜色，行为是使用石头时会释放出力量包裹全身。对于主角和怪人，我是后面再逐渐<strong>具象化</strong>并<strong>拓展</strong>的。
+          </p>
+          <p>
+            接口也是同理，接口是<strong>提前</strong>约定好一些成员，但是只是<strong>抽象化</strong>，<strong>暂时不实现（具象化）</strong>。后面使用类继承该接口再<strong>实现</strong>其中的成员。
+          </p>
+          <p>似乎无关的东西写的多了，但是毕竟在我脑子里浮现出来了，写下来也顺理成章……</p>
+          <hr>
+
+          <h2 id="user-content-02">二、C#接口语法介绍</h2>
+          <p>接下来正式介绍接口的语法，包括定义接口、实现接口等语法，请读者看完一部分内容就及时动手体会一下。</p>
+          <p>点击这里可以在官方文档中查看接口的介绍<a
+              href="https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/interfaces">Interfaces - define
+              behavior for multiple types - C# | Microsoft Learn</a></p>
+          <h3 id="user-content-定义">定义</h3>
+          <p>C#中定义接口使用 <code>interface</code> 关键字，<code>interface &lt;接口名&gt;</code> 。接口名前应该加一个 <code>I</code>
+            来标识这是个接口。接口中可以声明<strong>属性、方法、索引器和事件</strong>，但是不能声明<strong>字段、构造函数和析构函数</strong>。从继承这个概念角度出发，<code>interface</code>
+            实际上解决了 <code>class</code> 不能同时继承多个 <code>class</code> 的问题。例如，我定义了三个类 <code>class Person</code>,
+            <code>class Father</code>, <code>class Mother</code>。<code>Person</code> 不能同时继承 <code>Father</code> 和
+            <code>Mother</code>，只能从中选一个继承。但是 <code>class</code> 可以继承多个 <code>interface</code> 。定义了两个接口
+            <code>interface IFather</code>, <code>interface IMother</code>，<code>Person</code> 可以同时继承这两个接口
+            <code>IFather</code>, <code>IMother</code>。</p>
+          <pre><code class="language-csharp">interface IPowerSource
+{
+	string shape; //编译器会报错
+	int size; //编译器会报错
+	string color; //编译器会报错
+}
+</code></pre>
+          <p>声明成员字段时，Visual Studio 中编译器报错“接口不能包含实例字段“，</p>
+          <pre><code class="language-csharp">interface IPowerSource
+{
+	string Shape{get;set;}//自动属性的写法
+	int Size{get;set;}
+	string Color{get;set;}
+}
+</code></pre>
+          <p>接口中可以声明属性，其中 <code>Shape</code> , <code>Size</code> , <code>Color</code> 为成员属性。分别表示
+            <code>形状</code>，<code>尺寸</code>，<code>颜色</code>。</p>
+          <pre><code class="language-csharp">interface IPowerSource
+{
+	public string Shape{get;set;}
+	public int Size{get;set;}
+	public string Color{get;set;}
+	
+	protected void ReleasePower();
+	public void PrintName();
+}
+</code></pre>
+          <p>接口的成员默认访问类型是 <code>public</code> ，可以修改，如 <code>ReleasePower()</code> 修改为了 <code>protected</code>，当然也可以修改为
+            <code>internal</code>。但是，<strong>唯独不能修改为<code>private</code></strong>，原因很简单——接口需要被实现，如果某成员访问类型是
+            <code>private</code> ，那接口里定义的该成员不能被实现，也就没有意义。<br>
+            接口的成员方法不能有方法体。</p>
+          <hr>
+          <h3 id="user-content-实现">实现</h3>
+          <h4 id="user-content-隐式实现">隐式实现</h4>
+          <p>类继承接口时需要实现接口中声明的成员。类继承接口应这样写 <code>class &lt;类名&gt; : &lt;接口名&gt;</code> 。如果继承多个接口时，应用逗号分隔开接口，
+            <code>class &lt;类名&gt; : &lt;接口名&gt; , &lt;接口名&gt; , ..., &lt;接口名&gt;</code><br>
+            继承接口的类需要实现该接口的所有成员。</p>
+          <pre><code class="language-csharp">class Person : IPowerSource
+{
+    public string Shape { get; set; } = "三角形"; //为属性赋默认值
+    public int Size { get; set; } = 10;
+    public string Color { get; set; } = "绿色";
+
+    public void ReleasePower()
+    {
+    }
+    public void Print()
+    {
+        Console.WriteLine($"形状：{Shape}；尺寸：{Size}；颜色：{Color}");
+    }
+}
+</code></pre>
+          <p><code>Person</code> 类<strong>隐式</strong>实现了接口 <code>IPowerSource</code> 。</p>
+          <pre><code class="language-csharp">internal class Program
+{
+    static void Main(string[] args)
+    {
+        Person person = new Person(); //实例化
+        IPowerSource person2 = new Person(); //根据里氏替换原则，任何父类出现的地方都能使用子类替代
+
+        person.Print(); //输出：“形状：三角形；尺寸：10；颜色：绿色”
+        person2.Print(); ////输出：“形状：三角形；尺寸：10；颜色：绿色”
+    }
+}
+</code></pre>
+          <p>实例化了两个对象，并调用它们的<code>Print()</code>方法。根据里氏替换原则，任何父类出现的地方都能使用子类替代，描述的是子类可以在父类的基础上“做加法”，但是不能“做减法”。</p>
+          <h4 id="user-content-显示实现">显示实现</h4>
+          <p>显示实现时，需要在成员前加上接口名称和访问修饰符 '.' 。<br>
+            什么时候会想显示实现？——当你有两个接口，两个接口中有同名方法时，实现的同名方法内容不一样，例如：</p>
+          <pre><code class="language-csharp">public interface IControl
+{
+    void Paint();
+}
+public interface ISurface
+{
+    void Paint();
+}
+public class SampleClass : IControl, ISurface
+{
+	//隐式实现
+    public void Paint()
+    {
+        Console.WriteLine("Paint method in SampleClass");
+    }
+}
+</code></pre>
+          <pre><code class="language-csharp">internal class Program
+{
+    static void Main(string[] args)
+    {
+        SampleClass t1 = new SampleClass();
+        IControl t2 = new SampleClass();
+        ISurface t3 = new SampleClass();
+
+        t1.Paint(); //输出"Paint method in SampleClass"
+        t2.Paint(); //输出"Paint method in SampleClass"
+        t3.Paint(); //输出"Paint method in SampleClass"
+    }
+}
+</code></pre>
+          <pre><code class="language-csharp">public class SampleClass : IControl, ISurface
+{
+	//显示实现
+    void IControl.Paint()
+    {
+        System.Console.WriteLine("IControl.Paint");
+    }
+    //显示实现
+    void ISurface.Paint()
+    {
+        System.Console.WriteLine("ISurface.Paint");
+    }
+}
+</code></pre>
+          <pre><code class="language-csharp">internal class Program
+{
+    static void Main(string[] args)
+    {
+        SampleClass t1 = new SampleClass();
+        IControl t2 = new SampleClass();
+        ISurface t3 = new SampleClass();
+
+        t1.Paint(); //编译错误，因为SampleClass中没有定义Paint()方法
+        t2.Paint(); //输出"IControl.Paint"
+        t3.Paint(); //输出"ISurface.Paint"
+    }
+}
+</code></pre>
+          <p>可见，如果显示实现，那么只有使用接口类型的对象才能使用各自的 <code>Paint()</code> 方法。<br>
+            <code>IControl</code> 类型的 <code>t2</code> 对象才能使用 <code>IControl.Paint()</code>；<code>ISurface</code> 类型的
+            <code>t3</code> 对象才能使用 <code>ISurface.Paint()</code>。<br>
+            如果我想让 <code>SampleClass</code> 类型的 <code>t1</code> 对象也能够使用 <code>Paint()</code> 方法，那么需要在
+            <code>SampleClass</code> 中定义：
+          </p>
+          <pre><code class="language-csharp">public void Paint()
+{
+	Console.WriteLine("SampleClass.Paint");
+}
+</code></pre>
+          <hr>
+          <h2 id="user-content-03">总结</h2>
+          <p>接口是用来约定一些抽象的性质和行为的。<br>
+            使用 <code>interface</code> 关键字声明接口。<br>
+            类只能有一个父类，但是能继承多个接口。<br>
+            接口的成员可以是属性、事件、索引器和方法，不能是字段、构造函数和析构函数。<br>
+            接口的成员不能是 <code>private</code> 的。<br>
+            接口的成员方法不能有方法体。<br>
+            根据里氏替换原则，任何父类出现的地方都可以使用子类来替代。任何接口出现的地方都可以使用继承该接口的类来替代。<br>
+            接口的隐式实现和显式实现区别在于<strong>调用者</strong>是谁。</p>
+          <section data-footnotes="" class="footnotes">
+            <h2 class="sr-only" id="user-content-footnote-label">Footnotes</h2>
+            <ol>
+              <li id="user-content-user-content-fn-1">
+                <p>敌我同源，指的是假面骑士实际上和怪人的力量是同一性质的，只是假面骑士希望用力量守护人们，所以被称为假面骑士。 <a href="#user-content-user-content-fnref-1"
+                    data-footnote-backref="" aria-label="Back to reference 1" class="data-footnote-backref">↩</a></p>
+              </li>
+            </ol>
+          </section>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="right"></div>
+  </div>
+
+
+
+</body>
+
+</html>
