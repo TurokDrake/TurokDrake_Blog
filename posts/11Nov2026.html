@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+
+  <title>使用Physics.OverlapSphereNonAlloc()时遇到的问题</title>
+  <link href="../styles/article.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.12.0/styles/default.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.12.0/highlight.min.js"></script>
+
+  <!-- and it's easy to individually load additional languages -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.12.0/languages/go.min.js"></script>
+
+  <script>hljs.highlightAll();</script>
+  <meta name="msvalidate.01" content="0B170310F1852A6D4B8F35FD1265F175" />
+  <meta name='description' content='我在使用这个方法时，遇到的问题，就是执行完这个方法后，我传入的参数 `Collider[] _colliders` 仍然为 `null`。
+
+先简单阐述一下该方法的一些需要注意的事项。
+
+`Physics.OverlapSphereNonAlloc()` 的返回值为 `int`，我们使用该方法时，该方法会将检测到的 `collider` 放进我们传入的数组 `_colliders`中，举个栗子：  
+- 第一次使用方法，检测到2个物体，放进数组中，它们分别占据 0，1的位置；
+- 第二次使用方法，检测到5个物体，放进数组中，它们分别占据0~4的位置，而前面的物体占据5，6的位置。
+
+当我们**仅需要遍历刚刚检测到的物体时**，如果我们仍然使用`for(int i =0;i < _colliders.Length;i++)`的方式来遍历，不仅会遍历到本次使用方法获取的碰撞体，还会遍历到上一次使用方法检测到的碰撞体。  
+所以，我们用一个整形变量`int colliderNum`接收这个方法的返回值，用`for(int i =0;i<colliderNum;i++)`方式遍历。  
+
+再回到问题，问题出自我从一开始就没有**实例化数组**，即我在使用方法前，`_colliders = null;`，我应该实例化后再使用方法，类似这样`_colliders = new Collider[10];`。'>
+</head>
+
+<body>
+  <div class="grid-layout">
+    <div class="left"></div>
+
+    <div class="middle">
+      <article class="article">
+        <header class="article-header">
+          <p class="article-label">博客文章</p>
+          <h1>使用Physics.OverlapSphereNonAlloc()时遇到的问题</h1>
+          <p class="article-meta">
+            <time datetime="2026-11-11">2026-11-11</time>
+            <span aria-hidden="true">·</span>
+            <span>日常问题</span>
+          </p>
+        </header>
+
+        <hr />
+
+        <div class="article-content">
+          <p>我在使用这个方法时，遇到的问题，就是执行完这个方法后，我传入的参数 <code>Collider[] _colliders</code> 仍然为 <code>null</code>。</p>
+<p>先简单阐述一下该方法的一些需要注意的事项。</p>
+<p><code>Physics.OverlapSphereNonAlloc()</code> 的返回值为 <code>int</code>，我们使用该方法时，该方法会将检测到的 <code>collider</code> 放进我们传入的数组 <code>_colliders</code>中，举个栗子：</p>
+<ul>
+<li>第一次使用方法，检测到2个物体，放进数组中，它们分别占据 0，1的位置；</li>
+<li>第二次使用方法，检测到5个物体，放进数组中，它们分别占据0~4的位置，而前面的物体占据5，6的位置。</li>
+</ul>
+<p>当我们<strong>仅需要遍历刚刚检测到的物体时</strong>，如果我们仍然使用<code>for(int i =0;i &lt; _colliders.Length;i++)</code>的方式来遍历，不仅会遍历到本次使用方法获取的碰撞体，还会遍历到上一次使用方法检测到的碰撞体。<br>
+所以，我们用一个整形变量<code>int colliderNum</code>接收这个方法的返回值，用<code>for(int i =0;i&lt;colliderNum;i++)</code>方式遍历。</p>
+<p>再回到问题，问题出自我从一开始就没有<strong>实例化数组</strong>，即我在使用方法前，<code>_colliders = null;</code>，我应该实例化后再使用方法，类似这样<code>_colliders = new Collider[10];</code>。</p>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="right"></div>
+  </div>
+
+
+
+</body>
+
+</html>
