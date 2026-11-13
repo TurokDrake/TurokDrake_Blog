@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+
+  <title>几何图元中的二维直线的描述方法</title>
+  <link href="../styles/article.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="msvalidate.01" content="0B170310F1852A6D4B8F35FD1265F175" />
+  <meta name='description' content='我在阅读《3D数学基础：图形学与游戏开发》第九章关于几何图元的介绍时，了解到很多内容，诸如我们是怎么描述几何图元的，直线、平面、圆、球和三角形，以及多边形是怎么描述的。除此之外，还了解到了AABB(Axially Aligned Bounding Box)是什么，以及它的参数。
+在本文，我想借这个机会输出一下我刚学习到的知识。本文中将从一个小白的视角谈谈对直线的理解。^_^'>
+</head>
+
+<body>
+  <div class="grid-layout">
+    <div class="left"></div>
+
+    <div class="middle">
+      <article class="article">
+        <header class="article-header">
+          <p class="article-label">博客文章</p>
+          <h1>几何图元中的二维直线的描述方法</h1>
+          <p class="article-meta">
+            <time datetime="2026-11-13">2026-11-13</time>
+            <span aria-hidden="true">·</span>
+            <span>数学</span>
+          </p>
+        </header>
+
+        <hr />
+
+        <div class="article-content">
+          <blockquote>
+            <p>一个正方形，<br>
+              静静地坐在，<br>
+              他的长方形小屋外。<br>
+              当一个三角形路过时，<br>
+              噗通！<br>
+              “我必须去医院，”<br>
+              受伤的正方形叫道，<br>
+              一个圆环滚过来，<br>
+              把他带到了医院。</p>
+          </blockquote>
+
+          <h2 id="user-content-前言">前言</h2>
+          <p>
+            我在阅读《3D数学基础：图形学与游戏开发》第九章关于<strong>几何图元</strong>的介绍时，了解到很多内容，诸如我们是怎么描述几何图元的，直线、平面、圆、球和三角形，以及多边形是怎么描述的。除此之外，还了解到了<strong>AABB</strong>(Axially
+            Aligned Bounding Box)是什么，以及它的参数。<br>
+            在本文，我想借这个机会输出一下我刚学习到的知识。本文中将从一个小白的视角谈谈对直线的理解。^_^</p>
+          <blockquote>
+            <p>我在本文中谈到的是<strong>二维直线</strong>的描述方法。</p>
+          </blockquote>
+          <hr>
+          <h2 id="user-content-几何图元">几何图元</h2>
+          <p>在正式开始之前，容我啰嗦几句（一个句号算一句话的话确实只有几句）。<br>
+            我想谈谈我对<strong>几何图元</strong>这一术语的理解。几何图元（Geometric Primitive），我想解释为<strong>原始的图形</strong>，毕竟单词中有一个
+            Primitive，嘿嘿；我还想解释为<strong>图形元素</strong>，这个是我从中文中领悟到的含义；我还想解释为<strong>元图</strong>（这不就是把“图元”倒过来了而已吗~_~），像元宇宙、《烧掉数学书》中的元数学这样帅气的词（笔者该不会以为加个“元”就很帅了吧~_~）<br>
+            关于几何图元术语的理解，就到这为止。</p>
+          <hr>
+          <h2 id="user-content-如何描述光线">如何描述光线</h2>
+          <p>
+            <strong>我似乎忘记说明光线和直线的区别了</strong>，不过也无需太大篇幅，光线就是我们平常理解的<strong>射线</strong>，从一个点指向某个方向；等等，这里谈到的光线有点不一样，它也是有终点的。
+          </p>
+          <blockquote>
+            <p>计算机科学和计算几何中，光线的定义并不一样。计算几何中，也就是我们小时候课堂上接触的射线；计算机科学中，则是一个有起点和终点的有向线段。</p>
+          </blockquote>
+          <p>OK，现在可以接着讲述<strong>如何描述光线</strong>了。光线有三个参数（你的脑海里肯定马上就浮现出来了），它们分别是<strong>起点、终点和长度</strong>。
+            当然，你也可以说是两个参数（方向和长度），从不同角度理解起来自然不一样。<br>
+            我们可以使用两个点来描述光线，即 \(p(t) = p_o + t\vec{d}\) 。\(p_0\) 是起始点，\(\vec{d}\) 是一个矢量，在这里 \(\vec{d}\) 存储了这条光线的大小和方向，当 t
+            = 0时，\(p(t)\) 表示光线的起点；当 t = 1，时，\(p(t)\) 表示光线的终点。t 的范围为0到1。
+            当然，我们也可以让 \(\vec{d}\) 是一个单位矢量，而 t 的范围为0到L，L为光线的长度，这样表示也没问题。
+          </p>
+          <blockquote>
+            别忘记了，\(p_0\) 头上没有加小帽子，但是它是个矢量，我之所以没给它小帽子，是因为它表示一个点，我想让它作为一个真真正正的点。:-D
+          </blockquote>
+          <hr>
+          <h2 id="user-content-如何描述直线">如何描述直线</h2>
+          <p>直线比光线更猖狂，它没有起点和终点，因为它是无限（Infinity）的。<br>
+            直线最早的定义就是：<strong>离两个给定点距离相等的 点 的集合</strong>。<br>
+            在中学，我们如何描述直线？我记得课堂上列举了很多种式子，诸如斜截式（斜率、截距式），两点式，截距式，一般式……现在想想，这些式子都差不多，一般式能解读出的信息需要经过处理，斜截式和两点式都一目了然，其实是一个东西，纯截距中我能立马读出两个轴的截距。<br>
+            这里谈的是斜率截距式，这是一种二维中隐式描述直线的方法（也可以说是策略）。<br>
+            形式像这样： \(y = mx + y_o\) <br>
+            m 为斜率，\(y_o\) 为截距，即与 y 轴的交点。x和y则是直线上的点的坐标。<br>
+            从这个式子看，m是不是某种意义上表示了<b>直线是怎么旋转的</b>，\(y_0\) 是不是某种意义上表示了<b>直线是怎么平移的</b>。<br>
+            但是当斜率为0时，斜截式的 m 就出错了，斜率是 点 在水平方向上每移动一个单位，竖直方向上移动的距离。如果斜率为0，m 就是无穷大。此时我们一般就使用 \(x = C\) 来描述斜率为 0 的直线。
+          </p>
+          <p>
+            相比斜截式，一般式能描述一般情况，字面意思。一般式的形式像这样：\(ax+by=d\)。<br>
+            中学时期，我们遇到的是\(ax+by+d=0\)，其实都是一个意思，不过本文使用前者是因为前者表示的含义不用<b>翻译</b>。且听我娓娓道来。
+          </p>
+          <p>
+            \(ax+by=d\) 实际上可以理解为两个矢量的点积，哪两个矢量？——\((a,b)\) 和 \((x,y)\) <br>
+            记 \(\vec{n}=(a,b)\) ，\(\vec{p}=(x,y)\) ，那么该式子可以写成 \(\vec{n} · \vec{p} = d\) <br>
+            其中 \(\vec{n}\) 表示与直线垂直的单位矢量， \(\vec{p}\) 表示直线上的点，d 表示原点到直线的<b>有符号距离</b>。
+            我将用一张草图解释为什么这些参数表示这些含义。
+          </p>
+          <img src="https://img.remit.ee/i/0AAQXcrxo2ro" alt="对参数有趣的解释.png" />
+          <p align="center">对参数的解释</p>
+          <hr>
+          <h2 id="user-content-总结">总结</h2>
+          <p>本文实际上没有太多内容，仅谈谈我对描述直线的方法的个人理解，还有一些个人觉得有趣的内容。</p>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="right"></div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "\\[", right: "\\]", display: true },
+          { left: "\\(", right: "\\)", display: false }
+        ],
+        throwOnError: false
+      });
+    });
+  </script>
+
+</body>
+
+</html>
