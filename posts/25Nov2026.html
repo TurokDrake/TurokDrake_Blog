@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+
+  <title>[Unity]Unity 中如何判断两个 material 是否是同一个图像</title>
+  <link href="../styles/article.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.12.0/styles/default.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.12.0/highlight.min.js"></script>
+
+  <!-- and it's easy to individually load additional languages -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.12.0/languages/go.min.js"></script>
+
+  <script>hljs.highlightAll();</script>
+  <meta name="msvalidate.01" content="0B170310F1852A6D4B8F35FD1265F175" />
+  <meta name='description' content='使用 sharedMaterial 属性而不是 material 属性
+
+在 Unity 中，我们有时需要判断两个 Material 的内容是否是同一个图像，我们可能会出现这样的场景：①我们创建了一个名为 GameMaterial 的 .cs 脚本，GameMaterial 类中有一个公共成员，List<Material> materials，这个成员存储了对项目文件夹中的 Material 文件夹下的材质的引用。②现在我们有另一个脚本，该脚本中的某处正在判断“当前对象的 MeshRenderer 的材质是否和 GameMaterial.materials 的材质指的是同一个图像。
+
+我们可能会使用这个条件进行判断：gameObject.GetComponent<MeshRenderer>().material == GameMaterial.INSTANCE.materials[i];
+
+这个条件永远不会为 true，Material 是引用类型，如果该对象的 MeshRenderer 的材质是我们手动在 Inspector 窗口拖拽上去的，那么这个 Material 虽然和 GameMaterial.materials 的材质指的是同一个图像，但是它们指向的地址不一样。
+
+如果对象的 MeshRenderer 的材质是动态指定的，在代码中使用这样的代码 gameObject.GetComponent<MeshRenderer>().material = GameMaterial.INSTANCE.materials[i]; 设置对象的材质，那么再使用上方的代码 gameObject.GetComponent<MeshRenderer>().material == GameMaterial.INSTANCE.materials[i]; 进行判断时，这个条件仍然不会为 true，原因在于 Unity 在处理 Material 时，动态指定一个对象的 MeshRenderer 的材质的过程中会创建该 材质的副本，如果我们仅想判断两个材质是否是同一个图像，应该使用 sharedMaterial 属性而不是 material 属性。即使用这个条件判断：gameObject.GetComponent<MeshRenderer>().sharedMaterial == GameMaterial.INSTANCE.materials[i];'>
+</head>
+
+<body>
+  <div class="grid-layout">
+    <div class="left"></div>
+
+    <div class="middle">
+      <article class="article">
+        <header class="article-header">
+          <p class="article-label">博客文章</p>
+          <h1>Unity 中如何判断两个 material 是否是同一个图像</h1>
+          <p class="article-meta">
+            <time datetime="2026-11-25">2026-11-25</time>
+            <span aria-hidden="true">·</span>
+            <span>GameDev</span>
+          </p>
+        </header>
+
+        <hr />
+
+        <div class="article-content">
+          <blockquote>使用 <code>sharedMaterial</code> 属性而不是 <code>material</code> 属性判断。</blockquote>
+          <p>在 Unity 中，我们有时需要判断两个 Material 的内容是否是同一个图像，我们可能会出现这样的场景：①我们创建了一个名为 <code>GameMaterial</code> 的 .cs 脚本，<code>GameMaterial</code>
+            类中有一个公共成员，<code>List<Material> materials</code>，这个成员存储了对项目文件夹中的 Material 文件夹下的材质的引用。②现在我们有另一个脚本，该脚本中的某处正在判断“当前对象的
+              MeshRenderer 的材质是否和 <code>GameMaterial.materials</code> 的材质指的是同一个图像。
+
+              我们可能会使用这个条件进行判断：<code>gameObject.GetComponent<MeshRenderer>().material == GameMaterial.INSTANCE.materials[i];</code>
+
+                这个条件永远不会为 true，Material 是引用类型，如果该对象的 MeshRenderer 的材质是我们手动在 Inspector 窗口拖拽上去的，那么这个 Material 虽然和
+                <code>GameMaterial.materials</code> 的材质指的是同一个图像，但是它们指向的地址不一样。
+
+                如果对象的 MeshRenderer 的材质是动态指定的，在代码中使用这样的代码 <code>gameObject.GetComponent<MeshRenderer>().material =
+                  GameMaterial.INSTANCE.materials[i];</code> 设置对象的材质，那么再使用上方的代码 <code>gameObject.GetComponent<MeshRenderer>
+                    ().material == GameMaterial.INSTANCE.materials[i];</code> 进行判断时，这个条件仍然不会为 true，原因在于 Unity 在处理 Material
+                    时，动态指定一个对象的 MeshRenderer 的材质的过程中会创建该 材质的<b>副本</b>，如果我们仅想判断两个材质是否是同一个图像，应该使用 <code>sharedMaterial</code> 属性而不是 <code>material</code>
+                    属性。即使用这个条件判断：<code>gameObject.GetComponent<MeshRenderer>().sharedMaterial ==
+                      GameMaterial.INSTANCE.materials[i];</code></p>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="right"></div>
+  </div>
+
+
+
+</body>
+
+</html>
